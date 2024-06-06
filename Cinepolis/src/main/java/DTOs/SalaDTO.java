@@ -14,14 +14,16 @@ public class SalaDTO {
     private Long id;
     private int numero;
     private List<FuncionDTO> funciones;
+    private int asientos;
 
     public SalaDTO() {
     }
 
-    public SalaDTO(Long id, int numero, List<FuncionDTO> funciones) {
+    public SalaDTO(Long id, int numero, List<FuncionDTO> funciones, int asientos) {
         this.id = id;
         this.numero = numero;
         this.funciones = funciones;
+        this.asientos = asientos;
     }
 
     public Long getId() {
@@ -46,6 +48,14 @@ public class SalaDTO {
 
     public void setFunciones(List<FuncionDTO> funciones) {
         this.funciones = funciones;
+    }
+
+    public int getAsientos() {
+        return asientos;
+    }
+
+    public void setAsientos(int asientos) {
+        this.asientos = asientos;
     }
     
     
