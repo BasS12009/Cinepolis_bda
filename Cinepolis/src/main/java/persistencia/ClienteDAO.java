@@ -46,13 +46,11 @@ public class ClienteDAO implements IClienteDAO{
             comandoSQL.setString(6, cliente.getUbicacion());
             comandoSQL.setDate(7, new Date(cliente.getFechaNacimiento().getTime()));
             
+
             ResultSet resultado = comandoSQL.executeQuery();
-            while (resultado.next()) {
-            Cliente clienteEx = this.convertirACliente(resultado);
-            if (cliente.equals(clienteEx)) {
+            if (resultado.next()) {
                 conexion.rollback();
-                throw new cinepolisException("Cliente no valido");
-            }
+                throw new cinepolisException("La película ya existe");
             }
             
             codigoSQL = "INSERT INTO clientes (nombre, apellidoPaterno, apellidoMaterno, correo, contrasena, ubicacion, fechaNacimiento) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -100,15 +98,5 @@ public class ClienteDAO implements IClienteDAO{
             return cliente;
             }
     
-     private Cliente convertirACliente(ResultSet resultado) throws SQLException {
-        int id = resultado.getInt("idCliente");
-        String nombre = resultado.getString("nombre");
-        String paterno = resultado.getString("apellidoPaterno");
-        String materno = resultado.getString("apellidoMaterno");
-        String correo = resultado.getString("correo");
-        String contrasena = resultado.getString("contrasena");
-        String ubicacion = resultado.getString("ubicacion");
-        Date fechaN = resultado.getDate("fechaNacimiento");
-        return new Cliente(id, nombre, paterno, materno, correo, contrasena, ubicacion, fechaN);
-    }
+    
 }
