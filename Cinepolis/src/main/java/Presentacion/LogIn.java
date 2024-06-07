@@ -22,7 +22,7 @@ public class LogIn extends javax.swing.JFrame {
     public LogIn() {
         initComponents();
         this.setLocationRelativeTo(this);
-        this.setSize(690, 560);
+        this.setSize(785, 560);
         
     }
 
@@ -55,13 +55,13 @@ public class LogIn extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
         jLabel2.setText("Correo:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 180, -1, -1));
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 340, 280, 40));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 150, -1, -1));
+        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 310, 280, 40));
 
         jLabel3.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
         jLabel3.setText("Contraseña:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 300, -1, -1));
-        jPanel1.add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 210, 280, 40));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 270, -1, -1));
+        jPanel1.add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 180, 280, 40));
 
         btnIniciarSesion.setBackground(new java.awt.Color(12, 33, 63));
         btnIniciarSesion.setFont(new java.awt.Font("Sitka Text", 0, 14)); // NOI18N
@@ -73,20 +73,20 @@ public class LogIn extends javax.swing.JFrame {
                 btnIniciarSesionActionPerformed(evt);
             }
         });
-        jPanel1.add(btnIniciarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 460, 140, 30));
+        jPanel1.add(btnIniciarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 440, 140, 30));
 
         jPanel2.setBackground(new java.awt.Color(12, 33, 63));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 550));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 300, 550));
 
         jLabel4.setBackground(new java.awt.Color(255, 255, 255));
         jLabel4.setFont(new java.awt.Font("Serif", 0, 36)); // NOI18N
         jLabel4.setText("Inicio de Sesion");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, -1, -1));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 10, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
         jLabel5.setText("¿No tienes una cuenta aun? ");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 520, -1, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 500, -1, -1));
 
         btnRegistrate.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnRegistrate.setForeground(new java.awt.Color(12, 33, 63));
@@ -97,13 +97,13 @@ public class LogIn extends javax.swing.JFrame {
                 btnRegistrateActionPerformed(evt);
             }
         });
-        jPanel1.add(btnRegistrate, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 520, -1, -1));
+        jPanel1.add(btnRegistrate, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 500, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 680, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
