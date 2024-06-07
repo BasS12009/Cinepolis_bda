@@ -23,12 +23,12 @@ public class CinepolisBO implements ICinepolisBO{
     ClienteDAO clienteDAO = new ClienteDAO();
 
     @Override
-    public Cliente registro(ClienteDTO cliente) {
+    public ClienteDTO registro(ClienteDTO cliente) {
         Cliente clienteAuxiliar = null;
         try {
             clienteAuxiliar = convertirAEntidad(cliente);
             
-            return clienteDAO.insertarCliente(clienteAuxiliar);
+            return convertirAEntidad(clienteDAO.insertarCliente(clienteAuxiliar));
             
         } catch (SQLException ex) {
             Logger.getLogger(CinepolisBO.class.getName()).log(Level.SEVERE, null, ex);
@@ -41,13 +41,13 @@ public class CinepolisBO implements ICinepolisBO{
     }
 
     @Override
-    public Cliente login(ClienteDTO cliente) {
+    public ClienteDTO login(ClienteDTO cliente) {
 
         Cliente clienteAuxiliar = null;
         try {
             clienteAuxiliar = convertirAEntidad(cliente);
             
-            return clienteDAO.login(clienteAuxiliar);
+            return convertirAEntidad(clienteDAO.login(clienteAuxiliar));
             
         } catch (SQLException ex) {
             Logger.getLogger(CinepolisBO.class.getName()).log(Level.SEVERE, null, ex);

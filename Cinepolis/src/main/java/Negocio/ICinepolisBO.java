@@ -14,9 +14,9 @@ import java.sql.SQLException;
  */
 public interface ICinepolisBO {
     
-    public Cliente registro(ClienteDTO cliente);
+    public ClienteDTO registro(ClienteDTO cliente);
     
-    public Cliente login(ClienteDTO cliente);
+    public ClienteDTO login(ClienteDTO cliente);
     
     public Cliente convertirAEntidad(ClienteDTO cliente) throws SQLException ;
     

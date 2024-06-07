@@ -17,12 +17,13 @@ public class Boleto {
     private double costo;
     private boolean estado;
     private Date fechaCompra;
+    private Funcion funcion;
     private List<Cliente> clientes;
 
     public Boleto() {
     }
 
-    public Boleto(Long id, double costo, boolean estado, Date fechaCompra, List<Cliente> clientes) {
+    public Boleto(Long id, double costo, boolean estado, Date fechaCompra, Funcion funcion, List<Cliente> clientes) {
         this.id = id;
         this.costo = costo;
         this.estado = estado;
