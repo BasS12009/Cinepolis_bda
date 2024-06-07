@@ -4,6 +4,8 @@
 
 package com.mycompany.cinepolis;
 
+import persistencia.ConexionBD;
+
 /**
  *
  * @author diana
@@ -11,6 +13,6 @@ package com.mycompany.cinepolis;
 public class Cinepolis {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        ConexionBD conexion = new ConexionBD();
     }
 }
