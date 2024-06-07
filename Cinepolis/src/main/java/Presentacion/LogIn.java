@@ -4,12 +4,6 @@
  */
 package Presentacion;
 
-import java.awt.Color;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.util.Random;
 
 /**
  *
@@ -18,9 +12,6 @@ import java.util.Random;
 public class LogIn extends javax.swing.JFrame {
     
     
-    private Color color1 = new Color(12,33,63);
-    private Color color2 = new Color(29,69,168);
-    private Color color3 = new Color(99,18,118);
     /**
      * Creates new form LogIn
      */
@@ -36,35 +27,7 @@ public class LogIn extends javax.swing.JFrame {
     }
 
     
-    
-    
-    public LogIn(Color c1, Color c2, Color c3){
-        color1 = c1;
-        color2 = c2; 
-        color3= c3;
-    }
-    
-    @Override
-    public void paint(Graphics g) {    
-        Graphics2D g2 = (Graphics2D) g.create();
-        Rectangle clip = g2.getClipBounds();                        
-        g2.setPaint(new GradientPaint(0.0f, 0.0f, color1.darker(),0.0f ,getHeight(), color2.darker()));        
-        g2.fillRect(clip.x, clip.y, clip.width, clip.height);        
-    }
-    
-    public void setRandomColor(){
-        Random rand = new Random();
-        this.color1 = new Color(rand.nextInt(255),rand.nextInt(255),rand.nextInt(255));
-        this.color2 = new Color(rand.nextInt(255),rand.nextInt(255),rand.nextInt(255));
-       
-    }
-    
-    public void setVistaColor(){        
-        this.color1 = new Color(12,33,63);
-        this.color2 = new Color(29,69,168); 
-        this.color3 = new Color(99,18,118);
-    }
-    
+ 
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -75,36 +38,47 @@ public class LogIn extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jPasswordField1 = new javax.swing.JPasswordField();
         jButton1 = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("STFangsong", 0, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Inicio de Sesion");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 20, -1, -1));
-
         jLabel2.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Correo:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 170, -1, -1));
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 210, 330, 40));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 180, -1, -1));
+        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 340, 330, 40));
 
         jLabel3.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Contraseña:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 300, -1, -1));
-        jPanel1.add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 340, 320, 40));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 300, -1, -1));
+        jPanel1.add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 210, 330, 40));
 
+        jButton1.setFont(new java.awt.Font("Sitka Text", 0, 14)); // NOI18N
         jButton1.setText("Iniciar Sesion");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 460, -1, -1));
+        jButton1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 480, 140, 30));
+
+        jPanel2.setBackground(new java.awt.Color(12, 33, 63));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Image_20240606_172140 (1).png"))); // NOI18N
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 250, 250));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 550));
+
+        jLabel4.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel4.setFont(new java.awt.Font("Serif", 0, 36)); // NOI18N
+        jLabel4.setText("Inicio de Sesion");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -157,10 +131,12 @@ public class LogIn extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
