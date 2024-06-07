@@ -4,6 +4,8 @@
  */
 package entidades;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -54,5 +56,16 @@ public class Sala {
         this.funciones = funciones;
     }
     
+    public Sala convertirAEntidad(ResultSet resultado) throws SQLException {
+
+        int id = resultado.getInt("idSalas");
+        int numero = resultado.getInt("numero");
+        List<Funcion> funciones= resultado.
+        
+
+        return new Sala(id, numero, funciones);
+    }
+    
+
     
 }
