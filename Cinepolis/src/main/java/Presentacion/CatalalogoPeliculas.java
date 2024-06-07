@@ -15,6 +15,8 @@ public class CatalalogoPeliculas extends javax.swing.JFrame {
      */
     public CatalalogoPeliculas() {
         initComponents();
+         this.setLocationRelativeTo(this);
+        this.setSize(680, 550);
     }
 
     /**

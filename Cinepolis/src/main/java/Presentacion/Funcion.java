@@ -15,6 +15,10 @@ public class Funcion extends javax.swing.JFrame {
      */
     public Funcion() {
         initComponents();
+       
+        this.setLocationRelativeTo(this);
+        this.setSize(690, 560);
+        
     }
 
     /**

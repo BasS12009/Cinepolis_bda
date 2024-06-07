@@ -15,6 +15,8 @@ public class Cartelera extends javax.swing.JFrame {
      */
     public Cartelera() {
         initComponents();
+         this.setLocationRelativeTo(this);
+        this.setSize(690, 560);
     }
 
     /**

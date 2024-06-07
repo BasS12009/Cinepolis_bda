@@ -15,6 +15,8 @@ public class CatalogoClientes extends javax.swing.JFrame {
      */
     public CatalogoClientes() {
         initComponents();
+         this.setLocationRelativeTo(this);
+        this.setSize(690, 560);
     }
 
     /**

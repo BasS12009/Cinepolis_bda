@@ -15,6 +15,8 @@ public class Sucursales extends javax.swing.JFrame {
      */
     public Sucursales() {
         initComponents();
+         this.setLocationRelativeTo(this);
+        this.setSize(690, 560);
     }
 
     /**

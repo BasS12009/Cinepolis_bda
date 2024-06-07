@@ -15,6 +15,8 @@ public class Registro extends javax.swing.JFrame {
      */
     public Registro() {
         initComponents();
+         this.setLocationRelativeTo(this);
+        this.setSize(690, 560);
     }
 
     /**

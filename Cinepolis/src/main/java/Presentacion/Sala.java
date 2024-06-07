@@ -15,6 +15,8 @@ public class Sala extends javax.swing.JFrame {
      */
     public Sala() {
         initComponents();
+         this.setLocationRelativeTo(this);
+        this.setSize(680, 550);
     }
 
     /**

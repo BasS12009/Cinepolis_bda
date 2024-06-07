@@ -15,6 +15,8 @@ public class Boleto extends javax.swing.JFrame {
      */
     public Boleto() {
         initComponents();
+         this.setLocationRelativeTo(this);
+        this.setSize(690, 560);
     }
 
     /**
