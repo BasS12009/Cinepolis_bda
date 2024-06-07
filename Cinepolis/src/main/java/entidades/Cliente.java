@@ -4,14 +4,16 @@
  */
 package entidades;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 
 /**
  *
- * @author 
+ * @author
  */
 public class Cliente {
-    
+
     private int id;
     private String nombre;
     private String apellidoPaterno;
@@ -20,9 +22,9 @@ public class Cliente {
     private String contrasena;
     private String ubicacion;
     private Date fechaNacimiento;
-    
-    public Cliente(){
-        
+
+    public Cliente() {
+
     }
 
     public Cliente(int id, String nombre, String apellidoPaterno, String apellidoMaterno, String correo, String contrasena, String ubicacion, Date fechaNacimiento) {
@@ -109,7 +111,19 @@ public class Cliente {
     public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
-    
-    
-    
+
+    public Cliente convertirAEntidad(ResultSet resultado) throws SQLException {
+
+        int id = resultado.getInt("idCliente");
+        String nombre = resultado.getString("nombre");
+        String paterno = resultado.getString("apellidoPaterno");
+        String materno = resultado.getString("apellidoMaterno");
+        String correo = resultado.getString("correo");
+        String contrasena = resultado.getString("contrasena");
+        String ubicacion = resultado.getString("ubicacion");
+        Date fechaN = resultado.getDate("fechaNacimiento");
+
+        return new Cliente(id, nombre, paterno, materno, correo, contrasena, ubicacion, fechaN);
+    }
+
 }
