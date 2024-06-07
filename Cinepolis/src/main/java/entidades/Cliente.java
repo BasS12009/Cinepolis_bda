@@ -12,7 +12,7 @@ import java.util.Date;
  */
 public class Cliente {
     
-    private Long id;
+    private int id;
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
@@ -25,7 +25,7 @@ public class Cliente {
         
     }
 
-    public Cliente(Long id, String nombre, String apellidoPaterno, String apellidoMaterno, String correo, String contrasena, String ubicacion, Date fechaNacimiento) {
+    public Cliente(int id, String nombre, String apellidoPaterno, String apellidoMaterno, String correo, String contrasena, String ubicacion, Date fechaNacimiento) {
         this.id = id;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -46,11 +46,11 @@ public class Cliente {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
