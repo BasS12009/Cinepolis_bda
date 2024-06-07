@@ -39,11 +39,8 @@ public class PeliculaDAO implements IPeliculaDAO{
 
             ResultSet resultado = comandoSQL.executeQuery();
             if (resultado.next()) {
-            Pelicula peliculaExistente = this.convertirAPelicula(resultado);
-            if (pelicula.equals(peliculaExistente)) {
                 conexion.rollback();
                 throw new cinepolisException("La película ya existe");
-            }
             }
 
             // Insertar la nueva película
