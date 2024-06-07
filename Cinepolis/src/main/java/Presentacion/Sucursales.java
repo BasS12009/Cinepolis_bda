@@ -16,7 +16,7 @@ public class Sucursales extends javax.swing.JFrame {
     public Sucursales() {
         initComponents();
          this.setLocationRelativeTo(this);
-        this.setSize(690, 560);
+        this.setSize(725, 560);
     }
 
     /**
@@ -80,14 +80,14 @@ public class Sucursales extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 620, Short.MAX_VALUE)
+            .addGap(0, 660, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 40, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 620, 40));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 660, 40));
 
         jLabel1.setFont(new java.awt.Font("Serif", 0, 36)); // NOI18N
         jLabel1.setText("Sucursales");
@@ -111,7 +111,7 @@ public class Sucursales extends javax.swing.JFrame {
         comboBoxNombreSucursal.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
         comboBoxNombreSucursal.setForeground(new java.awt.Color(255, 255, 255));
         comboBoxNombreSucursal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cinepolis Bella Vista", "Cinepolis Sendero", "Cinepolis Navojoa ", "Cinepolis Patio Hermosillo" }));
-        jPanel1.add(comboBoxNombreSucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 280, 360, 30));
+        jPanel1.add(comboBoxNombreSucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 280, 370, 30));
 
         jLabel4.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
         jLabel4.setText("Coordenadas:");
@@ -121,7 +121,7 @@ public class Sucursales extends javax.swing.JFrame {
         comboBoxCoordenadas.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
         comboBoxCoordenadas.setForeground(new java.awt.Color(255, 255, 255));
         comboBoxCoordenadas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(comboBoxCoordenadas, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 390, 360, 30));
+        jPanel1.add(comboBoxCoordenadas, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 390, 370, 30));
 
         btnConfirmarSucursal.setBackground(new java.awt.Color(12, 33, 63));
         btnConfirmarSucursal.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
