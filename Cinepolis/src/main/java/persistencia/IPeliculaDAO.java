@@ -14,5 +14,5 @@ import excepciones.cinepolisException;
 public interface IPeliculaDAO {
     
 
-    public Pelicula insertarCliente(Pelicula cliente) throws cinepolisException;
+    public Pelicula insertarPelicula(Pelicula pelicula) throws cinepolisException;
 }

@@ -24,7 +24,7 @@ public class PeliculaDAO implements IPeliculaDAO{
     }
 
     @Override
-    public Pelicula insertarCliente(Pelicula pelicula) throws cinepolisException {
+    public Pelicula insertarPelicula(Pelicula pelicula) throws cinepolisException {
         Connection conexion = null;
         try {
             conexion = this.conexionBD.crearConexion();
@@ -87,19 +87,6 @@ public class PeliculaDAO implements IPeliculaDAO{
             }
         }
         return pelicula;
-    }
-    
-    private Pelicula convertirAPelicula(ResultSet resultado) throws SQLException {
-    int idPelicula = resultado.getInt("idPelicula");
-    String titulo = resultado.getString("titulo");
-    String sinopsis = resultado.getString("sinopsis");
-    String trailer = resultado.getString("trailer");
-    double duracion = resultado.getDouble("duracion");
-    String pais = resultado.getString("pais");
-    int idGenero = resultado.getInt("idGenero");
-    int idClasificacion = resultado.getInt("idClasificacion");
-
-    return new Pelicula(idPelicula, titulo, sinopsis, trailer, duracion, pais, idGenero, idClasificacion);
     }
     
     
