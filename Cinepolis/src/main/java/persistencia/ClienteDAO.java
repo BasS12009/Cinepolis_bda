@@ -112,6 +112,7 @@ public class ClienteDAO implements IClienteDAO{
             comandoSQL.setString(2, cliente.getContrasena());
 
 
+            
             ResultSet resultado = comandoSQL.executeQuery();
             if (!resultado.next()) {
                 conexion.rollback();
@@ -120,6 +121,9 @@ public class ClienteDAO implements IClienteDAO{
             
 
             conexion.commit();
+            
+            cliente = cliente.convertirAEntidad(resultado);
+            
             } catch (SQLException ex) {
                 
                 if (conexion != null) {
