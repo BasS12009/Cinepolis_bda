@@ -4,6 +4,8 @@
 
 package com.mycompany.cinepolis;
 
+import Negocio.CinepolisBO;
+import persistencia.ClienteDAO;
 import persistencia.ConexionBD;
 
 /**
@@ -14,5 +16,9 @@ public class Cinepolis {
 
     public static void main(String[] args) {
         ConexionBD conexion = new ConexionBD();
+        ClienteDAO clienteDAO= new ClienteDAO (conexion);
+        CinepolisBO cinepolisBO=new CinepolisBO(clienteDAO);
+        
+        
     }
 }

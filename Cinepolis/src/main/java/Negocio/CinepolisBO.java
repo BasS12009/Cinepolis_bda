@@ -20,8 +20,12 @@ import persistencia.ClienteDAO;
  */
 public class CinepolisBO implements ICinepolisBO{
     
-    ClienteDAO clienteDAO = new ClienteDAO();
+    ClienteDAO clienteDAO;
 
+    public CinepolisBO(ClienteDAO clienteDAO){
+        this.clienteDAO=clienteDAO;
+    }
+    
     @Override
     public ClienteDTO registro(ClienteDTO cliente) {
         Cliente clienteAuxiliar = null;
