@@ -142,6 +142,80 @@ public class PeliculaDAO implements IPeliculaDAO{
             }
         }
     }
+
+    //ELIMINAR PELICULAS
+    @Override
+    public Pelicula eliminarPeliculaPorID(int idPelicula) throws cinepolisException {
+        String sqlSelect = "SELECT * FROM peliculas WHERE idPelicula = ?";
+        String sqlDelete = "DELETE FROM peliculas WHERE idPelicula = ?";
+        Connection conexion = null;
+        PreparedStatement selectStatement = null;
+        PreparedStatement deleteStatement = null;
+        Pelicula pelicula = null;
+
+        try {
+            conexion = this.conexionBD.crearConexion();
+            conexion.setAutoCommit(false);
+
+            selectStatement = conexion.prepareStatement(sqlSelect);
+            selectStatement.setInt(1, idPelicula);
+            ResultSet resultado = selectStatement.executeQuery();
+
+            if (resultado.next()) {
+                pelicula = new Pelicula();
+                pelicula.setId(resultado.getInt("idPelicula"));
+                pelicula.setTitulo(resultado.getString("titulo"));
+                pelicula.setSinopsis(resultado.getString("sinopsis"));
+                pelicula.setTrailer(resultado.getString("trailer"));
+                pelicula.setDuracion(resultado.getDouble("duracion"));
+                pelicula.setPais(resultado.getString("pais"));
+                pelicula.setGenero(resultado.getInt("idGenero"));
+                pelicula.setClasificacion(resultado.getInt("idClasificacion"));
+            } else {
+                conexion.rollback();
+                throw new cinepolisException("No se encontró la película con el ID especificado");
+            }
+
+            deleteStatement = conexion.prepareStatement(sqlDelete);
+            deleteStatement.setInt(1, idPelicula);
+            deleteStatement.executeUpdate();
+
+            conexion.commit();
+            return pelicula;
+        } catch (SQLException ex) {
+            if (conexion != null) {
+                try {
+                    conexion.rollback();
+                } catch (SQLException rollbackEx) {
+                    System.out.println("Error al revertir la transacción: " + rollbackEx.getMessage());
+                }
+            }
+            throw new cinepolisException("Hubo un error al eliminar la película: " + ex.getMessage(), ex);
+        } finally {
+            if (selectStatement != null) {
+                try {
+                    selectStatement.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el selectStatement: " + e.getMessage());
+                }
+            }
+            if (deleteStatement != null) {
+                try {
+                    deleteStatement.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el deleteStatement: " + e.getMessage());
+                }
+            }
+            if (conexion != null) {
+                try {
+                    conexion.setAutoCommit(true);
+                    conexion.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión: " + e.getMessage());
+                }
+            }
+        }
+    }
     
     
 }
