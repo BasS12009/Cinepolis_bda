@@ -23,14 +23,14 @@ public class PeliculaDAO implements IPeliculaDAO{
         this.conexionBD=conexionBD;
     }
 
+    //INSERTAR PELICULAS
     @Override
     public Pelicula insertarPelicula(Pelicula pelicula) throws cinepolisException {
         Connection conexion = null;
         try {
             conexion = this.conexionBD.crearConexion();
             conexion.setAutoCommit(false);
-
-            // Consulta para verificar si la película ya existe
+    
             String codigoSQL = "SELECT idPelicula, titulo FROM peliculas WHERE titulo = ? AND idGenero = ? AND idClasificacion = ?";
             PreparedStatement comandoSQL = conexion.prepareStatement(codigoSQL);
             comandoSQL.setString(1,pelicula.getTitulo());
@@ -43,7 +43,6 @@ public class PeliculaDAO implements IPeliculaDAO{
                 throw new cinepolisException("La película ya existe");
             }
 
-            // Insertar la nueva película
             codigoSQL = "INSERT INTO peliculas (titulo, sinopsis, trailer, duracion, pais, idGenero, idClasificacion) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement insertCommand = conexion.prepareStatement(codigoSQL, Statement.RETURN_GENERATED_KEYS);
             insertCommand.setString(1, pelicula.getTitulo());
@@ -84,6 +83,64 @@ public class PeliculaDAO implements IPeliculaDAO{
             }
         }
         return pelicula;
+    }
+
+    //EDITAR PELICULAS
+    @Override
+    public Pelicula editarPelicula(Pelicula pelicula) throws cinepolisException {
+        String sql = "UPDATE peliculas SET titulo = ?, sinopsis = ?, trailer = ?, duracion = ?, pais = ?, idGenero = ?, idClasificacion = ? WHERE idPelicula = ?";
+        Connection conexion = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            conexion = this.conexionBD.crearConexion();
+            conexion.setAutoCommit(false);
+            
+            preparedStatement = conexion.prepareStatement(sql);
+            preparedStatement.setString(1, pelicula.getTitulo());
+            preparedStatement.setString(2, pelicula.getSinopsis());
+            preparedStatement.setString(3, pelicula.getTrailer());
+            preparedStatement.setDouble(4, pelicula.getDuracion());
+            preparedStatement.setString(5, pelicula.getPais());
+            preparedStatement.setInt(6, pelicula.getGenero());
+            preparedStatement.setInt(7, pelicula.getClasificacion());
+            preparedStatement.setInt(8, pelicula.getId());
+
+            int filasAfectadas = preparedStatement.executeUpdate();
+
+            if (filasAfectadas == 0) {
+                conexion.rollback();
+                throw new cinepolisException("No se encontró la película con el ID especificado");
+            }
+
+            conexion.commit();
+            return pelicula;
+        } catch (SQLException ex) {
+            if (conexion != null) {
+                try {
+                    conexion.rollback();
+                } catch (SQLException rollbackEx) {
+                    System.out.println("Error al revertir la transacción: " + rollbackEx.getMessage());
+                }
+            }
+            throw new cinepolisException("Error al actualizar la película: " + ex.getMessage(), ex);
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement: " + e.getMessage());
+                }
+            }
+            if (conexion != null) {
+                try {
+                    conexion.setAutoCommit(true);
+                    conexion.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión: " + e.getMessage());
+                }
+            }
+        }
     }
     
     

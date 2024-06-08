@@ -23,4 +23,6 @@ public interface IClienteDAO {
     
     public Cliente login(Cliente cliente) throws cinepolisException;
     
+    public Cliente editarCliente(Cliente cliente) throws cinepolisException;
+    
 }

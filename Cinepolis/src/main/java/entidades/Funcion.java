@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class Funcion {
     
-    private Long id;
+    private int id;
     private Date fecha;
     private double horaInicio;
     private Pelicula pelicula;
@@ -23,7 +23,7 @@ public class Funcion {
     public Funcion() {
     }
 
-    public Funcion(Long id, Date fecha, double horaInicio, Pelicula pelicula) {
+    public Funcion(int id, Date fecha, double horaInicio, Pelicula pelicula) {
         this.id = id;
         this.fecha = fecha;
         this.horaInicio = horaInicio;
@@ -36,11 +36,11 @@ public class Funcion {
         this.pelicula = pelicula;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -70,7 +70,7 @@ public class Funcion {
     
     public Funcion convertirAEntidad(ResultSet resultado) throws SQLException {
 
-        Long id = resultado.getLong("idPelicula");
+        int id = resultado.getInt("idPelicula");
         Date fecha = resultado.getDate("fecha");
         double horaInicio = resultado.getDouble("horaiInicio");
         Pelicula pelicula = new Pelicula().convertirAEntidad(resultado);

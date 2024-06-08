@@ -32,6 +32,7 @@ public class ClienteDAO implements IClienteDAO{
         this.conexionBD=conexionBD;
     }
 
+    //INSERTAR CLIENTES
     @Override
     public Cliente insertarCliente(Cliente cliente) throws cinepolisException {
         Connection conexion = null;
@@ -154,6 +155,65 @@ public class ClienteDAO implements IClienteDAO{
                  }
             return cliente;
     }
+    
+    //EDITAR CLIENTES
+    @Override
+    public Cliente editarCliente(Cliente cliente) throws cinepolisException {
+        String sql = "UPDATE clientes SET nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, correo = ?, contrasena = ?, ubicacion = ?, fechaNacimiento = ? WHERE idCliente = ?";
+        Connection conexion = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            conexion = this.conexionBD.crearConexion();
+            conexion.setAutoCommit(false);
+
+            preparedStatement = conexion.prepareStatement(sql);
+            preparedStatement.setString(1, cliente.getNombre());
+            preparedStatement.setString(2, cliente.getApellidoPaterno());
+            preparedStatement.setString(3, cliente.getApellidoMaterno());
+            preparedStatement.setString(4, cliente.getCorreo());
+            preparedStatement.setString(5, cliente.getContrasena());
+            preparedStatement.setString(6, cliente.getUbicacion());
+            preparedStatement.setDate(7, new Date(cliente.getFechaNacimiento().getTime()));
+            preparedStatement.setLong(8, cliente.getId());
+
+            int filasAfectadas = preparedStatement.executeUpdate();
+
+            if (filasAfectadas == 0) {
+                conexion.rollback(); 
+                throw new cinepolisException("No se encontró el cliente con el ID especificado");
+            }
+
+            conexion.commit();
+            return cliente;
+        } catch (SQLException ex) {
+            if (conexion != null) {
+                try {
+                    conexion.rollback();
+                } catch (SQLException rollbackEx) {
+                    System.out.println("Error al revertir la transacción: " + rollbackEx.getMessage());
+                }
+            }
+            throw new cinepolisException("Error al actualizar el cliente: " + ex.getMessage(), ex);
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    System.out.println("Error de informacion: " + e.getMessage());
+                }
+            }
+            if (conexion != null) {
+                try {
+                    conexion.setAutoCommit(true);
+                    conexion.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión: " + e.getMessage());
+                }
+            }
+        }
+    }
+    
     
     
 }

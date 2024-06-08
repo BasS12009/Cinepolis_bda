@@ -15,4 +15,5 @@ public interface IPeliculaDAO {
     
 
     public Pelicula insertarPelicula(Pelicula pelicula) throws cinepolisException;
+    public Pelicula editarPelicula(Pelicula pelicula) throws cinepolisException;
 }
