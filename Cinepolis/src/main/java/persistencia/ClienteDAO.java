@@ -24,6 +24,10 @@ public class ClienteDAO implements IClienteDAO{
     private IConexionBD conexionBD;
     private Menu menu;
     
+    public ClienteDAO(){
+        this.conexionBD = new ConexionBD();
+    }
+    
     public ClienteDAO(IConexionBD conexionBD){
         this.conexionBD=conexionBD;
     }
@@ -67,7 +71,7 @@ public class ClienteDAO implements IClienteDAO{
 
             ResultSet generatedKeys = insertCommand.getGeneratedKeys();
             if (generatedKeys.next()) {
-                cliente.setId(generatedKeys.getInt(1));
+                cliente.setId(generatedKeys.getLong(1));
             }
   
             conexion.commit();

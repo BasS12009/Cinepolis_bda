@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public class Cliente {
 
-    private int id;
+    private Long id;
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
@@ -27,7 +27,7 @@ public class Cliente {
 
     }
 
-    public Cliente(int id, String nombre, String apellidoPaterno, String apellidoMaterno, String correo, String contrasena, String ubicacion, Date fechaNacimiento) {
+    public Cliente(Long id, String nombre, String apellidoPaterno, String apellidoMaterno, String correo, String contrasena, String ubicacion, Date fechaNacimiento) {
         this.id = id;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -48,11 +48,11 @@ public class Cliente {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -114,7 +114,7 @@ public class Cliente {
 
     public Cliente convertirAEntidad(ResultSet resultado) throws SQLException {
 
-        int id = resultado.getInt("idCliente");
+        Long id = resultado.getLong("idCliente");
         String nombre = resultado.getString("nombre");
         String paterno = resultado.getString("apellidoPaterno");
         String materno = resultado.getString("apellidoMaterno");
@@ -126,4 +126,6 @@ public class Cliente {
         return new Cliente(id, nombre, paterno, materno, correo, contrasena, ubicacion, fechaN);
     }
 
+    
+    
 }

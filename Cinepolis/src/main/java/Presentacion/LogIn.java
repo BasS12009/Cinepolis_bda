@@ -4,30 +4,29 @@
  */
 package Presentacion;
 
+import DTOs.ClienteDTO;
+import Negocio.CinepolisBO;
+import java.util.Locale;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author diana
  */
 public class LogIn extends javax.swing.JFrame {
-    
-    
+
     /**
      * Creates new form LogIn
      */
-    
-    
+    CinepolisBO negocio = new CinepolisBO();
 
- 
     public LogIn() {
         initComponents();
         this.setLocationRelativeTo(this);
         this.setSize(785, 560);
-        
+
     }
 
-    
- 
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -39,9 +38,9 @@ public class LogIn extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        contrasena = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        correo = new javax.swing.JPasswordField();
         btnIniciarSesion = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -56,12 +55,12 @@ public class LogIn extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
         jLabel2.setText("Correo:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 150, -1, -1));
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 310, 280, 40));
+        jPanel1.add(contrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 310, 280, 40));
 
         jLabel3.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
         jLabel3.setText("Contraseña:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 270, -1, -1));
-        jPanel1.add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 180, 280, 40));
+        jPanel1.add(correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 180, 280, 40));
 
         btnIniciarSesion.setBackground(new java.awt.Color(12, 33, 63));
         btnIniciarSesion.setFont(new java.awt.Font("Sitka Text", 0, 14)); // NOI18N
@@ -116,9 +115,18 @@ public class LogIn extends javax.swing.JFrame {
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
         // TODO add your handling code here:
-        Cartelera cartelera = new Cartelera();
-        cartelera.setVisible(true);
-        this.dispose();
+        ClienteDTO clienteDTO = new ClienteDTO();
+        clienteDTO.setCorreo(correo.getText());
+        clienteDTO.setContrasena(contrasena.getText());
+        if (negocio.login(clienteDTO) != null) {
+            Cartelera cartelera = new Cartelera();
+            cartelera.setVisible(true);
+            this.dispose();
+        }else{
+            JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
+        }
+
+
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     private void btnRegistrateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrateActionPerformed
@@ -166,13 +174,13 @@ public class LogIn extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIniciarSesion;
     private javax.swing.JButton btnRegistrate;
+    private javax.swing.JTextField contrasena;
+    private javax.swing.JPasswordField correo;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

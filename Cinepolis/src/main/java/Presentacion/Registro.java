@@ -4,18 +4,25 @@
  */
 package Presentacion;
 
+import DTOs.ClienteDTO;
+import Negocio.CinepolisBO;
+import excepciones.cinepolisException;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author diana
  */
 public class Registro extends javax.swing.JFrame {
 
+    CinepolisBO negocio = new CinepolisBO();
+
     /**
      * Creates new form Registro
      */
     public Registro() {
         initComponents();
-         this.setLocationRelativeTo(this);
+        this.setLocationRelativeTo(this);
         this.setSize(780, 560);
     }
 
@@ -38,7 +45,7 @@ public class Registro extends javax.swing.JFrame {
         lblContraseña = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         dateChooserNacimiento = new com.toedter.calendar.JDateChooser();
-        txtContraseña = new javax.swing.JPasswordField();
+        txtContrasena = new javax.swing.JPasswordField();
         btnRegistrarse = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -72,7 +79,7 @@ public class Registro extends javax.swing.JFrame {
         jLabel3.setText("Fecha de nacimiento:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 250, -1, -1));
         jPanel1.add(dateChooserNacimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 280, 270, 30));
-        jPanel1.add(txtContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 360, 270, 30));
+        jPanel1.add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 360, 270, 30));
 
         btnRegistrarse.setBackground(new java.awt.Color(12, 33, 63));
         btnRegistrarse.setFont(new java.awt.Font("Sitka Text", 0, 14)); // NOI18N
@@ -101,9 +108,45 @@ public class Registro extends javax.swing.JFrame {
 
     private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed
         // TODO add your handling code here:
-        LogIn inicioSesion = new LogIn();
-        inicioSesion.setVisible(true);
-        dispose();
+        try {
+            ClienteDTO clienteDTO = new ClienteDTO();
+
+            String[] nombreC = txtNombre.getText().split(" ");
+            int cantidad = nombreC.length;
+
+            if (cantidad < 3) {
+                new cinepolisException("Nombre inválido");
+            }
+
+            if (cantidad > 3) {
+                clienteDTO.setApellidoMaterno(nombreC[nombreC.length - 1]);
+                clienteDTO.setApellidoPaterno(nombreC[nombreC.length - 2]);
+                String nombreAuxiliar = "";
+                for (int i = 0; i < nombreC.length - 2; i++) {
+                    nombreAuxiliar += nombreC[i] + " ";
+                }
+                clienteDTO.setNombre(nombreAuxiliar);
+            }else{
+                clienteDTO.setNombre(nombreC[0]);
+                clienteDTO.setApellidoPaterno(nombreC[1]);
+                clienteDTO.setApellidoMaterno(nombreC[2]);
+            }
+            
+
+            clienteDTO.setCorreo(txtCorreo.getText());
+            clienteDTO.setContrasena(txtContrasena.getText());
+            clienteDTO.setFechaNacimiento(dateChooserNacimiento.getDate());
+
+            if (negocio.registro(clienteDTO) != null) {
+                LogIn inicioSesion = new LogIn();
+                inicioSesion.setVisible(true);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "No se pudo registrar el usuario");
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
     }//GEN-LAST:event_btnRegistrarseActionPerformed
 
     /**
@@ -151,7 +194,7 @@ public class Registro extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblContraseña;
     private javax.swing.JLabel lblCorreo;
-    private javax.swing.JPasswordField txtContraseña;
+    private javax.swing.JPasswordField txtContrasena;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
