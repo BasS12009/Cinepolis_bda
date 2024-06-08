@@ -25,4 +25,6 @@ public interface IClienteDAO {
     
     public Cliente editarCliente(Cliente cliente) throws cinepolisException;
     
+    public Cliente eliminarClientePorID(int idCliente) throws cinepolisException;
+    
 }

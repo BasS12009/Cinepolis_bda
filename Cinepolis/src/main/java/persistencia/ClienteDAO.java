@@ -213,6 +213,80 @@ public class ClienteDAO implements IClienteDAO{
             }
         }
     }
+
+    //ElIMINAR CLIENTE
+    @Override
+    public Cliente eliminarClientePorID(int idCliente) throws cinepolisException {
+        String sqlSelect = "SELECT * FROM clientes WHERE idCliente = ?";
+        String sqlDelete = "DELETE FROM clientes WHERE idCliente = ?";
+        Connection conexion = null;
+        PreparedStatement selectStatement = null;
+        PreparedStatement deleteStatement = null;
+        Cliente cliente = null;
+
+        try {
+            conexion = this.conexionBD.crearConexion();
+            conexion.setAutoCommit(false);
+
+            selectStatement = conexion.prepareStatement(sqlSelect);
+            selectStatement.setInt(1, idCliente);
+            ResultSet resultado = selectStatement.executeQuery();
+
+            if (resultado.next()) {
+                cliente = new Cliente();
+                cliente.setId(resultado.getLong("idCliente"));
+                cliente.setNombre(resultado.getString("nombre"));
+                cliente.setApellidoPaterno(resultado.getString("apellidoPaterno"));
+                cliente.setApellidoMaterno(resultado.getString("apellidoMaterno"));
+                cliente.setCorreo(resultado.getString("correo"));
+                cliente.setContrasena(resultado.getString("contrasena"));
+                cliente.setUbicacion(resultado.getString("ubicacion"));
+                cliente.setFechaNacimiento(resultado.getDate("fechaNacimiento"));
+            } else {
+                conexion.rollback();
+                throw new cinepolisException("No se encontró el cliente con el ID especificado");
+            }
+            
+            deleteStatement = conexion.prepareStatement(sqlDelete);
+            deleteStatement.setInt(1, idCliente);
+            deleteStatement.executeUpdate();
+
+            conexion.commit();
+            return cliente;
+        } catch (SQLException ex) {
+            if (conexion != null) {
+                try {
+                    conexion.rollback();
+                } catch (SQLException rollbackEx) {
+                    System.out.println("Error al revertir la transacción: " + rollbackEx.getMessage());
+                }
+            }
+            throw new cinepolisException("Hubo un error al eliminar el cliente: " + ex.getMessage(), ex);
+        } finally {
+            if (selectStatement != null) {
+                try {
+                    selectStatement.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el selectStatement: " + e.getMessage());
+                }
+            }
+            if (deleteStatement != null) {
+                try {
+                    deleteStatement.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el deleteStatement: " + e.getMessage());
+                }
+            }
+            if (conexion != null) {
+                try {
+                    conexion.setAutoCommit(true);
+                    conexion.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión: " + e.getMessage());
+                }
+            }
+        }
+    }
     
     
     
