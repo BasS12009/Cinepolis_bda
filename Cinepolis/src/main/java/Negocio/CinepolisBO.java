@@ -79,6 +79,7 @@ public class CinepolisBO implements ICinepolisBO{
         return new Cliente(id, nombre, paterno, materno, correo, contrasena, ubicacion, fechaN);
     }
     
+    @Override
     public ClienteDTO convertirAEntidad(Cliente cliente) throws SQLException {
 
         Long id = cliente.getId();
