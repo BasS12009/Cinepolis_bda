@@ -18,22 +18,22 @@ public class Funcion {
     private Long id;
     private Date fecha;
     private double horaInicio;
-    private List<Pelicula> peliculas;
+    private Pelicula pelicula;
 
     public Funcion() {
     }
 
-    public Funcion(Long id, Date fecha, double horaInicio, List<Pelicula> peliculas) {
+    public Funcion(Long id, Date fecha, double horaInicio, Pelicula pelicula) {
         this.id = id;
         this.fecha = fecha;
         this.horaInicio = horaInicio;
-        this.peliculas = peliculas;
+        this.pelicula = pelicula;
     }
 
-    public Funcion(Date fecha, double horaInicio, List<Pelicula> peliculas) {
+    public Funcion(Date fecha, double horaInicio, Pelicula pelicula) {
         this.fecha = fecha;
         this.horaInicio = horaInicio;
-        this.peliculas = peliculas;
+        this.pelicula = pelicula;
     }
 
     public Long getId() {
@@ -60,27 +60,23 @@ public class Funcion {
         this.horaInicio = horaInicio;
     }
 
-    public List<Pelicula> getPeliculas() {
-        return peliculas;
+    public Pelicula getPeliculas() {
+        return pelicula;
     }
 
-    public void setPeliculas(List<Pelicula> peliculas) {
-        this.peliculas = peliculas;
+    public void setPeliculas(Pelicula pelicula) {
+        this.pelicula = pelicula;
     }
     
     public Funcion convertirAEntidad(ResultSet resultado) throws SQLException {
 
-        int id = resultado.getInt("idPelicula");
-        String titulo = resultado.getString("titulo");
-        String sinopsis = resultado.getString("sinopsis");
-        String trailer = resultado.getString("trailer");
-        Double duracion = resultado.getDouble("duracion");
-        String pais = resultado.getString("pais");
-        int idGenero = resultado.getInt("idGenero");
-        int idClasificacion = resultado.getInt("idClasificacion");
-        
+        Long id = resultado.getLong("idPelicula");
+        Date fecha = resultado.getDate("fecha");
+        double horaInicio = resultado.getDouble("horaiInicio");
+        Pelicula pelicula = new Pelicula().convertirAEntidad(resultado);
+  
 
-        return new Pelicula(id, titulo, sinopsis, trailer, duracion, pais, idGenero, idClasificacion);
+        return new Funcion(id, fecha, horaInicio, pelicula);
     }
     
 

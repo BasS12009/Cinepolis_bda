@@ -4,6 +4,8 @@
  */
 package entidades;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -28,9 +30,19 @@ public class Boleto {
         this.costo = costo;
         this.estado = estado;
         this.fechaCompra = fechaCompra;
+        this.funcion = funcion;
         this.cliente = cliente;
     }
 
+    
+    public Boleto(double costo, boolean estado, Date fechaCompra,  Funcion funcion, Cliente cliente) {
+        this.costo = costo;
+        this.estado = estado;
+        this.fechaCompra = fechaCompra;
+        this.funcion = funcion;
+        this.cliente = cliente;
+    }
+    
     public Funcion getFuncion() {
         return funcion;
     }
@@ -45,14 +57,7 @@ public class Boleto {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
-    }
-
-    public Boleto(double costo, boolean estado, Date fechaCompra,  List<Cliente> clientes) {
-        this.costo = costo;
-        this.estado = estado;
-        this.fechaCompra = fechaCompra;
-        this.cliente = cliente;
-    }
+    }    
 
     public Long getId() {
         return id;
@@ -86,7 +91,18 @@ public class Boleto {
         this.fechaCompra = fechaCompra;
     }
 
-    
+    public Boleto convertirAEntidad(ResultSet resultado) throws SQLException {
+
+        Long id = resultado.getLong("idBoleto");
+        Double costo = resultado.getDouble("costo");
+        boolean estado = resultado.getBoolean("estado");
+        Date fechaCompra = resultado.getDate("fechaCompra");
+        Funcion funcion = new Funcion().convertirAEntidad(resultado);
+        Cliente cliente = new Cliente().convertirAEntidad(resultado);
+        
+
+        return new Boleto(id, costo, estado, fechaCompra, funcion, cliente);
+    }
     
     
     

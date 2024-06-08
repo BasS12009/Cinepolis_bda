@@ -4,14 +4,17 @@
  */
 package entidades;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
- * @author 
+ * @author
  */
 public class Sucursal {
-    
+
     private Long id;
     private String nombre;
     private String ubicacion;
@@ -64,7 +67,25 @@ public class Sucursal {
     public void setSalas(List<Sala> salas) {
         this.salas = salas;
     }
-    
-    
-    
+
+  
+
+    public Sucursal convertirAEntidad(ResultSet resultado) throws SQLException {
+        Long id = resultado.getLong("idSucursales");
+        String nombre = resultado.getString("nombre");
+        String ubicacion = resultado.getString("ubicacion");
+
+        List<Sala> salas = new ArrayList<>();
+
+        while (resultado.next()) {
+            Long salaId = resultado.getLong("idSala");
+            int numero = resultado.getInt("numero");
+            Funcion funcion = new Funcion().convertirAEntidad(resultado);
+
+            salas.add(new Sala(salaId,numero, funcion));
+        }
+
+        return new Sucursal(id, nombre, ubicacion, salas);
+    }
+
 }
