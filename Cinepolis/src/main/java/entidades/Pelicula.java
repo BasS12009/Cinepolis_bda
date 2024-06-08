@@ -25,6 +25,10 @@ public class Pelicula {
 
     public Pelicula() {
     }
+    
+    public Pelicula(int id) {
+        this.idPelicula=id;
+    }
 
     public Pelicula(int id, String titulo, String sinopsis, String trailer, double duracion, String pais, int idGenero, int idClasificacion) {
         this.idPelicula = id;

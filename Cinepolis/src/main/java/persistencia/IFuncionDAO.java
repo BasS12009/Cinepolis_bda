@@ -14,4 +14,8 @@ import excepciones.cinepolisException;
 public interface IFuncionDAO {
     
     public Funcion insertarFuncion(Funcion funcion) throws cinepolisException;
+    
+    public Funcion editarFuncion(Funcion funcion) throws cinepolisException;
+    
+    public Funcion eliminarFuncionPorId(int idFuncion) throws cinepolisException;
 }
