@@ -8,17 +8,13 @@ package Presentacion;
  *
  * @author diana
  */
-public class Funcion extends javax.swing.JFrame {
+public class EditarFuncion extends javax.swing.JFrame {
 
     /**
-     * Creates new form Funcion
+     * Creates new form EditarFuncion
      */
-    public Funcion() {
+    public EditarFuncion() {
         initComponents();
-       
-        this.setLocationRelativeTo(this);
-        this.setSize(791, 570);
-        
     }
 
     /**
@@ -34,6 +30,12 @@ public class Funcion extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         btnRegresar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -46,14 +48,14 @@ public class Funcion extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 760, Short.MAX_VALUE)
+            .addGap(0, 740, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 40, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 760, 40));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 740, 40));
 
         jPanel2.setBackground(new java.awt.Color(12, 33, 63));
 
@@ -84,15 +86,35 @@ public class Funcion extends javax.swing.JFrame {
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 60, -1));
 
+        jLabel1.setFont(new java.awt.Font("Serif", 0, 36)); // NOI18N
+        jLabel1.setText("Editar Funciones");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 50, -1, -1));
+
+        jLabel2.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
+        jLabel2.setText("Fecha:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 160, -1, -1));
+        jPanel1.add(jDateChooser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 200, 240, 30));
+
+        jLabel3.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
+        jLabel3.setText("Hora Inicio");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 290, -1, -1));
+        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 330, 240, 30));
+
+        jButton1.setBackground(new java.awt.Color(12, 33, 63));
+        jButton1.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Editar");
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 480, 120, 30));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 791, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
         );
 
         pack();
@@ -100,8 +122,8 @@ public class Funcion extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        Cartelera cartelera = new Cartelera();
-        cartelera.setVisible(true);
+       AdministrarFunciones administrarFunciones = new  AdministrarFunciones();
+        administrarFunciones.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
@@ -122,28 +144,34 @@ public class Funcion extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Funcion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditarFuncion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Funcion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditarFuncion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Funcion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditarFuncion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Funcion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditarFuncion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Funcion().setVisible(true);
+                new EditarFuncion().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegresar;
+    private javax.swing.JButton jButton1;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
