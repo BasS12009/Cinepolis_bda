@@ -60,10 +60,10 @@ public class Sala {
 
         int id = resultado.getInt("idSalas");
         int numero = resultado.getInt("numero");
-        List<Funcion> funciones= resultado.
+        Funcion funcion = funcion.c
         
 
-        return new Sala(id, numero, funciones);
+        return new Sala(id, numero, funcion);
     }
     
 

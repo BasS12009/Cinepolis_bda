@@ -18,24 +18,40 @@ public class Boleto {
     private boolean estado;
     private Date fechaCompra;
     private Funcion funcion;
-    private List<Cliente> clientes;
+    private Cliente cliente;
 
     public Boleto() {
     }
 
-    public Boleto(Long id, double costo, boolean estado, Date fechaCompra, Funcion funcion, List<Cliente> clientes) {
+    public Boleto(Long id, double costo, boolean estado, Date fechaCompra, Funcion funcion, Cliente cliente) {
         this.id = id;
         this.costo = costo;
         this.estado = estado;
         this.fechaCompra = fechaCompra;
-        this.clientes = clientes;
+        this.cliente = cliente;
+    }
+
+    public Funcion getFuncion() {
+        return funcion;
+    }
+
+    public void setFuncion(Funcion funcion) {
+        this.funcion = funcion;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     public Boleto(double costo, boolean estado, Date fechaCompra,  List<Cliente> clientes) {
         this.costo = costo;
         this.estado = estado;
         this.fechaCompra = fechaCompra;
-        this.clientes = clientes;
+        this.cliente = cliente;
     }
 
     public Long getId() {
@@ -70,13 +86,7 @@ public class Boleto {
         this.fechaCompra = fechaCompra;
     }
 
-    public List<Cliente> getClientes() {
-        return clientes;
-    }
-
-    public void setClientes(List<Cliente> clientes) {
-        this.clientes = clientes;
-    }
+    
     
     
     

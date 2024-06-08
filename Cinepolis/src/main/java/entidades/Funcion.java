@@ -4,6 +4,8 @@
  */
 package entidades;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -66,5 +68,20 @@ public class Funcion {
         this.peliculas = peliculas;
     }
     
+    public Funcion convertirAEntidad(ResultSet resultado) throws SQLException {
+
+        int id = resultado.getInt("idPelicula");
+        String titulo = resultado.getString("titulo");
+        String sinopsis = resultado.getString("sinopsis");
+        String trailer = resultado.getString("trailer");
+        Double duracion = resultado.getDouble("duracion");
+        String pais = resultado.getString("pais");
+        int idGenero = resultado.getInt("idGenero");
+        int idClasificacion = resultado.getInt("idClasificacion");
+        
+
+        return new Pelicula(id, titulo, sinopsis, trailer, duracion, pais, idGenero, idClasificacion);
+    }
     
+
 }
