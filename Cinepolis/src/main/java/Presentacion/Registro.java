@@ -44,9 +44,9 @@ public class Registro extends javax.swing.JFrame {
         txtCorreo = new javax.swing.JTextField();
         lblContraseña = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        dateChooserNacimiento = new com.toedter.calendar.JDateChooser();
         txtContrasena = new javax.swing.JPasswordField();
         btnRegistrarse = new javax.swing.JButton();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,7 +78,6 @@ public class Registro extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         jLabel3.setText("Fecha de nacimiento:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 250, -1, -1));
-        jPanel1.add(dateChooserNacimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 280, 270, 30));
         jPanel1.add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 360, 270, 30));
 
         btnRegistrarse.setBackground(new java.awt.Color(12, 33, 63));
@@ -91,6 +90,7 @@ public class Registro extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnRegistrarse, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 490, -1, -1));
+        jPanel1.add(jDateChooser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 280, 270, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -186,7 +186,7 @@ public class Registro extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrarse;
-    private com.toedter.calendar.JDateChooser dateChooserNacimiento;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

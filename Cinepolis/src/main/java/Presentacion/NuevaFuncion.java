@@ -8,15 +8,13 @@ package Presentacion;
  *
  * @author diana
  */
-public class Sucursales extends javax.swing.JFrame {
+public class NuevaFuncion extends javax.swing.JFrame {
 
     /**
-     * Creates new form Sucursales
+     * Creates new form NuevaFuncion
      */
-    public Sucursales() {
+    public NuevaFuncion() {
         initComponents();
-         this.setLocationRelativeTo(this);
-        this.setSize(725, 560);
     }
 
     /**
@@ -32,17 +30,10 @@ public class Sucursales extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         btnRegresar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        comboBoxCiudades = new javax.swing.JComboBox<>();
-        jLabel3 = new javax.swing.JLabel();
-        comboBoxNombreSucursal = new javax.swing.JComboBox<>();
-        jLabel4 = new javax.swing.JLabel();
-        comboBoxCoordenadas = new javax.swing.JComboBox<>();
-        btnConfirmarSucursal = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(12, 33, 63));
@@ -80,55 +71,14 @@ public class Sucursales extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 660, Short.MAX_VALUE)
+            .addGap(0, 760, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 40, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 660, 40));
-
-        jLabel1.setFont(new java.awt.Font("Serif", 0, 36)); // NOI18N
-        jLabel1.setText("Sucursales");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 40, -1, -1));
-
-        jLabel2.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
-        jLabel2.setText("Ciudades:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 130, -1, -1));
-
-        comboBoxCiudades.setBackground(new java.awt.Color(12, 33, 63));
-        comboBoxCiudades.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
-        comboBoxCiudades.setForeground(new java.awt.Color(255, 255, 255));
-        comboBoxCiudades.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ciudad Obregon", "Hermosillo ", "Navojoa", "Culiacan ", "Mazatlan", " ", " " }));
-        jPanel1.add(comboBoxCiudades, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 160, 370, 30));
-
-        jLabel3.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
-        jLabel3.setText("Nombre Sucursal:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 250, -1, -1));
-
-        comboBoxNombreSucursal.setBackground(new java.awt.Color(12, 33, 63));
-        comboBoxNombreSucursal.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
-        comboBoxNombreSucursal.setForeground(new java.awt.Color(255, 255, 255));
-        comboBoxNombreSucursal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cinepolis Bella Vista", "Cinepolis Sendero", "Cinepolis Navojoa ", "Cinepolis Patio Hermosillo" }));
-        jPanel1.add(comboBoxNombreSucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 280, 370, 30));
-
-        jLabel4.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
-        jLabel4.setText("Coordenadas:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 350, -1, -1));
-
-        comboBoxCoordenadas.setBackground(new java.awt.Color(12, 33, 63));
-        comboBoxCoordenadas.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
-        comboBoxCoordenadas.setForeground(new java.awt.Color(255, 255, 255));
-        comboBoxCoordenadas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(comboBoxCoordenadas, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 390, 370, 30));
-
-        btnConfirmarSucursal.setBackground(new java.awt.Color(12, 33, 63));
-        btnConfirmarSucursal.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
-        btnConfirmarSucursal.setForeground(new java.awt.Color(255, 255, 255));
-        btnConfirmarSucursal.setText("Confirmar Sucursal");
-        btnConfirmarSucursal.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel1.add(btnConfirmarSucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 470, 150, 40));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 760, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -138,7 +88,7 @@ public class Sucursales extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
         );
 
         pack();
@@ -146,7 +96,7 @@ public class Sucursales extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-      Cartelera cartelera = new Cartelera();
+        Cartelera cartelera = new Cartelera();
         cartelera.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
@@ -168,34 +118,26 @@ public class Sucursales extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Sucursales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NuevaFuncion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Sucursales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NuevaFuncion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Sucursales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NuevaFuncion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Sucursales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NuevaFuncion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Sucursales().setVisible(true);
+                new NuevaFuncion().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnConfirmarSucursal;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JComboBox<String> comboBoxCiudades;
-    private javax.swing.JComboBox<String> comboBoxCoordenadas;
-    private javax.swing.JComboBox<String> comboBoxNombreSucursal;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
