@@ -4,6 +4,8 @@
  */
 package DTOs;
 
+import entidades.Cliente;
+import entidades.Funcion;
 import java.util.Date;
 import java.util.List;
 
@@ -14,25 +16,75 @@ import java.util.List;
 public class BoletoDTO {
     
     //Atributos
-    private Long id;
+     private Long id;
     private double costo;
     private boolean estado;
     private Date fechaCompra;
-    private List<ClienteDTO> clientes;
+    private Funcion funcion;
+    private Cliente cliente;
+
     
     //Constructor vacio
     public BoletoDTO() {
     }
-    
-    //Constructor con atributos inicializados
 
-    public BoletoDTO(Long id, double costo, boolean estado, Date fechaCompra, List<ClienteDTO> clientes) {
+    public BoletoDTO(Long id, double costo, boolean estado, Date fechaCompra, Funcion funcion, Cliente cliente) {
         this.id = id;
         this.costo = costo;
         this.estado = estado;
         this.fechaCompra = fechaCompra;
-        this.clientes = clientes;
+        this.funcion = funcion;
+        this.cliente = cliente;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public double getCosto() {
+        return costo;
+    }
+
+    public void setCosto(double costo) {
+        this.costo = costo;
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
+    public Date getFechaCompra() {
+        return fechaCompra;
+    }
+
+    public void setFechaCompra(Date fechaCompra) {
+        this.fechaCompra = fechaCompra;
+    }
+
+    public Funcion getFuncion() {
+        return funcion;
+    }
+
+    public void setFuncion(Funcion funcion) {
+        this.funcion = funcion;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+    
     
     
 }

@@ -109,6 +109,11 @@ public class AdministrarFunciones extends javax.swing.JFrame {
         btnNuevaFuncion.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
         btnNuevaFuncion.setForeground(new java.awt.Color(255, 255, 255));
         btnNuevaFuncion.setText("+Nueva Funcion");
+        btnNuevaFuncion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevaFuncionActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnNuevaFuncion, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 130, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -131,6 +136,10 @@ public class AdministrarFunciones extends javax.swing.JFrame {
         administrarCatalogos.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
+
+    private void btnNuevaFuncionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaFuncionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnNuevaFuncionActionPerformed
 
     /**
      * @param args the command line arguments

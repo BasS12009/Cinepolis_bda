@@ -5,6 +5,7 @@
 package DTOs;
 
 
+import entidades.Pelicula;
 import java.util.Date;
 import java.util.List;
 
@@ -13,11 +14,11 @@ import java.util.List;
  * @author diana
  */
 public class FuncionDTO {
-     private Long id;
+      private Long id;
     private Date fecha;
     private double horaInicio;
-    private List<PeliculaDTO> peliculas;
-
+    private PeliculaDTO peliculaDTO;
+    
     public FuncionDTO() {
     }
 
@@ -25,7 +26,7 @@ public class FuncionDTO {
         this.id = id;
         this.fecha = fecha;
         this.horaInicio = horaInicio;
-        this.peliculas = peliculas;
+        this.peliculaDTO = peliculaDTO;
     }
 
     public Long getId() {
@@ -52,14 +53,14 @@ public class FuncionDTO {
         this.horaInicio = horaInicio;
     }
 
-    public List<PeliculaDTO> getPeliculas() {
-        return peliculas;
+    public PeliculaDTO getPeliculaDTO() {
+        return peliculaDTO;
     }
 
-    public void setPeliculas(List<PeliculaDTO> peliculas) {
-        this.peliculas = peliculas;
+    public void setPeliculaDTO(PeliculaDTO peliculaDTO) {
+        this.peliculaDTO = peliculaDTO;
     }
-    
+
     
     
 }

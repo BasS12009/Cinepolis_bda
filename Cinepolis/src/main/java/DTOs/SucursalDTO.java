@@ -12,19 +12,19 @@ import java.util.List;
  * @author diana
  */
 public class SucursalDTO {
-    private Long id;
+  private Long id;
     private String nombre;
     private String ubicacion;
-    List<SalaDTO> salas;
+    List<SalaDTO> salaDTO;
 
     public SucursalDTO() {
     }
 
-    public SucursalDTO(Long id, String nombre, String ubicacion, List<SalaDTO> salas) {
+    public SucursalDTO(Long id, String nombre, String ubicacion, List<SalaDTO> salaDTO) {
         this.id = id;
         this.nombre = nombre;
         this.ubicacion = ubicacion;
-        this.salas = salas;
+        this.salaDTO = salaDTO;
     }
 
     public Long getId() {
@@ -51,12 +51,12 @@ public class SucursalDTO {
         this.ubicacion = ubicacion;
     }
 
-    public List<SalaDTO> getSalas() {
-        return salas;
+    public List<SalaDTO> getSalaDTO() {
+        return salaDTO;
     }
 
-    public void setSalas(List<SalaDTO> salas) {
-        this.salas = salas;
+    public void setSalaDTO(List<SalaDTO> salas) {
+        this.salaDTO = salaDTO;
     }
     
     
