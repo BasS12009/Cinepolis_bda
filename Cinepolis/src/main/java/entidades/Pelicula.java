@@ -22,6 +22,7 @@ public class Pelicula {
     private String pais;
     private int idGenero;
     private int idClasificacion;
+    
 
     public Pelicula() {
     }
