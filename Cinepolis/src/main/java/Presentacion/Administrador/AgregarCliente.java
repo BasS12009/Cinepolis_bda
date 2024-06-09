@@ -4,7 +4,10 @@
  */
 package Presentacion.Administrador;
 
+import DTOs.ClienteDTO;
 import Negocio.CinepolisBO;
+import java.util.Date;
+import javax.swing.JOptionPane;
 import persistencia.ClienteDAO;
 import persistencia.ConexionBD;
 
@@ -46,7 +49,9 @@ public class AgregarCliente extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         txtContrasena = new javax.swing.JPasswordField();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        jButton1 = new javax.swing.JButton();
+        botonAgregar = new javax.swing.JButton();
+        lblContraseña1 = new javax.swing.JLabel();
+        txtUbicacion = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -59,11 +64,11 @@ public class AgregarCliente extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 740, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 40, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 740, 40));
@@ -92,7 +97,7 @@ public class AgregarCliente extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(btnRegresar)
-                .addGap(0, 527, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 60, -1));
@@ -109,23 +114,39 @@ public class AgregarCliente extends javax.swing.JFrame {
         lblCorreo.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         lblCorreo.setText("Correo:");
         jPanel1.add(lblCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 220, -1, -1));
+
+        txtCorreo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCorreoActionPerformed(evt);
+            }
+        });
         jPanel1.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 250, 270, 30));
 
         lblContraseña.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
-        lblContraseña.setText("Contraseña:");
-        jPanel1.add(lblContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 390, -1, -1));
+        lblContraseña.setText("Ubicacion:");
+        jPanel1.add(lblContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 440, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         jLabel4.setText("Fecha de nacimiento:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 300, -1, -1));
-        jPanel1.add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 420, 270, 30));
+        jPanel1.add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 400, 270, 30));
         jPanel1.add(jDateChooser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 330, 270, 30));
 
-        jButton1.setBackground(new java.awt.Color(12, 33, 63));
-        jButton1.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Agregar Cliente");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 500, -1, 30));
+        botonAgregar.setBackground(new java.awt.Color(12, 33, 63));
+        botonAgregar.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
+        botonAgregar.setForeground(new java.awt.Color(255, 255, 255));
+        botonAgregar.setText("Agregar Cliente");
+        botonAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonAgregarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(botonAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 510, -1, 30));
+
+        lblContraseña1.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
+        lblContraseña1.setText("Contraseña:");
+        jPanel1.add(lblContraseña1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 370, -1, -1));
+        jPanel1.add(txtUbicacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 470, 270, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -147,6 +168,49 @@ public class AgregarCliente extends javax.swing.JFrame {
         catalogoClientes.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
+
+    private void botonAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAgregarActionPerformed
+
+        String nombreCompleto = txtNombre.getText();
+        String correo = txtCorreo.getText();
+        String contrasena = new String(txtContrasena.getPassword());
+        Date fechaNacimiento = jDateChooser1.getDate();
+
+        if (nombreCompleto.isEmpty() || correo.isEmpty() || contrasena.isEmpty() || fechaNacimiento == null) {
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String[] partesNombre = nombreCompleto.split(" ");
+        String nombre = partesNombre.length > 0 ? partesNombre[0] : "";
+        String apellidoPaterno = partesNombre.length > 1 ? partesNombre[1] : "";
+        String apellidoMaterno = partesNombre.length > 2 ? partesNombre[2] : "";
+
+        ClienteDTO nuevoCliente = new ClienteDTO();
+        nuevoCliente.setNombre(nombre);
+        nuevoCliente.setApellidoPaterno(apellidoPaterno);
+        nuevoCliente.setApellidoMaterno(apellidoMaterno);
+        nuevoCliente.setCorreo(correo);
+        nuevoCliente.setContrasena(contrasena);
+        nuevoCliente.setFechaNacimiento(fechaNacimiento);
+        nuevoCliente.setUbicacion(txtUbicacion.getText());
+
+        try {
+            cinepolisBO.agregarCliente(nuevoCliente);
+            JOptionPane.showMessageDialog(this, "Cliente agregado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+            txtNombre.setText("");
+            txtCorreo.setText("");
+            txtContrasena.setText("");
+            jDateChooser1.setDate(null);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al agregar cliente: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_botonAgregarActionPerformed
+
+    private void txtCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -190,8 +254,8 @@ public class AgregarCliente extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botonAgregar;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JButton jButton1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
@@ -200,9 +264,11 @@ public class AgregarCliente extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel lblContraseña;
+    private javax.swing.JLabel lblContraseña1;
     private javax.swing.JLabel lblCorreo;
     private javax.swing.JPasswordField txtContrasena;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtUbicacion;
     // End of variables declaration//GEN-END:variables
 }

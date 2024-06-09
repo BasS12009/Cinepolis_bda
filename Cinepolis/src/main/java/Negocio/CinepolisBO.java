@@ -4,17 +4,26 @@
  */
 package Negocio;
 
+import DTOs.ClasificacionDTO;
 import DTOs.ClienteDTO;
+import DTOs.GeneroDTO;
+import DTOs.PeliculaDTO;
+import entidades.Clasificacion;
 import entidades.Cliente;
+import entidades.Genero;
+import entidades.Pelicula;
 import excepciones.cinepolisException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import persistencia.ClasificacionDAO;
 import persistencia.ClienteDAO;
+import persistencia.ConexionBD;
+import persistencia.GeneroDAO;
+import persistencia.PeliculaDAO;
 
 /**
  *
@@ -23,9 +32,15 @@ import persistencia.ClienteDAO;
 public class CinepolisBO implements ICinepolisBO{
     
     ClienteDAO clienteDAO;
-
+    PeliculaDAO peliculaDAO;
+    ClasificacionDAO clasificacionDAO;
+    GeneroDAO generoDAO;
+            
     public CinepolisBO(ClienteDAO clienteDAO){
         this.clienteDAO=clienteDAO;
+        this.peliculaDAO=new PeliculaDAO(clienteDAO.getConexion());
+        this.clasificacionDAO=new ClasificacionDAO(clienteDAO.getConexion());
+        this.generoDAO=new GeneroDAO(clienteDAO.getConexion());
     }
     
     @Override
@@ -79,6 +94,19 @@ public class CinepolisBO implements ICinepolisBO{
         Date fechaN = cliente.getFechaNacimiento();
 
         return new Cliente(id, nombre, paterno, materno, correo, contrasena, ubicacion, fechaN);
+    }
+    
+    public Pelicula convertirAEntidad(PeliculaDTO peliculaDTO) throws SQLException, cinepolisException {
+
+    String titulo = peliculaDTO.getTitulo();
+    int idGenero = obtenerIdGenero(peliculaDTO.getGenero());
+    String sinopsis = peliculaDTO.getSinopsis();
+    int idClasificacion = obtenerIdClasificacion(peliculaDTO.getClasificacion());
+    double duracion = peliculaDTO.getDuracion();
+    String pais = peliculaDTO.getPais();
+    String trailer = peliculaDTO.getTrailer();
+
+    return new Pelicula( titulo,  sinopsis,  trailer,  duracion,  pais,  idGenero,  idClasificacion);
     }
     
     @Override
@@ -188,4 +216,72 @@ public class CinepolisBO implements ICinepolisBO{
             throw new cinepolisException("Error al eliminar el cliente en la base de datos.", ex);
         }
     }
+    
+    
+    public void agregarPelicula(PeliculaDTO pelicula) throws SQLException, cinepolisException {
+        try{
+            peliculaDAO.insertarPelicula(convertirAEntidad(pelicula));
+        }catch(SQLException ex){
+            System.out.println(ex.getMessage());
+        }
+    }
+    
+    public int obtenerIdGenero(String generoSeleccionado) throws SQLException, cinepolisException {
+        
+        long id=generoDAO.obtenerIdPorNombre(generoSeleccionado);
+        return (int) id;
+        
+    }
+
+    public int obtenerIdClasificacion(String clasificacionSeleccionada) throws SQLException, cinepolisException {
+        
+        long id=clasificacionDAO.obtenerIdPorNombre(clasificacionSeleccionada);
+        return (int) id;
+    }
+
+    @Override
+    public void agregarCliente(ClienteDTO cliente) throws SQLException, cinepolisException {
+        try{
+            clienteDAO.insertarCliente(this.convertirAEntidad(cliente));
+        }catch(SQLException ex){
+            System.out.println(ex.getMessage());
+        }
+       
+    }
+    
+    
+    @Override
+    public List<ClasificacionDTO> obtenerTodasLasClasificaciones(){
+        
+    List<ClasificacionDTO> clasificacionesDTO = new ArrayList<>();
+    List<Clasificacion> clasificaciones = clasificacionDAO.obtenerTodos();
+    for (Clasificacion clasificacion : clasificaciones) {
+        ClasificacionDTO clasificacionDTO = new ClasificacionDTO();
+        clasificacionDTO.setId(clasificacion.getId());
+        clasificacionDTO.setTipo(clasificacion.getNombre());
+        clasificacionesDTO.add(clasificacionDTO);
+    }
+        return clasificacionesDTO;
+    }
+
+    @Override
+    public List<GeneroDTO> obtenerTodosLosGeneros(){
+        
+        try {
+            List<GeneroDTO> generosDTO = new ArrayList<>();
+            List<Genero> generos = generoDAO.obtenerTodos();
+            for (Genero genero : generos) {
+                GeneroDTO generoDTO = new GeneroDTO();
+                generoDTO.setId(genero.getId());
+                generoDTO.setTipo(genero.getNombre());
+                generosDTO.add(generoDTO);
+            }
+            return generosDTO;
+        } catch (cinepolisException ex) {
+            System.out.println(ex.getMessage());
+           return null;
+        }
+    }
+    
 }
+

@@ -20,9 +20,10 @@ public class PeliculaDAO implements IPeliculaDAO{
     private IConexionBD conexionBD;
     
     public PeliculaDAO(){
+    }
+    public PeliculaDAO(IConexionBD conexionBD){
         this.conexionBD=conexionBD;
     }
-
     //INSERTAR PELICULAS
     @Override
     public Pelicula insertarPelicula(Pelicula pelicula) throws cinepolisException {

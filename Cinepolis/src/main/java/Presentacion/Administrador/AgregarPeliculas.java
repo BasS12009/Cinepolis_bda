@@ -4,8 +4,14 @@
  */
 package Presentacion.Administrador;
 
-import Presentacion.Administrador.AgregarCliente;
+import DTOs.ClasificacionDTO;
+import DTOs.GeneroDTO;
+import DTOs.PeliculaDTO;
 import Negocio.CinepolisBO;
+import excepciones.cinepolisException;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import persistencia.ClienteDAO;
 import persistencia.ConexionBD;
 
@@ -23,6 +29,26 @@ public class AgregarPeliculas extends javax.swing.JFrame {
          this.setLocationRelativeTo(this);
         this.setSize(805, 600);
         this.cinepolisBO=cinepolisBO;
+        cargarClasificaciones();
+        cargarGeneros();
+    }
+    
+    private void cargarGeneros() {
+        List<GeneroDTO> generos = cinepolisBO.obtenerTodosLosGeneros();
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+        for (GeneroDTO genero : generos) {
+            model.addElement(genero.getTipo());
+        }
+        jComboBoxGenero.setModel(model);
+    }
+    
+    private void cargarClasificaciones() {
+        List<ClasificacionDTO> clasificaciones = cinepolisBO.obtenerTodasLasClasificaciones();
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+        for (ClasificacionDTO clasificacion : clasificaciones) {
+            model.addElement(clasificacion.getTipo());
+        }
+        jComboBoxClasificacion.setModel(model);
     }
 
     /**
@@ -41,21 +67,20 @@ public class AgregarPeliculas extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         btnPortada = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jTextField1 = new javax.swing.JTextField();
+        jComboBoxGenero = new javax.swing.JComboBox<>();
+        textoTitulo = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        textSinopsis = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        jComboBoxClasificacion = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        textoDuracion = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        textoPais = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        textoLink = new javax.swing.JTextField();
         btnAgregarPelicula = new javax.swing.JButton();
-        jLabel9 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -116,15 +141,30 @@ public class AgregarPeliculas extends javax.swing.JFrame {
         btnPortada.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
         btnPortada.setForeground(new java.awt.Color(255, 255, 255));
         btnPortada.setText("Agregar Portada");
+        btnPortada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPortadaActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnPortada, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 340, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         jLabel2.setText("Titulo:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 140, -1, -1));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Terror", "Comedia", "Ciencia Ficcion", "Drama ", "Musical" }));
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 170, -1, 30));
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 170, 240, 30));
+        jComboBoxGenero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxGeneroActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jComboBoxGenero, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 170, -1, 30));
+
+        textoTitulo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textoTituloActionPerformed(evt);
+            }
+        });
+        jPanel1.add(textoTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 170, 240, 30));
 
         jLabel3.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         jLabel3.setText("Genero:");
@@ -134,44 +174,62 @@ public class AgregarPeliculas extends javax.swing.JFrame {
         jLabel4.setText("Sinopsis: ");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 230, -1, -1));
 
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        textSinopsis.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                textSinopsisActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 260, 240, 80));
+        jPanel1.add(textSinopsis, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 260, 240, 80));
 
         jLabel5.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         jLabel5.setText("Clasificacion:");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 230, -1, -1));
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 260, 110, 30));
+        jComboBoxClasificacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxClasificacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxClasificacionActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jComboBoxClasificacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 260, 110, 30));
 
         jLabel6.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         jLabel6.setText("Duracion:");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 300, -1, -1));
-        jPanel1.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 330, 110, 30));
+
+        textoDuracion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textoDuracionActionPerformed(evt);
+            }
+        });
+        jPanel1.add(textoDuracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 330, 110, 30));
 
         jLabel7.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         jLabel7.setText("Pais:");
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 360, -1, -1));
-        jPanel1.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 390, 150, 30));
+        jPanel1.add(textoPais, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 390, 150, 30));
 
         jLabel8.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         jLabel8.setText("Link Trailer:");
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 410, -1, -1));
-        jPanel1.add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 440, 290, 30));
+
+        textoLink.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textoLinkActionPerformed(evt);
+            }
+        });
+        jPanel1.add(textoLink, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 440, 290, 30));
 
         btnAgregarPelicula.setBackground(new java.awt.Color(12, 33, 63));
         btnAgregarPelicula.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
         btnAgregarPelicula.setForeground(new java.awt.Color(255, 255, 255));
         btnAgregarPelicula.setText("Agregar Pelicula");
+        btnAgregarPelicula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarPeliculaActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnAgregarPelicula, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 507, -1, 30));
-
-        jLabel9.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
-        jLabel9.setText("Fecha de creacion:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 370, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -194,9 +252,87 @@ public class AgregarPeliculas extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void textSinopsisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textSinopsisActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_textSinopsisActionPerformed
+
+    private void textoTituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textoTituloActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textoTituloActionPerformed
+
+    private void btnAgregarPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarPeliculaActionPerformed
+       String titulo = textoTitulo.getText();
+       String genero = (String) jComboBoxGenero.getSelectedItem();
+       String sinopsis = textSinopsis.getText();
+       String clasificacion = (String) jComboBoxClasificacion.getSelectedItem();
+       String duracionStr = textoDuracion.getText();
+       String pais = textoPais.getText();
+       String linkTrailer = textoLink.getText();
+
+       // Validar que no haya campos vacíos
+       if (titulo.isEmpty() || genero.isEmpty() || sinopsis.isEmpty() || clasificacion.isEmpty() ||
+           duracionStr.isEmpty() || pais.isEmpty() || linkTrailer.isEmpty()) {
+           JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
+           return;
+       }
+
+       // Convertir duración a número
+       int duracion;
+       try {
+           duracion = Integer.parseInt(duracionStr);
+       } catch (NumberFormatException e) {
+           JOptionPane.showMessageDialog(this, "La duración debe ser un número", "Error", JOptionPane.ERROR_MESSAGE);
+           return;
+       }
+
+       // Obtener datos de la UI y crear un DTO
+        PeliculaDTO peliculaDTO = new PeliculaDTO();
+        peliculaDTO.setTitulo(textoTitulo.getText());
+        peliculaDTO.setGenero((String) jComboBoxGenero.getSelectedItem());
+        peliculaDTO.setSinopsis(textSinopsis.getText());
+        peliculaDTO.setClasificacion((String) jComboBoxClasificacion.getSelectedItem());
+        peliculaDTO.setDuracion(Double.parseDouble(textoDuracion.getText()));
+        peliculaDTO.setPais(textoPais.getText());
+        peliculaDTO.setTrailer(textoLink.getText());
+
+        // Llamar a la capa de negocio para agregar la película
+        try {
+            cinepolisBO.agregarPelicula(peliculaDTO);
+            JOptionPane.showMessageDialog(this, "Película agregada exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+            // Limpiar los campos después de agregar
+            textoTitulo.setText("");
+            textSinopsis.setText("");
+            textoDuracion.setText("");
+            textoPais.setText("");
+            textoLink.setText("");
+            jComboBoxGenero.setSelectedIndex(0);
+            jComboBoxClasificacion.setSelectedIndex(0);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al agregar película: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnAgregarPeliculaActionPerformed
+
+    private void btnPortadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPortadaActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_btnPortadaActionPerformed
+
+    private void textoLinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textoLinkActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textoLinkActionPerformed
+
+    private void textoDuracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textoDuracionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textoDuracionActionPerformed
+
+    private void jComboBoxClasificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxClasificacionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxClasificacionActionPerformed
+
+    private void jComboBoxGeneroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxGeneroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxGeneroActionPerformed
 
     /**
      * @param args the command line arguments
@@ -242,8 +378,8 @@ public class AgregarPeliculas extends javax.swing.JFrame {
     private javax.swing.JButton btnAgregarPelicula;
     private javax.swing.JButton btnPortada;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> jComboBoxClasificacion;
+    private javax.swing.JComboBox<String> jComboBoxGenero;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -252,14 +388,14 @@ public class AgregarPeliculas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField textSinopsis;
+    private javax.swing.JTextField textoDuracion;
+    private javax.swing.JTextField textoLink;
+    private javax.swing.JTextField textoPais;
+    private javax.swing.JTextField textoTitulo;
     // End of variables declaration//GEN-END:variables
 }
+

@@ -35,6 +35,10 @@ public class ClienteDAO implements IClienteDAO{
         this.conexionBD=conexionBD;
     }
 
+    public IConexionBD getConexion(){
+       return conexionBD;
+    }
+    
     //INSERTAR CLIENTES
     @Override
     public Cliente insertarCliente(Cliente cliente) throws cinepolisException {

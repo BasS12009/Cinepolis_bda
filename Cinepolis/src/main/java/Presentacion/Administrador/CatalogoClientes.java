@@ -377,6 +377,11 @@ public class CatalogoClientes extends javax.swing.JFrame {
         btnSiguiente.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
         btnSiguiente.setForeground(new java.awt.Color(255, 255, 255));
         btnSiguiente.setText("Siguiente");
+        btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiguienteActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 510, -1, -1));
 
         NumeroDePagina.setText("1");
@@ -416,22 +421,10 @@ public class CatalogoClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNuevoClienteActionPerformed
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
-        // TODO add your handling code here:
-        try {
-        List<ClienteDTO> todosLosClientes = cinepolisBO.buscarClientesTabla();
-
-        int totalPaginas = (int) Math.ceil((double) todosLosClientes.size() / LIMITE);
-
-        if (pagina < totalPaginas) {
-            pagina++;
-            cargarClientesEnTabla();
-            actualizarNumeroDePagina();
-        } else {
-
-            JOptionPane.showMessageDialog(this, "No hay más páginas disponibles", "Información", JOptionPane.INFORMATION_MESSAGE);
-        }
-    } catch (cinepolisException ex) {
-        ex.printStackTrace();
+        if (pagina > 1) {
+        pagina--;
+        cargarClientesEnTabla();
+        actualizarNumeroDePagina();
     }
     }//GEN-LAST:event_btnAtrasActionPerformed
 
@@ -459,6 +452,26 @@ public class CatalogoClientes extends javax.swing.JFrame {
             ex.printStackTrace();
         }
     }//GEN-LAST:event_NumeroDePaginaActionPerformed
+
+    private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
+        // TODO add your handling code here:
+        try {
+        List<ClienteDTO> todosLosClientes = cinepolisBO.buscarClientesTabla();
+
+        int totalPaginas = (int) Math.ceil((double) todosLosClientes.size() / LIMITE);
+
+        if (pagina < totalPaginas) {
+            pagina++;
+            cargarClientesEnTabla();
+            actualizarNumeroDePagina();
+        } else {
+
+            JOptionPane.showMessageDialog(this, "No hay más páginas disponibles", "Información", JOptionPane.INFORMATION_MESSAGE);
+        }
+    } catch (cinepolisException ex) {
+        ex.printStackTrace();
+    }
+    }//GEN-LAST:event_btnSiguienteActionPerformed
 
     private void actualizarNumeroDePagina() {
     NumeroDePagina.setText("Página " + pagina);

@@ -4,7 +4,10 @@
  */
 package Negocio;
 
+import DTOs.ClasificacionDTO;
 import DTOs.ClienteDTO;
+import DTOs.GeneroDTO;
+
 import entidades.Cliente;
 import excepciones.cinepolisException;
 import java.sql.SQLException;
@@ -32,5 +35,12 @@ public interface ICinepolisBO {
     
     public ClienteDTO editarCliente(ClienteDTO cliente) throws cinepolisException;
     
-     public ClienteDTO eliminarCliente(long idCliente) throws cinepolisException ;
+    public ClienteDTO eliminarCliente(long idCliente) throws cinepolisException ;
+     
+    public void agregarCliente(ClienteDTO cliente) throws SQLException, cinepolisException;
+    
+    public List<ClasificacionDTO> obtenerTodasLasClasificaciones();
+    
+    public List<GeneroDTO> obtenerTodosLosGeneros();
+     
 }
