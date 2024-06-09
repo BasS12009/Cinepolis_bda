@@ -12,6 +12,7 @@ import entidades.Cliente;
 import excepciones.cinepolisException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
@@ -27,4 +28,5 @@ public interface IClienteDAO {
     
     public Cliente eliminarClientePorID(int idCliente) throws cinepolisException;
     
+    public List<Cliente> buscarClientesTabla() throws cinepolisException;
 }

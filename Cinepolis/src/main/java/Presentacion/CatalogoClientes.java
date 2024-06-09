@@ -4,21 +4,156 @@
  */
 package Presentacion;
 
+import DTOs.ClienteDTO;
+import Negocio.CinepolisBO;
+import excepciones.cinepolisException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import persistencia.ClienteDAO;
+import persistencia.ConexionBD;
+import utilerias.JButtonCellEditor;
+import utilerias.JButtonRenderer;
+
 /**
  *
  * @author diana
  */
 public class CatalogoClientes extends javax.swing.JFrame {
-
+    private int pagina=1;
+    private int LIMITE=1;
+    CinepolisBO cinepolisBO;
+    
     /**
      * Creates new form CatalogoClientes
      */
     public CatalogoClientes() {
         initComponents();
+//        CinepolisBO cinepolisBO
+//        this.cinepolisBO=cinepolisBO;
          this.setLocationRelativeTo(this);
         this.setSize(955, 600);
+        this.cargarMetodosIniciales();
+        
     }
+    
+    
+    private int getIdSeleccionadoTablaClientes() {
+        int indiceFilaSeleccionada = this.tblClientes.getSelectedRow();
+        if (indiceFilaSeleccionada != -1) {
+            DefaultTableModel modelo = (DefaultTableModel) this.tblClientes.getModel();
+            int indiceColumnaId = 0;
+            int idSocioSeleccionado = (int) modelo.getValueAt(indiceFilaSeleccionada,
+                    indiceColumnaId);
+            return idSocioSeleccionado;
+        } else {
+            return 0;
+        }
+    }
+    
+    private void cargarMetodosIniciales() {
+        this.cargarConfiguracionInicialTablaClientes();
+        this.cargarClientesEnTabla();
+    }
+    
+    private void cargarConfiguracionInicialTablaClientes() {
+        ActionListener onEditarClickListener = new ActionListener() {
+            final int columnaId = 0;
 
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Metodo para editar un alumno
+                editar();
+            }
+        };
+        int indiceColumnaEditar = 4;
+        TableColumnModel modeloColumnas = this.tblClientes.getColumnModel();
+        modeloColumnas.getColumn(indiceColumnaEditar).setCellRenderer(new JButtonRenderer("Editar"));
+        modeloColumnas.getColumn(indiceColumnaEditar).setCellEditor(new JButtonCellEditor("Editar", onEditarClickListener));
+
+        ActionListener onEliminarClickListener = new ActionListener() {
+            final int columnaId = 0;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                eliminar();
+            }
+        };
+        int indiceColumnaEliminar = 5;
+        modeloColumnas.getColumn(indiceColumnaEliminar).setCellRenderer(new JButtonRenderer("Eliminar"));
+        modeloColumnas.getColumn(indiceColumnaEliminar).setCellEditor(new JButtonCellEditor("Eliminar", onEliminarClickListener));
+        }
+    
+    
+    private void editar(){
+    int id = this.getIdSeleccionadoTablaClientes(); 
+    }
+    
+    private void eliminar() {
+        int idCliente = this.getIdSeleccionadoTablaClientes();
+    }
+    
+    private void llenarTablaClientes(List<ClienteDTO> clienteLista) {
+         DefaultTableModel modeloTabla = (DefaultTableModel) this.tblClientes.getModel();
+
+        modeloTabla.setRowCount(0);
+
+        if (clienteLista != null) {
+            clienteLista.forEach(row -> {
+                Object[] fila = new Object[6]; // Adjust the array size to match the number of columns
+                fila[0] = row.getId();
+                fila[1] = row.getNombre() + " " + row.getApellidoPaterno() + " " + row.getApellidoMaterno();
+                fila[2] = row.getCorreo();
+                fila[3] = row.getContrasena();
+                fila[4] = "Eliminar";
+                fila[5] = "Editar"; 
+                modeloTabla.addRow(fila); // Add row data to the table model
+            });
+        }
+    }
+     
+    private void cargarClientesEnTabla() {
+    try {
+        int indiceInicio = (pagina - 1) * LIMITE;
+        List<ClienteDTO> todosLosClientes = cinepolisBO.buscarClientesTabla();
+        int indiceFin = Math.min(indiceInicio + LIMITE, todosLosClientes.size());
+
+        List<ClienteDTO> clientesPagina = obtenerClientesPagina(indiceInicio, indiceFin);
+
+        llenarTablaClientes(clientesPagina);
+
+        actualizarNumeroDePagina();
+    } catch (cinepolisException ex) {
+        ex.printStackTrace();
+    }
+    }
+    
+    
+    private List<ClienteDTO> obtenerClientesPagina(int indiceInicio, int indiceFin) {
+            try {
+        List<ClienteDTO> todosLosClientes = cinepolisBO.buscarClientesTabla();
+        List<ClienteDTO> clientesPaginas = new ArrayList<>();
+
+        indiceFin = Math.min(indiceFin, todosLosClientes.size());
+
+        for (int i = indiceInicio; i < indiceFin; i++) {
+            clientesPaginas.add(todosLosClientes.get(i));
+        }
+        
+        return clientesPaginas;
+            } catch (cinepolisException ex) {
+ 
+                ex.printStackTrace();
+                return Collections.emptyList();
+            }
+        }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -47,6 +182,7 @@ public class CatalogoClientes extends javax.swing.JFrame {
         btnNuevoCliente = new javax.swing.JButton();
         btnAtras = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
+        NumeroDePagina = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -214,6 +350,14 @@ public class CatalogoClientes extends javax.swing.JFrame {
         btnSiguiente.setText("Siguiente");
         jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 510, -1, -1));
 
+        NumeroDePagina.setText("1");
+        NumeroDePagina.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NumeroDePaginaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(NumeroDePagina, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 520, 20, 20));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -244,9 +388,52 @@ public class CatalogoClientes extends javax.swing.JFrame {
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
         // TODO add your handling code here:
+        try {
+        List<ClienteDTO> todosLosClientes = cinepolisBO.buscarClientesTabla();
 
+        int totalPaginas = (int) Math.ceil((double) todosLosClientes.size() / LIMITE);
+
+        if (pagina < totalPaginas) {
+            pagina++;
+            cargarClientesEnTabla();
+            actualizarNumeroDePagina();
+        } else {
+
+            JOptionPane.showMessageDialog(this, "No hay más páginas disponibles", "Información", JOptionPane.INFORMATION_MESSAGE);
+        }
+    } catch (cinepolisException ex) {
+        ex.printStackTrace();
+    }
     }//GEN-LAST:event_btnAtrasActionPerformed
 
+    private void NumeroDePaginaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NumeroDePaginaActionPerformed
+        // TODO add your handling code here:
+        try {
+        List<ClienteDTO> todosLosclientes = cinepolisBO.buscarClientesTabla();
+
+        int totalPaginas = (int) Math.ceil((double) todosLosclientes.size() / LIMITE);
+
+        int nuevaPagina = Integer.parseInt(NumeroDePagina.getText());
+
+        if (nuevaPagina >= 1 && nuevaPagina <= totalPaginas) {
+            pagina = nuevaPagina;
+
+            cargarClientesEnTabla();
+
+            actualizarNumeroDePagina();
+        } else {
+            JOptionPane.showMessageDialog(this, "Número de página inválido", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Ingrese un número válido para la página", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (cinepolisException ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_NumeroDePaginaActionPerformed
+
+    private void actualizarNumeroDePagina() {
+    NumeroDePagina.setText("Página " + pagina);
+    }
     /**
      * @param args the command line arguments
      */
@@ -275,6 +462,10 @@ public class CatalogoClientes extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
+        ConexionBD conexion = new ConexionBD();
+        ClienteDAO clienteDAO= new ClienteDAO (conexion);
+        CinepolisBO cinepolisBO=new CinepolisBO(clienteDAO);
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new CatalogoClientes().setVisible(true);
@@ -283,6 +474,7 @@ public class CatalogoClientes extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField NumeroDePagina;
     private javax.swing.JButton btnAtras;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnNuevoCliente;

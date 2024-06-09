@@ -6,7 +6,9 @@ package Negocio;
 
 import DTOs.ClienteDTO;
 import entidades.Cliente;
+import excepciones.cinepolisException;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
@@ -21,4 +23,6 @@ public interface ICinepolisBO {
     public Cliente convertirAEntidad(ClienteDTO cliente) throws SQLException ;
     
     public ClienteDTO convertirAEntidad(Cliente cliente) throws SQLException;
+    
+    public List<ClienteDTO> buscarClientesTabla() throws cinepolisException;
 }

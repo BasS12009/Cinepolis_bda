@@ -14,6 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import persistencia.IConexionBD;
 
 /**
@@ -288,6 +290,27 @@ public class ClienteDAO implements IClienteDAO{
         }
     }
     
-    
+    public List<Cliente> buscarClientesTabla() throws cinepolisException {
+        try{
+            List<Cliente> clientesLista=null;
+            Connection conexion=this.conexionBD.crearConexion();
+            String codigoSQL= "SELECT idCliente, nombre, apellidoPaterno, apellidoMaterno, correo, contrasena, ubicacion, fechaNacimiento FROM clientes";
+            Statement comandoSQL = conexion.createStatement();
+            ResultSet resultado=comandoSQL.executeQuery(codigoSQL);
+            while(resultado.next()){
+                if(clientesLista==null){
+                    clientesLista=new ArrayList<>();
+                }
+                Cliente cliente = new Cliente();
+                cliente=cliente.convertirAEntidad(resultado);
+                clientesLista.add(cliente);
+            }
+            conexion.close();
+            return clientesLista;
+        } catch(SQLException ex){
+            System.out.println(ex.getMessage());
+            throw new cinepolisException("Ocurrio un error al leer la base de datos, intentelo de nuevo y si el error persiste");
+        }
+    }
     
 }
