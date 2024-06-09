@@ -4,19 +4,23 @@
  */
 package Presentacion.Administrador;
 
-import Presentacion.Cartelera;
+import Negocio.CinepolisBO;
+import persistencia.ClienteDAO;
+import persistencia.ConexionBD;
 
 /**
  *
  * @author diana
  */
 public class NuevaFuncion extends javax.swing.JFrame {
-
+ CinepolisBO cinepolisBO;
     /**
      * Creates new form NuevaFuncion
+     * @param cinepolisBO
      */
-    public NuevaFuncion() {
+    public NuevaFuncion(CinepolisBO cinepolisBO) {
         initComponents();
+         this.cinepolisBO= cinepolisBO;
     }
 
     /**
@@ -32,6 +36,14 @@ public class NuevaFuncion extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         btnRegresar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        btnAgregarFuncion = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -82,6 +94,31 @@ public class NuevaFuncion extends javax.swing.JFrame {
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 760, 40));
 
+        jLabel1.setFont(new java.awt.Font("Serif", 0, 36)); // NOI18N
+        jLabel1.setText("Nueva Funcion");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 60, -1, -1));
+
+        jLabel2.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
+        jLabel2.setText("Fecha:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 130, -1, -1));
+        jPanel1.add(jDateChooser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 170, 250, 30));
+
+        jLabel3.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
+        jLabel3.setText("Hora Inicio:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 230, -1, 20));
+        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 260, 250, 30));
+
+        jLabel4.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
+        jLabel4.setText("Duracion:");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 320, -1, -1));
+        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 350, 250, 30));
+
+        btnAgregarFuncion.setBackground(new java.awt.Color(12, 33, 63));
+        btnAgregarFuncion.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
+        btnAgregarFuncion.setForeground(new java.awt.Color(255, 255, 255));
+        btnAgregarFuncion.setText("Agregar Funcion");
+        jPanel1.add(btnAgregarFuncion, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 480, -1, 30));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -98,8 +135,8 @@ public class NuevaFuncion extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        Cartelera cartelera = new Cartelera();
-        cartelera.setVisible(true);
+       AdministrarFunciones administrarFunciones = new  AdministrarFunciones(cinepolisBO);
+        administrarFunciones.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
@@ -129,19 +166,30 @@ public class NuevaFuncion extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(NuevaFuncion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+ ConexionBD conexion = new ConexionBD();
+        ClienteDAO clienteDAO= new ClienteDAO (conexion);
+        CinepolisBO cinepolisBO=new CinepolisBO(clienteDAO);
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
-                new NuevaFuncion().setVisible(true);
+                new NuevaFuncion(cinepolisBO).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarFuncion;
     private javax.swing.JButton btnRegresar;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }
