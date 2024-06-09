@@ -31,7 +31,6 @@ public class EditarCliente extends javax.swing.JFrame {
     try {
         ClienteDTO cliente = cinepolisBO.obtenerClientePorID(idCliente);
 
-        // Llenar los campos de edición con los datos del cliente
         txtNombre.setText(cliente.getNombre() + " " + cliente.getApellidoPaterno() + " " + cliente.getApellidoMaterno());
         txtCorreo.setText(cliente.getCorreo());
         Calendar fecha = Calendar.getInstance();

@@ -4,11 +4,24 @@
  */
 package Presentacion.Administrador;
 
+import DTOs.PeliculaDTO;
 import Presentacion.Administrador.AgregarPeliculas;
 import Presentacion.Administrador.AdministrarCatalogos;
 import Negocio.CinepolisBO;
+import excepciones.cinepolisException;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import persistencia.ClienteDAO;
 import persistencia.ConexionBD;
+import utilerias.JButtonCellEditor;
+import utilerias.JButtonRenderer;
 
 /**
  *
@@ -16,6 +29,8 @@ import persistencia.ConexionBD;
  */
 public class CatalogoPeliculas extends javax.swing.JFrame {
     CinepolisBO cinepolisBO;
+    private int pagina=1;
+    private int LIMITE=1;
     
     /**
      * Creates new form CatalalogoPeliculas
@@ -25,8 +40,131 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
          this.setLocationRelativeTo(this);
         this.setSize(955, 600);
         this.cinepolisBO=cinepolisBO;
+        this.cargarMetodosIniciales();
+        NumeroDePagina.setEditable(false);
     }
+    
+    private long getIdSeleccionadoTablaPelicula() throws cinepolisException {
+         int selectedRow = tblPeliculas.getSelectedRow();
+        if (selectedRow >= 0) {
+            return (long) tblPeliculas.getValueAt(selectedRow, 0);
+        } else {
+            throw new excepciones.cinepolisException("No se ha seleccionado ninguna película");
+        }
+    }
+        
+    private void cargarMetodosIniciales() {
+        this.cargarConfiguracionInicialTablaClientes();
+        this.cargarPeliculasEnTabla();
+    }
+    
+        private void cargarConfiguracionInicialTablaClientes() {
+        ActionListener onEditarClickListener = new ActionListener() {
+            final int columnaId = 0;
 
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editar();
+            }
+        };
+        int indiceColumnaEditar = 4;
+        TableColumnModel modeloColumnas = this.tblPeliculas.getColumnModel();
+        Color color = new Color(178, 218, 250);
+        modeloColumnas.getColumn(indiceColumnaEditar).setCellRenderer(new JButtonRenderer("Editar",color));
+        modeloColumnas.getColumn(indiceColumnaEditar).setCellEditor(new JButtonCellEditor("Editar", onEditarClickListener));
+
+        ActionListener onEliminarClickListener = new ActionListener() {
+            final int columnaId = 0;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                eliminar();
+            }
+        };
+        int indiceColumnaEliminar = 5;
+        color = new Color(255, 105, 97);
+        modeloColumnas.getColumn(indiceColumnaEliminar).setCellRenderer(new JButtonRenderer("Eliminar",color));
+        modeloColumnas.getColumn(indiceColumnaEliminar).setCellEditor(new JButtonCellEditor("Eliminar", onEliminarClickListener));
+        }
+        
+            private void editar() {
+            try {
+            long id = this.getIdSeleccionadoTablaPelicula();
+            System.out.println("ID de la película seleccionada: " + id);
+            EditarPelicula editar = new EditarPelicula(this.cinepolisBO, id);
+            this.setVisible(false);
+            editar.show();
+        } catch (excepciones.cinepolisException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        }
+
+        private void eliminar() {
+            try {
+            long id = this.getIdSeleccionadoTablaPelicula();
+            PeliculaDTO pelicula = cinepolisBO.obtenerPeliculaPorID(id);
+            int confirmacion = JOptionPane.showConfirmDialog(this, 
+                        "¿Está seguro que desea eliminar la película?\n" +
+                        "ID: " + pelicula.getId() + "\n" +
+                        "Título: " + pelicula.getTitulo() + "\n" +
+                        "Sinopsis: " + pelicula.getGenero(),
+                        "Confirmar eliminación",
+                        JOptionPane.YES_NO_OPTION);
+
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                cinepolisBO.eliminarPelicula(id);
+                JOptionPane.showMessageDialog(this, "Película eliminada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                cargarPeliculasEnTabla();
+            }
+            } catch (cinepolisException ex) {
+                JOptionPane.showMessageDialog(this, "Error al eliminar el cliente: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    
+        private void llenarTablaPeliculas(List<PeliculaDTO> clienteLista) {
+         DefaultTableModel modeloTabla = (DefaultTableModel) this.tblPeliculas.getModel();
+
+        modeloTabla.setRowCount(0);
+
+        if (clienteLista != null) {
+            clienteLista.forEach(row -> {
+                Object[] fila = new Object[6];
+                fila[0] = row.getId();
+                fila[1] = row.getTitulo();
+                fila[2] = row.getGenero();
+                fila[3] = row.getClasificacion();
+                fila[4] = "Eliminar";
+                fila[5] = "Editar"; 
+                modeloTabla.addRow(fila);
+            });
+        }
+        }
+        
+        private void cargarPeliculasEnTabla() {
+    try {
+        int indiceInicio = (pagina - 1) * LIMITE;
+        List<PeliculaDTO> todasLasPeliculas = cinepolisBO.obtenerTodasLasPeliculasTablaDTO();
+        int indiceFin = Math.min(indiceInicio + LIMITE, todasLasPeliculas.size());
+
+        List<PeliculaDTO> peliculasPagina = obtenerPeliculasPagina(indiceInicio, indiceFin);
+
+        llenarTablaPeliculas(peliculasPagina);
+
+        actualizarNumeroDePagina();
+    } catch (cinepolisException ex) {
+        ex.printStackTrace();
+    }
+    }
+        
+        private List<PeliculaDTO> obtenerPeliculasPagina(int indiceInicio, int indiceFin) throws cinepolisException {
+            List<PeliculaDTO> todasLasPeliculas = cinepolisBO.buscarPeliculasTabla();
+            List<PeliculaDTO> peliculasPaginas = new ArrayList<>();
+            indiceFin = Math.min(indiceFin, todasLasPeliculas.size());
+            for (int i = indiceInicio; i < indiceFin; i++) {
+                peliculasPaginas.add(todasLasPeliculas.get(i));
+            }
+            return peliculasPaginas;
+        }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -55,6 +193,7 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
         btnNuevaPelicula = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
         btnAtras = new javax.swing.JButton();
+        NumeroDePagina = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -211,6 +350,11 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
         btnSiguiente.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
         btnSiguiente.setForeground(new java.awt.Color(255, 255, 255));
         btnSiguiente.setText("Siguiente");
+        btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiguienteActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 510, -1, -1));
 
         btnAtras.setBackground(new java.awt.Color(12, 33, 63));
@@ -223,6 +367,14 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnAtras, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 510, -1, -1));
+
+        NumeroDePagina.setText("1");
+        NumeroDePagina.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NumeroDePaginaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(NumeroDePagina, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 520, 20, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -239,7 +391,6 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        // TODO add your handling code here:
         AdministrarCatalogos administrarCatalogos = new AdministrarCatalogos(cinepolisBO);
         administrarCatalogos.setVisible(true);
         this.dispose();
@@ -252,10 +403,64 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnNuevaPeliculaActionPerformed
 
+    
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
-        // TODO add your handling code here:
+        if (pagina > 1) {
+        pagina--;
+        cargarPeliculasEnTabla();
+        actualizarNumeroDePagina();
+        }
     }//GEN-LAST:event_btnAtrasActionPerformed
+   
+    private void NumeroDePaginaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NumeroDePaginaActionPerformed
+         
+        try {
+        List<PeliculaDTO> todasLasPeliculas = cinepolisBO.buscarPeliculasTabla();
 
+        int totalPaginas = (int) Math.ceil((double) todasLasPeliculas.size() / LIMITE);
+
+        int nuevaPagina = Integer.parseInt(NumeroDePagina.getText());
+
+        if (nuevaPagina >= 1 && nuevaPagina <= totalPaginas) {
+            pagina = nuevaPagina;
+
+            cargarPeliculasEnTabla();
+
+            actualizarNumeroDePagina();
+        } else {
+            JOptionPane.showMessageDialog(this, "Número de página inválido", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Ingrese un número válido para la página", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (cinepolisException ex) {
+            ex.printStackTrace();
+        }
+        
+    }//GEN-LAST:event_NumeroDePaginaActionPerformed
+
+    private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
+        try {
+        List<PeliculaDTO> todasLasPeliculas = cinepolisBO.buscarPeliculasTabla();
+
+        int totalPaginas = (int) Math.ceil((double) todasLasPeliculas.size() / LIMITE);
+
+        if (pagina < totalPaginas) {
+            pagina++;
+            cargarPeliculasEnTabla();
+            actualizarNumeroDePagina();
+        } else {
+
+            JOptionPane.showMessageDialog(this, "No hay más páginas disponibles", "Información", JOptionPane.INFORMATION_MESSAGE);
+        }
+    } catch (cinepolisException ex) {
+        ex.printStackTrace();
+    }
+    }//GEN-LAST:event_btnSiguienteActionPerformed
+
+    private void actualizarNumeroDePagina() {
+    NumeroDePagina.setText("Página " + pagina);
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -273,6 +478,7 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField NumeroDePagina;
     private javax.swing.JButton btnAtras;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnNuevaPelicula;

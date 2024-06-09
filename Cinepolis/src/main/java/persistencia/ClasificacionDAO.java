@@ -54,7 +54,7 @@ public class ClasificacionDAO implements IClasificacionDAO{
     public Clasificacion buscarPorId(long id) throws cinepolisException{
         Connection conexion = null;
         Clasificacion clasificacion = null;
-        String query = "SELECT * FROM clasificacion WHERE id = ?";
+        String query = "SELECT * FROM clasificacion WHERE idClasificacion = ?";
 
         try {
             conexion = this.conexionBD.crearConexion();
@@ -66,8 +66,8 @@ public class ClasificacionDAO implements IClasificacionDAO{
 
                 if (resultSet.next()) {
                     clasificacion = new Clasificacion();
-                    clasificacion.setId(resultSet.getLong("id"));
-                    clasificacion.setNombre(resultSet.getString("nombre"));
+                    clasificacion.setId(resultSet.getLong("idClasificacion"));
+                    clasificacion.setNombre(resultSet.getString("tipo"));
                 }
             }
 

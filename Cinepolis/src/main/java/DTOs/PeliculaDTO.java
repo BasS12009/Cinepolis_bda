@@ -18,6 +18,10 @@ public class PeliculaDTO {
     private String pais;
     private String clasificacion;
 
+    public PeliculaDTO(){
+       
+    }
+    
     
     public Long getId() {
         return id;

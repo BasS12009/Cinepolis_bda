@@ -7,8 +7,10 @@ package Negocio;
 import DTOs.ClasificacionDTO;
 import DTOs.ClienteDTO;
 import DTOs.GeneroDTO;
+import DTOs.PeliculaDTO;
 
 import entidades.Cliente;
+import entidades.Pelicula;
 import excepciones.cinepolisException;
 import java.sql.SQLException;
 import java.util.List;
@@ -42,5 +44,16 @@ public interface ICinepolisBO {
     public List<ClasificacionDTO> obtenerTodasLasClasificaciones();
     
     public List<GeneroDTO> obtenerTodosLosGeneros();
-     
+    
+    public PeliculaDTO obtenerPeliculaPorID(long id) throws cinepolisException;
+    
+    public PeliculaDTO eliminarPelicula(long idPelicula) throws cinepolisException;
+    
+    public PeliculaDTO convertirAEntidad(Pelicula pelicula) throws SQLException;
+    
+    public List<PeliculaDTO> obtenerTodasLasPeliculasTablaDTO() throws cinepolisException;
+    
+    public List<PeliculaDTO> buscarPeliculasTabla() throws cinepolisException;
+    
+   public PeliculaDTO editarPelicula(PeliculaDTO pelicula) throws cinepolisException;  
 }

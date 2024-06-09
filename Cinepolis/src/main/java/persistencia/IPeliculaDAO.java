@@ -4,8 +4,10 @@
  */
 package persistencia;
 
+import DTOs.PeliculaDTO;
 import entidades.Pelicula;
 import excepciones.cinepolisException;
+import java.util.List;
 
 /**
  *
@@ -18,5 +20,10 @@ public interface IPeliculaDAO {
     
     public Pelicula editarPelicula(Pelicula pelicula) throws cinepolisException;
     
-    public Pelicula eliminarPeliculaPorID(int idPelicula) throws cinepolisException;
+    public Pelicula eliminarPeliculaPorID(Long idPelicula) throws cinepolisException;
+    
+    public PeliculaDTO obtenerPeliculaPorId(long id) throws cinepolisException;
+    
+    public List<PeliculaDTO> obtenerTodasLasPeliculas() throws cinepolisException;
+    
 }

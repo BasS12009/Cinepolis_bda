@@ -4,7 +4,14 @@
  */
 package Presentacion.Administrador;
 
+import DTOs.ClasificacionDTO;
+import DTOs.GeneroDTO;
+import DTOs.PeliculaDTO;
 import Negocio.CinepolisBO;
+import excepciones.cinepolisException;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import persistencia.ClienteDAO;
 import persistencia.ConexionBD;
 
@@ -13,15 +20,74 @@ import persistencia.ConexionBD;
  * @author diana
  */
 public class EditarPelicula extends javax.swing.JFrame {
- CinepolisBO cinepolisBO;
+    CinepolisBO cinepolisBO;
+    long idPelicula;
+ 
     /**
      * Creates new form EditarPelicula
      */
-    public EditarPelicula(CinepolisBO cinepolisBO) {
+    public EditarPelicula (CinepolisBO cinepolisBO,long idPelicula) throws cinepolisException {
+        System.out.println("ID de película recibido en EditarPelicula: " + idPelicula); // Confirmación del ID recibido
         initComponents();
-         this.cinepolisBO= cinepolisBO;
+        this.cinepolisBO = cinepolisBO;
+        this.idPelicula = idPelicula; // Asegúrate de que esto esté presente y se asigne correctamente
+
+        try {
+            llenarComboBoxGeneros();
+            llenarComboBoxClasificaciones();
+
+            PeliculaDTO pelicula = cinepolisBO.obtenerPeliculaPorID(idPelicula);
+
+            if (pelicula == null) {
+                throw new cinepolisException("No se encontró la película con el ID especificado");
+            }
+
+            textoTitulo.setText(pelicula.getTitulo());
+            textoSinopsis.setText(pelicula.getSinopsis());
+            textoDuracion.setText(String.valueOf(pelicula.getDuracion()));
+            textoPais.setText(pelicula.getPais());
+            textoTrailer.setText(pelicula.getTrailer());
+
+            String genero = pelicula.getGenero();
+            String clasificacion = pelicula.getClasificacion();
+
+            for (int i = 0; i < jComboBox1.getItemCount(); i++) {
+                if (jComboBox1.getItemAt(i).equals(genero)) {
+                    jComboBox1.setSelectedIndex(i);
+                    break;
+                }
+            }
+
+            for (int i = 0; i < jComboBox2.getItemCount(); i++) {
+                if (jComboBox2.getItemAt(i).equals(clasificacion)) {
+                    jComboBox2.setSelectedIndex(i);
+                    break;
+                }
+            }
+        } catch (cinepolisException ex) {
+            System.out.println("Error al obtener la película por ID: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+    
+    private void llenarComboBoxGeneros() {
+        List<GeneroDTO> generos = cinepolisBO.obtenerTodosLosGeneros();
+        jComboBox1.removeAllItems();
+        for (GeneroDTO genero : generos) {
+            jComboBox1.addItem(genero.getTipo());
+        }
     }
 
+    private void llenarComboBoxClasificaciones() {
+        List<ClasificacionDTO> clasificaciones = cinepolisBO.obtenerTodasLasClasificaciones();
+        jComboBox2.removeAllItems();
+        for (ClasificacionDTO clasificacion : clasificaciones) {
+            jComboBox2.addItem(clasificacion.getTipo());
+        }
+    }
+
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -39,20 +105,19 @@ public class EditarPelicula extends javax.swing.JFrame {
         btnPortada = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
-        jTextField1 = new javax.swing.JTextField();
+        textoTitulo = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        textoSinopsis = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        textoDuracion = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        textoPais = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        textoTrailer = new javax.swing.JTextField();
         btnEditarPelicula = new javax.swing.JButton();
-        jLabel9 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -119,9 +184,8 @@ public class EditarPelicula extends javax.swing.JFrame {
         jLabel2.setText("Titulo:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 140, -1, -1));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Terror", "Comedia", "Ciencia Ficcion", "Drama ", "Musical" }));
         jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 170, -1, 30));
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 170, 240, 30));
+        jPanel1.add(textoTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 170, 240, 30));
 
         jLabel3.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         jLabel3.setText("Genero:");
@@ -131,34 +195,33 @@ public class EditarPelicula extends javax.swing.JFrame {
         jLabel4.setText("Sinopsis: ");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 230, -1, -1));
 
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        textoSinopsis.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                textoSinopsisActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 260, 240, 80));
+        jPanel1.add(textoSinopsis, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 260, 240, 80));
 
         jLabel5.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         jLabel5.setText("Clasificacion:");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 230, -1, -1));
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jPanel1.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 260, 110, 30));
 
         jLabel6.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         jLabel6.setText("Duracion:");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 300, -1, -1));
-        jPanel1.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 330, 110, 30));
+        jPanel1.add(textoDuracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 330, 110, 30));
 
         jLabel7.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         jLabel7.setText("Pais:");
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 360, -1, -1));
-        jPanel1.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 390, 150, 30));
+        jPanel1.add(textoPais, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 390, 150, 30));
 
         jLabel8.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         jLabel8.setText("Link Trailer:");
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 410, -1, -1));
-        jPanel1.add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 440, 290, 30));
+        jPanel1.add(textoTrailer, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 440, 290, 30));
 
         btnEditarPelicula.setBackground(new java.awt.Color(12, 33, 63));
         btnEditarPelicula.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
@@ -170,10 +233,6 @@ public class EditarPelicula extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnEditarPelicula, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 500, -1, 30));
-
-        jLabel9.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
-        jLabel9.setText("Fecha de creacion:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 370, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -196,52 +255,47 @@ public class EditarPelicula extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void textoSinopsisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textoSinopsisActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_textoSinopsisActionPerformed
 
+    
     private void btnEditarPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarPeliculaActionPerformed
-        // TODO add your handling code here:
+        try {        
+        String titulo = textoTitulo.getText();
+        String sinopsis = textoSinopsis.getText();
+        String genero = (String) jComboBox1.getSelectedItem(); 
+        String clasificacion = (String) jComboBox2.getSelectedItem(); 
+        String duracionStr = textoDuracion.getText();
+        double duracion = Double.parseDouble(duracionStr);
+        String pais = textoPais.getText();
+        String trailer = textoTrailer.getText();
+
+        PeliculaDTO pelicula = new PeliculaDTO();
+        pelicula.setId(idPelicula);
+        pelicula.setTitulo(titulo);
+        pelicula.setSinopsis(sinopsis);
+        pelicula.setGenero(genero);
+        pelicula.setClasificacion(clasificacion);
+        pelicula.setDuracion(duracion);
+        pelicula.setPais(pais);
+        pelicula.setTrailer(trailer);
+
+        System.out.println("Ejecutando SQL con ID: " + idPelicula);
+        
+        
+            cinepolisBO.editarPelicula( pelicula);
+            JOptionPane.showMessageDialog(this, "La película se ha editado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+            CatalogoPeliculas catalogoPeliculas = new CatalogoPeliculas(cinepolisBO);
+            catalogoPeliculas.setVisible(true);
+        } catch (cinepolisException ex) {
+            JOptionPane.showMessageDialog(this, "Error al editar la película: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+        
     }//GEN-LAST:event_btnEditarPeliculaActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EditarPelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EditarPelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EditarPelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EditarPelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        ConexionBD conexion = new ConexionBD();
-        ClienteDAO clienteDAO= new ClienteDAO (conexion);
-        CinepolisBO cinepolisBO=new CinepolisBO(clienteDAO);
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                
-                new EditarPelicula(cinepolisBO).setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditarPelicula;
@@ -257,14 +311,13 @@ public class EditarPelicula extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField textoDuracion;
+    private javax.swing.JTextField textoPais;
+    private javax.swing.JTextField textoSinopsis;
+    private javax.swing.JTextField textoTitulo;
+    private javax.swing.JTextField textoTrailer;
     // End of variables declaration//GEN-END:variables
 }

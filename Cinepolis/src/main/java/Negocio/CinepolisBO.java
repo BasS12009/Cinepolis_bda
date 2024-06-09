@@ -109,6 +109,20 @@ public class CinepolisBO implements ICinepolisBO{
     return new Pelicula( titulo,  sinopsis,  trailer,  duracion,  pais,  idGenero,  idClasificacion);
     }
     
+    public Pelicula convertirAEntidadEd(PeliculaDTO peliculaDTO) throws SQLException, cinepolisException {
+
+    long id=peliculaDTO.getId();
+    String titulo = peliculaDTO.getTitulo();
+    int idGenero = obtenerIdGenero(peliculaDTO.getGenero());
+    String sinopsis = peliculaDTO.getSinopsis();
+    int idClasificacion = obtenerIdClasificacion(peliculaDTO.getClasificacion());
+    double duracion = peliculaDTO.getDuracion();
+    String pais = peliculaDTO.getPais();
+    String trailer = peliculaDTO.getTrailer();
+
+    return new Pelicula( (int) id,titulo,  sinopsis,  trailer,  duracion,  pais,  idGenero,  idClasificacion);
+    }
+    
     @Override
     public ClienteDTO convertirAEntidad(Cliente cliente) throws SQLException {
 
@@ -124,6 +138,61 @@ public class CinepolisBO implements ICinepolisBO{
         return new ClienteDTO(id, nombre, paterno, materno, correo, contrasena, ubicacion, fechaN);
     }
     
+    @Override
+    public PeliculaDTO convertirAEntidad(Pelicula pelicula) throws SQLException {
+        PeliculaDTO peliculaDTO = new PeliculaDTO();
+            
+            peliculaDTO.setTitulo(pelicula.getTitulo());
+            peliculaDTO.setSinopsis(pelicula.getSinopsis());
+            peliculaDTO.setTrailer(pelicula.getTrailer());
+            peliculaDTO.setDuracion(pelicula.getDuracion());
+            peliculaDTO.setPais(pelicula.getPais());
+
+            try {
+                String genero = obtenerTipoGeneroPorID(pelicula.getGenero());
+                peliculaDTO.setGenero(genero);
+            } catch (cinepolisException ex) {
+                System.out.println("Error al obtener el tipo de género: " + ex.getMessage());
+            }
+
+            try {
+                String clasificacion = obtenerTipoClasificacionPorID(pelicula.getClasificacion());
+                peliculaDTO.setClasificacion(clasificacion);
+            } catch (cinepolisException ex) {
+                System.out.println("Error al obtener el tipo de clasificación: " + ex.getMessage());
+            }
+
+            return peliculaDTO;
+            
+    }
+    
+    
+    public PeliculaDTO convertirAEntidadEd(Pelicula pelicula) throws SQLException {
+        PeliculaDTO peliculaDTO = new PeliculaDTO();
+            peliculaDTO.setId((long) pelicula.getId());
+            peliculaDTO.setId((long) pelicula.getId());
+            peliculaDTO.setTitulo(pelicula.getTitulo());
+            peliculaDTO.setSinopsis(pelicula.getSinopsis());
+            peliculaDTO.setTrailer(pelicula.getTrailer());
+            peliculaDTO.setDuracion(pelicula.getDuracion());
+            peliculaDTO.setPais(pelicula.getPais());
+
+            try {
+                String genero = obtenerTipoGeneroPorID(pelicula.getGenero());
+                peliculaDTO.setGenero(genero);
+            } catch (cinepolisException ex) {
+                System.out.println("Error al obtener el tipo de género: " + ex.getMessage());
+            }
+
+            try {
+                String clasificacion = obtenerTipoClasificacionPorID(pelicula.getClasificacion());
+                peliculaDTO.setClasificacion(clasificacion);
+            } catch (cinepolisException ex) {
+                System.out.println("Error al obtener el tipo de clasificación: " + ex.getMessage());
+            }
+
+            return peliculaDTO; 
+    }
     
     @Override
     public List<ClienteDTO> buscarClientesTabla() throws cinepolisException {
@@ -283,5 +352,107 @@ public class CinepolisBO implements ICinepolisBO{
         }
     }
     
+    @Override
+    public PeliculaDTO obtenerPeliculaPorID(long id) throws cinepolisException {
+        try {
+
+            PeliculaDTO pelicula = peliculaDAO.obtenerPeliculaPorId(id);
+
+            if (pelicula == null) {
+                throw new cinepolisException("No se encontró ningún cliente con el ID proporcionado.");
+            }
+
+            return pelicula;
+        } catch (cinepolisException ex) {
+            throw new cinepolisException("Error al obtener el cliente por ID.", ex);
+        }
+    }
+    
+    @Override
+    public PeliculaDTO eliminarPelicula(long idPelicula) throws cinepolisException {
+        PeliculaDTO pelicula=new PeliculaDTO();
+        try {
+            pelicula=convertirAEntidad(peliculaDAO.eliminarPeliculaPorID(idPelicula));
+        } catch(SQLException ex){
+            System.out.println(ex.getMessage());
+            throw new cinepolisException(ex.getMessage());
+        }
+        return pelicula;
+    }
+    
+    public String obtenerTipoGeneroPorID(int id) throws cinepolisException{
+        String tipo=generoDAO.buscarPorId(id).getNombre();
+        return tipo;
+    }
+    
+    public String obtenerTipoClasificacionPorID(int id) throws cinepolisException{
+        String tipo=clasificacionDAO.buscarPorId(id).getNombre();
+        return tipo;
+    }
+    
+    @Override
+    public List<PeliculaDTO> obtenerTodasLasPeliculasTablaDTO() throws cinepolisException {
+        try {
+
+            List<PeliculaDTO> peliculas = peliculaDAO.obtenerTodasLasPeliculas();
+
+
+            if (peliculas == null || peliculas.isEmpty()) {
+                throw new cinepolisException("No se encontraron peliculas en la base de datos.");
+            }
+
+
+            return peliculas;
+        } catch (cinepolisException ex) {
+
+            throw new cinepolisException("Error al obtener todas las peliculas.", ex);
+        }
+    }
+    
+    @Override
+    public List<PeliculaDTO> buscarPeliculasTabla() throws cinepolisException {
+        try{
+           List<Pelicula> peliculas=this.peliculaDAO.buscarPeliculasTabla();
+           return this.convertirPeliculaTablaDTO(peliculas);
+        } catch(cinepolisException ex){
+
+            System.out.println(ex.getMessage());
+            throw new cinepolisException(ex.getMessage());
+        }
+    }
+    
+    private List<PeliculaDTO> convertirPeliculaTablaDTO(List<Pelicula> peliculas) throws cinepolisException {
+        if (peliculas == null) {
+            throw new cinepolisException("No se pudieron obtener los alumnos");
+        }
+
+        List<PeliculaDTO> PeliculasDTO = new ArrayList<>();
+        for (Pelicula pelicula : peliculas) {
+            PeliculaDTO peliculaDTO = new PeliculaDTO();
+            peliculaDTO.setId((long) pelicula.getId());
+            peliculaDTO.setTitulo(pelicula.getTitulo());
+            peliculaDTO.setSinopsis(pelicula.getSinopsis());
+            peliculaDTO.setTrailer(pelicula.getTrailer());
+            peliculaDTO.setDuracion(pelicula.getDuracion());
+            peliculaDTO.setPais(pelicula.getPais());
+            peliculaDTO.setGenero(obtenerTipoGeneroPorID(pelicula.getGenero()));
+            peliculaDTO.setClasificacion(obtenerTipoClasificacionPorID(pelicula.getClasificacion()));
+            PeliculasDTO.add(peliculaDTO);
+        }
+        return PeliculasDTO;
+     }
+    
+    @Override
+    public PeliculaDTO editarPelicula(PeliculaDTO pelicula) throws cinepolisException {
+        try {
+            Pelicula peliculaEntidad = convertirAEntidadEd(pelicula);
+
+            Pelicula peliculaEditado = peliculaDAO.editarPelicula(peliculaEntidad);
+
+            return convertirAEntidad(peliculaEditado);
+        } catch (SQLException ex) {
+            throw new cinepolisException("Error al editar el cliente en la base de datos.", ex);
+        }
+    }
 }
 
