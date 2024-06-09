@@ -22,5 +22,6 @@ public class Cinepolis {
         CinepolisBO cinepolisBO=new CinepolisBO(clienteDAO);
         
         AdministrarCatalogos administrarCatalogos=new AdministrarCatalogos(cinepolisBO);
+        administrarCatalogos.show();
     }
 }
