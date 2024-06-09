@@ -4,11 +4,17 @@
  */
 package Presentacion;
 
+import java.awt.CardLayout;
+import javax.swing.JPanel;
+
 /**
  *
  * @author diana
  */
 public class Cartelera extends javax.swing.JFrame {
+
+     private CardLayout cardLayout;
+    private JPanel mainPanel;
 
     /**
      * Creates new form catalogoPeliculas
@@ -28,17 +34,19 @@ public class Cartelera extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFileChooser1 = new javax.swing.JFileChooser();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         ComboBoxGenero = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
+        btnMenu = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
+        jRadioButtonMenuItem3 = new javax.swing.JRadioButtonMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jRadioButtonMenuItem2 = new javax.swing.JRadioButtonMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -91,6 +99,22 @@ public class Cartelera extends javax.swing.JFrame {
         jLabel1.setText("Cartelera ");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 40, -1, -1));
 
+        jMenu2.setText("Sucursales");
+
+        jRadioButtonMenuItem3.setSelected(true);
+        jRadioButtonMenuItem3.setText("Ver Sucursales");
+        jMenu2.add(jRadioButtonMenuItem3);
+
+        btnMenu.add(jMenu2);
+
+        jMenu3.setText("Funciones");
+
+        jRadioButtonMenuItem2.setSelected(true);
+        jRadioButtonMenuItem2.setText("Ver Funciones");
+        jMenu3.add(jRadioButtonMenuItem2);
+
+        btnMenu.add(jMenu3);
+
         jMenu1.setText("Salas");
 
         jRadioButtonMenuItem1.setSelected(true);
@@ -102,20 +126,9 @@ public class Cartelera extends javax.swing.JFrame {
         });
         jMenu1.add(jRadioButtonMenuItem1);
 
-        jMenuBar1.add(jMenu1);
+        btnMenu.add(jMenu1);
 
-        jMenu2.setText("Sucursales");
-        jMenuBar1.add(jMenu2);
-
-        jMenu3.setText("Boleto");
-
-        jRadioButtonMenuItem2.setSelected(true);
-        jRadioButtonMenuItem2.setText("Comprar Boletos");
-        jMenu3.add(jRadioButtonMenuItem2);
-
-        jMenuBar1.add(jMenu3);
-
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(btnMenu);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -172,15 +185,17 @@ public class Cartelera extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> ComboBoxGenero;
+    private javax.swing.JMenuBar btnMenu;
+    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem2;
+    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem3;
     // End of variables declaration//GEN-END:variables
 }

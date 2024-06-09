@@ -23,7 +23,7 @@ public class AdministrarFunciones extends javax.swing.JFrame {
         this.setSize(955, 600);
         this.cinepolisBO=cinepolisBO;
         
-    }
+    } 
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -164,6 +164,9 @@ public class AdministrarFunciones extends javax.swing.JFrame {
 
     private void btnNuevaFuncionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaFuncionActionPerformed
         // TODO add your handling code here:
+        NuevaFuncion nuevaFuncion = new NuevaFuncion(cinepolisBO);
+        nuevaFuncion.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnNuevaFuncionActionPerformed
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed

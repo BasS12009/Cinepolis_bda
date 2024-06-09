@@ -25,6 +25,7 @@ public class EditarPelicula extends javax.swing.JFrame {
  
     /**
      * Creates new form EditarPelicula
+     * @param cinepolisBO
      */
     public EditarPelicula (CinepolisBO cinepolisBO,long idPelicula) throws cinepolisException {
         System.out.println("ID de película recibido en EditarPelicula: " + idPelicula); // Confirmación del ID recibido

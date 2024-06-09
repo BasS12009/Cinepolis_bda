@@ -15,6 +15,8 @@ import java.util.List;
  */
 public class Funcion {
     
+    private int diaSemana;
+    private int duracion;
     private int id;
     private Date fecha;
     private double horaInicio;
@@ -23,17 +25,21 @@ public class Funcion {
     public Funcion() {
     }
 
-    public Funcion(int id, Date fecha, double horaInicio, Pelicula pelicula) {
+    public Funcion(int id, Date fecha, double horaInicio, Pelicula pelicula, int diaSemana, int duracion) {
         this.id = id;
         this.fecha = fecha;
         this.horaInicio = horaInicio;
         this.pelicula = pelicula;
+        this.diaSemana = diaSemana;
+        this.duracion = duracion;
     }
 
-    public Funcion(Date fecha, double horaInicio, Pelicula pelicula) {
+    public Funcion(Date fecha, double horaInicio, Pelicula pelicula, int diaSemana, int duracion) {
         this.fecha = fecha;
         this.horaInicio = horaInicio;
         this.pelicula = pelicula;
+        this.diaSemana = diaSemana;
+        this.duracion = duracion;
     }
 
     public int getId() {
@@ -67,6 +73,24 @@ public class Funcion {
     public void setPeliculas(Pelicula pelicula) {
         this.pelicula = pelicula;
     }
+
+    public int getDiaSemana() {
+        return diaSemana;
+    }
+
+    public void setDiaSemana(int diaSemana) {
+        this.diaSemana = diaSemana;
+    }
+
+    public int getDuracion() {
+        return duracion;
+    }
+
+    public void setDuracion(int duracion) {
+        this.duracion = duracion;
+    }
+
+    
     
     public Funcion convertirAEntidad(ResultSet resultado) throws SQLException {
 
@@ -76,7 +100,7 @@ public class Funcion {
         Pelicula pelicula = new Pelicula().convertirAEntidad(resultado);
   
 
-        return new Funcion(id, fecha, horaInicio, pelicula);
+        return new Funcion(id, fecha, horaInicio, pelicula, diaSemana, duracion);
     }
     
 
