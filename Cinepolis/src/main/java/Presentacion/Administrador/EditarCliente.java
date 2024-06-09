@@ -2,11 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package Presentacion;
+package Presentacion.Administrador;
 
 import DTOs.ClienteDTO;
 import Negocio.CinepolisBO;
-import Presentacion.CatalogoClientes;
+import Presentacion.Administrador.CatalogoClientes;
 import excepciones.cinepolisException;
 import java.util.Calendar;
 import javax.swing.JOptionPane;

@@ -5,8 +5,8 @@
 package com.mycompany.cinepolis;
 
 import Negocio.CinepolisBO;
-import Presentacion.AdministrarCatalogos;
-import Presentacion.CatalogoClientes;
+import Presentacion.Administrador.AdministrarCatalogos;
+import Presentacion.Administrador.CatalogoClientes;
 import persistencia.ClienteDAO;
 import persistencia.ConexionBD;
 

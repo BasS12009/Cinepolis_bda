@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package Presentacion;
+package Presentacion.Administrador;
 
 import Negocio.CinepolisBO;
 import persistencia.ClienteDAO;
@@ -12,15 +12,17 @@ import persistencia.ConexionBD;
  *
  * @author diana
  */
-public class EditarFuncion extends javax.swing.JFrame {
+public class AdministrarFunciones extends javax.swing.JFrame {
     CinepolisBO cinepolisBO;
     /**
-     * Creates new form EditarFuncion
+     * Creates new form AdministrarFunciones
      */
-    public EditarFuncion(CinepolisBO cinepolisBO) {
+    public AdministrarFunciones(CinepolisBO cinepolisBO) {
         initComponents();
+        this.setLocationRelativeTo(this);
+        this.setSize(955, 600);
+        this.cinepolisBO=cinepolisBO;
         
-        this.cinepolisBO= cinepolisBO;
     }
 
     /**
@@ -37,11 +39,11 @@ public class EditarFuncion extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         btnRegresar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblFunciones = new javax.swing.JTable();
+        btnNuevaFuncion = new javax.swing.JButton();
+        btnAtras = new javax.swing.JButton();
+        btnSiguiente = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,14 +56,14 @@ public class EditarFuncion extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 740, Short.MAX_VALUE)
+            .addGap(0, 890, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 40, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 740, 40));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 890, 40));
 
         jPanel2.setBackground(new java.awt.Color(12, 33, 63));
 
@@ -93,30 +95,57 @@ public class EditarFuncion extends javax.swing.JFrame {
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 60, -1));
 
         jLabel1.setFont(new java.awt.Font("Serif", 0, 36)); // NOI18N
-        jLabel1.setText("Editar Funciones");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 50, -1, -1));
+        jLabel1.setText("Administrar Funciones");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 40, -1, -1));
 
-        jLabel2.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
-        jLabel2.setText("Fecha:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 160, -1, -1));
-        jPanel1.add(jDateChooser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 200, 240, 30));
+        tblFunciones.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "Fecha", "Hora Inicio", "Duracion", "Eliminar", "Editar"
+            }
+        ));
+        jScrollPane1.setViewportView(tblFunciones);
 
-        jLabel3.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
-        jLabel3.setText("Hora Inicio");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 290, -1, -1));
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 330, 240, 30));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 170, 720, 320));
 
-        jButton1.setBackground(new java.awt.Color(12, 33, 63));
-        jButton1.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Editar");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 480, 120, 30));
+        btnNuevaFuncion.setBackground(new java.awt.Color(12, 33, 63));
+        btnNuevaFuncion.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
+        btnNuevaFuncion.setForeground(new java.awt.Color(255, 255, 255));
+        btnNuevaFuncion.setText("+Nueva Funcion");
+        btnNuevaFuncion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevaFuncionActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnNuevaFuncion, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 130, -1, -1));
+
+        btnAtras.setBackground(new java.awt.Color(12, 33, 63));
+        btnAtras.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
+        btnAtras.setForeground(new java.awt.Color(255, 255, 255));
+        btnAtras.setText("Atras");
+        btnAtras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAtrasActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnAtras, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 510, -1, -1));
+
+        btnSiguiente.setBackground(new java.awt.Color(12, 33, 63));
+        btnSiguiente.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
+        btnSiguiente.setForeground(new java.awt.Color(255, 255, 255));
+        btnSiguiente.setText("Siguiente");
+        jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 510, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,37 +157,46 @@ public class EditarFuncion extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-       AdministrarFunciones administrarFunciones = new  AdministrarFunciones(cinepolisBO);
-        administrarFunciones.setVisible(true);
+        AdministrarCatalogos administrarCatalogos = new AdministrarCatalogos(cinepolisBO);
+        administrarCatalogos.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
+
+    private void btnNuevaFuncionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaFuncionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnNuevaFuncionActionPerformed
+
+    private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
+        // TODO add your handling code here:
+        
+            
+    }//GEN-LAST:event_btnAtrasActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-
+    public static void main(String args[]) {  
         ConexionBD conexion = new ConexionBD();
         ClienteDAO clienteDAO= new ClienteDAO (conexion);
         CinepolisBO cinepolisBO=new CinepolisBO(clienteDAO);
         
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new EditarFuncion(cinepolisBO).setVisible(true);
+                new AdministrarFunciones(cinepolisBO).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAtras;
+    private javax.swing.JButton btnNuevaFuncion;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JButton jButton1;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private javax.swing.JButton btnSiguiente;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblFunciones;
     // End of variables declaration//GEN-END:variables
 }
