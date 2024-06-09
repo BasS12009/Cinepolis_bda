@@ -18,7 +18,7 @@ public class LogIn extends javax.swing.JFrame {
     /**
      * Creates new form LogIn
      */
-    CinepolisBO negocio = new CinepolisBO();
+    CinepolisBO negocio;
 
     public LogIn() {
         initComponents();

@@ -129,5 +129,57 @@ public class CinepolisBO implements ICinepolisBO{
         }
         return clientesDTO;
      }
+
+    @Override
+    public ClienteDTO obtenerClientePorID(long id) throws cinepolisException {
+        try {
+            // Accede a la capa de datos para obtener el cliente por su ID
+            ClienteDTO cliente = clienteDAO.obtenerClientePorID(id);
+
+            // Verifica si se encontró el cliente
+            if (cliente == null) {
+                throw new cinepolisException("No se encontró ningún cliente con el ID proporcionado.");
+            }
+
+            // Devuelve el cliente obtenido
+            return cliente;
+        } catch (cinepolisException ex) {
+            // Captura cualquier excepción de la capa de datos y relanza como una excepción de negocio
+            throw new cinepolisException("Error al obtener el cliente por ID.", ex);
+        }
+    }
+
+    @Override
+    public List<ClienteDTO> obtenerTodosLosClientes() throws cinepolisException {
+        try {
+
+            List<ClienteDTO> clientes = clienteDAO.obtenerTodosLosClientes();
+
+
+            if (clientes == null || clientes.isEmpty()) {
+                throw new cinepolisException("No se encontraron clientes en la base de datos.");
+            }
+
+
+            return clientes;
+        } catch (cinepolisException ex) {
+
+            throw new cinepolisException("Error al obtener todos los clientes.", ex);
+        }
+    }
+
+    @Override
+    public ClienteDTO editarCliente(ClienteDTO cliente) throws cinepolisException {
+        try {
+            Cliente clienteEntidad = convertirAEntidad(cliente);
+
+            Cliente clienteEditado = clienteDAO.editarCliente(clienteEntidad);
+
+            return convertirAEntidad(clienteEditado);
+        } catch (SQLException ex) {
+            throw new cinepolisException("Error al editar el cliente en la base de datos.", ex);
+        }
+    }
+    
     
 }

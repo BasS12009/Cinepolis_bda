@@ -25,4 +25,10 @@ public interface ICinepolisBO {
     public ClienteDTO convertirAEntidad(Cliente cliente) throws SQLException;
     
     public List<ClienteDTO> buscarClientesTabla() throws cinepolisException;
+    
+    public ClienteDTO obtenerClientePorID(long id) throws cinepolisException;
+    
+    public List<ClienteDTO> obtenerTodosLosClientes() throws cinepolisException;
+    
+    public ClienteDTO editarCliente(ClienteDTO cliente) throws cinepolisException;
 }

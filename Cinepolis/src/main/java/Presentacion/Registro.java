@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
  */
 public class Registro extends javax.swing.JFrame {
 
-    CinepolisBO negocio = new CinepolisBO();
+    CinepolisBO negocio;
 
     /**
      * Creates new form Registro
@@ -135,7 +135,7 @@ public class Registro extends javax.swing.JFrame {
 
             clienteDTO.setCorreo(txtCorreo.getText());
             clienteDTO.setContrasena(txtContrasena.getText());
-            clienteDTO.setFechaNacimiento(dateChooserNacimiento.getDate());
+            //clienteDTO.setFechaNacimiento(dateChooserNacimiento.getDate());
 
             if (negocio.registro(clienteDTO) != null) {
                 LogIn inicioSesion = new LogIn();

@@ -8,6 +8,7 @@ package persistencia;
  *
  * @author PC Gamer
  */
+import DTOs.ClienteDTO;
 import entidades.Cliente;
 import excepciones.cinepolisException;
 import java.sql.ResultSet;
@@ -29,4 +30,8 @@ public interface IClienteDAO {
     public Cliente eliminarClientePorID(int idCliente) throws cinepolisException;
     
     public List<Cliente> buscarClientesTabla() throws cinepolisException;
+    
+    public List<ClienteDTO> obtenerTodosLosClientes() throws cinepolisException;
+     
+    public ClienteDTO obtenerClientePorID(long id) throws cinepolisException;
 }

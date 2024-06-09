@@ -32,24 +32,24 @@ public class CatalogoClientes extends javax.swing.JFrame {
     /**
      * Creates new form CatalogoClientes
      */
-    public CatalogoClientes() {
+    public CatalogoClientes(CinepolisBO cinepolisBO) {
         initComponents();
-//        CinepolisBO cinepolisBO
-//        this.cinepolisBO=cinepolisBO;
+        this.cinepolisBO=cinepolisBO;
          this.setLocationRelativeTo(this);
         this.setSize(955, 600);
         this.cargarMetodosIniciales();
+        NumeroDePagina.setEditable(false);
         
     }
     
     
-    private int getIdSeleccionadoTablaClientes() {
+    private long getIdSeleccionadoTablaClientes() {
         int indiceFilaSeleccionada = this.tblClientes.getSelectedRow();
         if (indiceFilaSeleccionada != -1) {
             DefaultTableModel modelo = (DefaultTableModel) this.tblClientes.getModel();
-            int indiceColumnaId = 0;
-            int idSocioSeleccionado = (int) modelo.getValueAt(indiceFilaSeleccionada,
-                    indiceColumnaId);
+            long indiceColumnaId = 0;
+            long idSocioSeleccionado = (long) modelo.getValueAt(indiceFilaSeleccionada,
+                   (int) indiceColumnaId);
             return idSocioSeleccionado;
         } else {
             return 0;
@@ -90,31 +90,40 @@ public class CatalogoClientes extends javax.swing.JFrame {
         }
     
     
-    private void editar(){
-    int id = this.getIdSeleccionadoTablaClientes(); 
+    private void editar() {
+    try {
+        long id = this.getIdSeleccionadoTablaClientes();
+        EditarCliente editar = new EditarCliente(this.cinepolisBO, id);
+        this.setVisible(false);
+        editar.show();
+    } catch (excepciones.cinepolisException e) {
+        System.out.println("Error: " + e.getMessage());
+        // Manejo de la excepción aquí
+    }
     }
     
     private void eliminar() {
-        int idCliente = this.getIdSeleccionadoTablaClientes();
+        long idCliente = this.getIdSeleccionadoTablaClientes();
     }
     
     private void llenarTablaClientes(List<ClienteDTO> clienteLista) {
          DefaultTableModel modeloTabla = (DefaultTableModel) this.tblClientes.getModel();
 
-        modeloTabla.setRowCount(0);
+    // Clear existing rows
+    modeloTabla.setRowCount(0);
 
-        if (clienteLista != null) {
-            clienteLista.forEach(row -> {
-                Object[] fila = new Object[6]; // Adjust the array size to match the number of columns
-                fila[0] = row.getId();
-                fila[1] = row.getNombre() + " " + row.getApellidoPaterno() + " " + row.getApellidoMaterno();
-                fila[2] = row.getCorreo();
-                fila[3] = row.getContrasena();
-                fila[4] = "Eliminar";
-                fila[5] = "Editar"; 
-                modeloTabla.addRow(fila); // Add row data to the table model
-            });
-        }
+    if (clienteLista != null) {
+        clienteLista.forEach(row -> {
+            Object[] fila = new Object[6]; // Adjust the array size to match the number of columns
+            fila[0] = row.getId();
+            fila[1] = row.getNombre() + " " + row.getApellidoPaterno() + " " + row.getApellidoMaterno();
+            fila[2] = row.getCorreo();
+            fila[3] = row.getContrasena();
+            fila[4] = "Eliminar";
+            fila[5] = "Editar"; 
+            modeloTabla.addRow(fila); // Add row data to the table model
+        });
+    }
     }
      
     private void cargarClientesEnTabla() {
@@ -374,14 +383,14 @@ public class CatalogoClientes extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        AdministrarCatalogos administrarCatalogos = new AdministrarCatalogos();
+        AdministrarCatalogos administrarCatalogos = new AdministrarCatalogos(cinepolisBO);
         administrarCatalogos.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnNuevoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoClienteActionPerformed
         // TODO add your handling code here:
-        AgregarCliente agregarCliente = new AgregarCliente();
+        AgregarCliente agregarCliente = new AgregarCliente(cinepolisBO);
         agregarCliente.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnNuevoClienteActionPerformed
@@ -468,7 +477,7 @@ public class CatalogoClientes extends javax.swing.JFrame {
         
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CatalogoClientes().setVisible(true);
+                new CatalogoClientes(cinepolisBO).setVisible(true);
             }
         });
     }

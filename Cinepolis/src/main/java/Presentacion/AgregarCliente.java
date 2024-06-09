@@ -4,19 +4,24 @@
  */
 package Presentacion;
 
+import Negocio.CinepolisBO;
+import persistencia.ClienteDAO;
+import persistencia.ConexionBD;
+
 /**
  *
  * @author diana
  */
 public class AgregarCliente extends javax.swing.JFrame {
-
+    CinepolisBO cinepolisBO;
     /**
      * Creates new form AgregarCliente
      */
-    public AgregarCliente() {
+    public AgregarCliente(CinepolisBO cinepolisBO) {
         initComponents();
         this.setLocationRelativeTo(this);
         this.setSize(805, 600);
+        this.cinepolisBO=cinepolisBO;
     }
 
     /**
@@ -138,7 +143,7 @@ public class AgregarCliente extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        CatalogoClientes  catalogoClientes = new  CatalogoClientes();
+        CatalogoClientes  catalogoClientes = new  CatalogoClientes(cinepolisBO);
         catalogoClientes.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
@@ -171,11 +176,17 @@ public class AgregarCliente extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
+        ConexionBD conexion = new ConexionBD();
+        ClienteDAO clienteDAO= new ClienteDAO (conexion);
+        CinepolisBO cinepolisBO=new CinepolisBO(clienteDAO);
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AgregarCliente().setVisible(true);
+                new AgregarCliente(cinepolisBO).setVisible(true);
             }
         });
+        
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

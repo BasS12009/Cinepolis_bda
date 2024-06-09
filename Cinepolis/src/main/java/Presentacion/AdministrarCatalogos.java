@@ -4,17 +4,24 @@
  */
 package Presentacion;
 
+import Negocio.CinepolisBO;
+import persistencia.ClienteDAO;
+import persistencia.ConexionBD;
+
 /**
  *
  * @author diana
  */
 public class AdministrarCatalogos extends javax.swing.JFrame {
-
+    
+    CinepolisBO cinepolisBO;
+    
     /**
      * Creates new form AdministrarCatalogos
      */
-    public AdministrarCatalogos() {
+    public AdministrarCatalogos(CinepolisBO cinepolisBO) {
         initComponents();
+        this.cinepolisBO=cinepolisBO;
     }
 
     /**
@@ -122,22 +129,22 @@ public class AdministrarCatalogos extends javax.swing.JFrame {
     private void btnCatalogoPeliculasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCatalogoPeliculasActionPerformed
         // TODO add your handling code here:
         
-        CatalogoPeliculas catalogoPeliculas = new CatalogoPeliculas();
+        CatalogoPeliculas catalogoPeliculas = new CatalogoPeliculas(cinepolisBO);
         catalogoPeliculas.setVisible(true);
         this.dispose();
         
     }//GEN-LAST:event_btnCatalogoPeliculasActionPerformed
 
     private void btnCatalogoClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCatalogoClientesActionPerformed
-        // TODO add your handling code here:
-         CatalogoClientes catalogoClientes = new CatalogoClientes();
+
+        CatalogoClientes catalogoClientes = new CatalogoClientes(cinepolisBO);
         catalogoClientes.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnCatalogoClientesActionPerformed
 
     private void btnAdministrarFuncionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdministrarFuncionesActionPerformed
         // TODO add your handling code here:
-        AdministrarFunciones administrarFunciones = new AdministrarFunciones();
+        AdministrarFunciones administrarFunciones = new AdministrarFunciones(cinepolisBO);
         administrarFunciones.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnAdministrarFuncionesActionPerformed
@@ -146,33 +153,13 @@ public class AdministrarCatalogos extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AdministrarCatalogos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AdministrarCatalogos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AdministrarCatalogos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AdministrarCatalogos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
+    ConexionBD conexion = new ConexionBD();
+        ClienteDAO clienteDAO= new ClienteDAO (conexion);
+        CinepolisBO cinepolisBO=new CinepolisBO(clienteDAO);
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AdministrarCatalogos().setVisible(true);
+                new AdministrarCatalogos(cinepolisBO).setVisible(true);
             }
         });
     }

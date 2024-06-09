@@ -4,6 +4,7 @@
  */
 package persistencia;
 
+import DTOs.ClienteDTO;
 import persistencia.IClienteDAO;
 import entidades.Cliente;
 import excepciones.cinepolisException;
@@ -313,4 +314,81 @@ public class ClienteDAO implements IClienteDAO{
         }
     }
     
+    @Override
+    public List<ClienteDTO> obtenerTodosLosClientes() throws cinepolisException {
+        try {
+            List<ClienteDTO> clientesLista = new ArrayList<>();
+            Connection conexion = this.conexionBD.crearConexion();
+            String codigoSQL = "SELECT idCliente, nombre, apellidoPaterno, apellidoMaterno, correo, contrasena, ubicacion, fechaNacimiento FROM clientes";
+            Statement comandoSQL = conexion.createStatement();
+            ResultSet resultado = comandoSQL.executeQuery(codigoSQL);
+
+            while (resultado.next()) {
+                ClienteDTO cliente = new ClienteDTO();
+                cliente.setId(resultado.getLong("idCliente"));
+                cliente.setNombre(resultado.getString("nombre"));
+                cliente.setApellidoPaterno(resultado.getString("apellidoPaterno"));
+                cliente.setApellidoMaterno(resultado.getString("apellidoMaterno"));
+                cliente.setCorreo(resultado.getString("correo"));
+                cliente.setContrasena(resultado.getString("contrasena"));
+                cliente.setUbicacion(resultado.getString("ubicacion"));
+                cliente.setFechaNacimiento(resultado.getDate("fechaNacimiento"));
+                clientesLista.add(cliente);
+            }
+
+            conexion.close();
+            return clientesLista;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new cinepolisException("Ocurrió un error al leer la base de datos, inténtelo de nuevo y si el error persiste", ex);
+        }
+    }
+    
+    @Override
+    public ClienteDTO obtenerClientePorID(long id) throws cinepolisException {
+        Connection conexion = null;
+        PreparedStatement comandoSQL = null;
+        ClienteDTO cliente = null;
+
+        try {
+            conexion = this.conexionBD.crearConexion();
+            String codigoSQL = "SELECT idCliente, nombre, apellidoPaterno, apellidoMaterno, correo, contrasena, ubicacion, fechaNacimiento FROM clientes WHERE idCliente = ?";
+            comandoSQL = conexion.prepareStatement(codigoSQL);
+            comandoSQL.setLong(1, id);
+            ResultSet resultado = comandoSQL.executeQuery();
+
+            if (resultado.next()) {
+                cliente = new ClienteDTO();
+                cliente.setId(resultado.getLong("idCliente"));
+                cliente.setNombre(resultado.getString("nombre"));
+                cliente.setApellidoPaterno(resultado.getString("apellidoPaterno"));
+                cliente.setApellidoMaterno(resultado.getString("apellidoMaterno"));
+                cliente.setCorreo(resultado.getString("correo"));
+                cliente.setContrasena(resultado.getString("contrasena"));
+                cliente.setUbicacion(resultado.getString("ubicacion"));
+                cliente.setFechaNacimiento(resultado.getDate("fechaNacimiento"));
+            }
+
+            return cliente;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new cinepolisException("Ocurrió un error al buscar el cliente por ID", ex);
+        } finally {
+            if (comandoSQL != null) {
+                try {
+                    comandoSQL.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement: " + e.getMessage());
+                }
+            }
+            if (conexion != null) {
+                try {
+                    conexion.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión: " + e.getMessage());
+                }
+            }
+        }
+    }
+
 }

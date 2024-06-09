@@ -4,17 +4,46 @@
  */
 package Presentacion;
 
+import DTOs.ClienteDTO;
+import Negocio.CinepolisBO;
+import Presentacion.CatalogoClientes;
+import excepciones.cinepolisException;
+import java.util.Calendar;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author diana
  */
 public class EditarCliente extends javax.swing.JFrame {
 
+    CinepolisBO cinepolisBO;
+    long idCliente;
+
     /**
      * Creates new form EditarCliente
      */
-    public EditarCliente() {
+    public EditarCliente(CinepolisBO cinepolisBO,long idCliente) throws cinepolisException {
         initComponents();
+    this.cinepolisBO = cinepolisBO;
+    this.idCliente = idCliente;
+
+    try {
+        ClienteDTO cliente = cinepolisBO.obtenerClientePorID(idCliente);
+
+        // Llenar los campos de edición con los datos del cliente
+        txtNombre.setText(cliente.getNombre() + " " + cliente.getApellidoPaterno() + " " + cliente.getApellidoMaterno());
+        txtCorreo.setText(cliente.getCorreo());
+        Calendar fecha = Calendar.getInstance();
+        fecha.setTime(cliente.getFechaNacimiento());
+        jDateChooser1.setCalendar(fecha);
+        txtContrasena.setText(cliente.getContrasena());
+    } catch (cinepolisException ex) {
+        // Manejo de la excepción
+        System.out.println("Error al obtener el cliente por ID: " + ex.getMessage());
+        ex.printStackTrace();
+        // Aquí podrías mostrar un mensaje de error al usuario si lo deseas
+    }
     }
 
     /**
@@ -39,7 +68,8 @@ public class EditarCliente extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         txtContrasena = new javax.swing.JPasswordField();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        jButton1 = new javax.swing.JButton();
+        botonEditar = new javax.swing.JButton();
+        mostrarContraseña = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -97,11 +127,23 @@ public class EditarCliente extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         jLabel3.setText("Nombre completo:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 140, 150, 20));
+
+        txtNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNombreActionPerformed(evt);
+            }
+        });
         jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 170, 270, 30));
 
         lblCorreo.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         lblCorreo.setText("Correo:");
         jPanel1.add(lblCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 220, -1, -1));
+
+        txtCorreo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCorreoActionPerformed(evt);
+            }
+        });
         jPanel1.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 250, 270, 30));
 
         lblContraseña.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
@@ -111,14 +153,32 @@ public class EditarCliente extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         jLabel4.setText("Fecha de nacimiento:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 300, -1, -1));
+
+        txtContrasena.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtContrasenaActionPerformed(evt);
+            }
+        });
         jPanel1.add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 420, 270, 30));
         jPanel1.add(jDateChooser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 330, 270, 30));
 
-        jButton1.setBackground(new java.awt.Color(12, 33, 63));
-        jButton1.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Editar Cliente");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 500, -1, -1));
+        botonEditar.setBackground(new java.awt.Color(12, 33, 63));
+        botonEditar.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
+        botonEditar.setForeground(new java.awt.Color(255, 255, 255));
+        botonEditar.setText("Editar Cliente");
+        botonEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonEditarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(botonEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 500, -1, -1));
+
+        mostrarContraseña.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mostrarContraseñaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(mostrarContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 420, 30, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -136,49 +196,77 @@ public class EditarCliente extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        CatalogoClientes catologoClientes = new CatalogoClientes();
+        CatalogoClientes catologoClientes = new CatalogoClientes(this.cinepolisBO);
         catologoClientes.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EditarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EditarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EditarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EditarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
+    
+    
+    }//GEN-LAST:event_txtNombreActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new EditarCliente().setVisible(true);
-            }
-        });
-    }
+    private void txtCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreoActionPerformed
+
+    private void txtContrasenaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtContrasenaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtContrasenaActionPerformed
+
+    private void botonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEditarActionPerformed
+        try {
+            String nombreCompleto = txtNombre.getText();
+            String correo = txtCorreo.getText();
+            String contrasena = new String(txtContrasena.getPassword());
+            Calendar fechaNacimiento = jDateChooser1.getCalendar();
+
+            String[] partesNombre = nombreCompleto.split(" ");
+            String nombre = partesNombre[0];
+            String apellidoPaterno = partesNombre[1];
+            String apellidoMaterno = partesNombre[2];
+
+            ClienteDTO clienteEditado = new ClienteDTO();
+            clienteEditado.setId(idCliente);
+            clienteEditado.setNombre(nombre);
+            clienteEditado.setApellidoPaterno(apellidoPaterno);
+            clienteEditado.setApellidoMaterno(apellidoMaterno);
+            clienteEditado.setCorreo(correo);
+            clienteEditado.setContrasena(contrasena);
+            clienteEditado.setFechaNacimiento(fechaNacimiento.getTime());
+            clienteEditado.setUbicacion(cinepolisBO.obtenerClientePorID(idCliente).getUbicacion());
+
+            cinepolisBO.editarCliente(clienteEditado);
+
+            JOptionPane.showMessageDialog(this, "Cliente editado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+            this.dispose();
+            CatalogoClientes catalogoClientes = new CatalogoClientes(cinepolisBO);
+            catalogoClientes.setVisible(true);
+
+        } catch (cinepolisException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al editar el cliente: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_botonEditarActionPerformed
+
+    private void mostrarContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mostrarContraseñaActionPerformed
+        // TODO add your handling code here:
+            if (mostrarContraseña.isSelected()) {
+            // Si está marcada, mostrar la contraseña como texto plano
+            char[] contrasenaChars = txtContrasena.getPassword();
+            String contrasena = new String(contrasenaChars);
+            txtContrasena.setEchoChar((char) 0); // Establecer el carácter de eco como 0 para mostrar la contraseña
+            txtContrasena.setText(contrasena);
+        } else {
+            // Si no está marcada, volver a ocultar la contraseña
+            txtContrasena.setEchoChar('*'); // Restablecer el carácter de eco para ocultar la contraseña
+        }
+    }//GEN-LAST:event_mostrarContraseñaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botonEditar;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JButton jButton1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
@@ -188,8 +276,10 @@ public class EditarCliente extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JLabel lblContraseña;
     private javax.swing.JLabel lblCorreo;
+    private javax.swing.JCheckBox mostrarContraseña;
     private javax.swing.JPasswordField txtContrasena;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }
+

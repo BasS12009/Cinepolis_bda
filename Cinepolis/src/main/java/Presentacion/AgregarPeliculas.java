@@ -4,19 +4,24 @@
  */
 package Presentacion;
 
+import Negocio.CinepolisBO;
+import persistencia.ClienteDAO;
+import persistencia.ConexionBD;
+
 /**
  *
  * @author diana
  */
 public class AgregarPeliculas extends javax.swing.JFrame {
-
+    CinepolisBO cinepolisBO;
     /**
      * Creates new form AgregarPeliculas
      */
-    public AgregarPeliculas() {
+    public AgregarPeliculas(CinepolisBO cinepolisBO) {
         initComponents();
          this.setLocationRelativeTo(this);
         this.setSize(805, 600);
+        this.cinepolisBO=cinepolisBO;
     }
 
     /**
@@ -50,7 +55,6 @@ public class AgregarPeliculas extends javax.swing.JFrame {
         jTextField5 = new javax.swing.JTextField();
         btnAgregarPelicula = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -167,7 +171,6 @@ public class AgregarPeliculas extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         jLabel9.setText("Fecha de creacion:");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 370, -1, -1));
-        jPanel1.add(jDateChooser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 400, 140, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -185,7 +188,7 @@ public class AgregarPeliculas extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        CatalogoPeliculas  catalogoPeliculas = new  CatalogoPeliculas();
+        CatalogoPeliculas  catalogoPeliculas = new  CatalogoPeliculas(cinepolisBO);
         catalogoPeliculas.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
@@ -198,6 +201,7 @@ public class AgregarPeliculas extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -211,20 +215,24 @@ public class AgregarPeliculas extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AgregarPeliculas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AgregarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AgregarPeliculas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AgregarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AgregarPeliculas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AgregarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AgregarPeliculas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AgregarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
+        ConexionBD conexion = new ConexionBD();
+        ClienteDAO clienteDAO= new ClienteDAO (conexion);
+        CinepolisBO cinepolisBO=new CinepolisBO(clienteDAO);
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AgregarPeliculas().setVisible(true);
+                new AgregarPeliculas(cinepolisBO).setVisible(true);
             }
         });
     }
@@ -235,7 +243,6 @@ public class AgregarPeliculas extends javax.swing.JFrame {
     private javax.swing.JButton btnRegresar;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
