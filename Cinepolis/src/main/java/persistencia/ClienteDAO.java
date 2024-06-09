@@ -219,7 +219,7 @@ public class ClienteDAO implements IClienteDAO{
 
     //ElIMINAR CLIENTE
     @Override
-    public Cliente eliminarClientePorID(int idCliente) throws cinepolisException {
+    public Cliente eliminarClientePorID(long idCliente) throws cinepolisException {
         String sqlSelect = "SELECT * FROM clientes WHERE idCliente = ?";
         String sqlDelete = "DELETE FROM clientes WHERE idCliente = ?";
         Connection conexion = null;
@@ -232,7 +232,7 @@ public class ClienteDAO implements IClienteDAO{
             conexion.setAutoCommit(false);
 
             selectStatement = conexion.prepareStatement(sqlSelect);
-            selectStatement.setInt(1, idCliente);
+            selectStatement.setLong(1, idCliente);
             ResultSet resultado = selectStatement.executeQuery();
 
             if (resultado.next()) {
@@ -251,7 +251,7 @@ public class ClienteDAO implements IClienteDAO{
             }
             
             deleteStatement = conexion.prepareStatement(sqlDelete);
-            deleteStatement.setInt(1, idCliente);
+            deleteStatement.setLong(1, idCliente);
             deleteStatement.executeUpdate();
 
             conexion.commit();

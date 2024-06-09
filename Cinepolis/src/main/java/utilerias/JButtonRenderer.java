@@ -4,6 +4,7 @@
  */
 package utilerias;
 
+import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JButton;
 import javax.swing.JTable;
@@ -17,8 +18,10 @@ public class JButtonRenderer implements TableCellRenderer {
 
     private final JButton button;
     
-    public JButtonRenderer(String text) {
+    public JButtonRenderer(String text, Color color) {
         this.button = new JButton(text);
+        this.button.setBackground(color);
+
     }
     
     @Override

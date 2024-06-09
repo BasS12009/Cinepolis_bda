@@ -31,4 +31,6 @@ public interface ICinepolisBO {
     public List<ClienteDTO> obtenerTodosLosClientes() throws cinepolisException;
     
     public ClienteDTO editarCliente(ClienteDTO cliente) throws cinepolisException;
+    
+     public ClienteDTO eliminarCliente(long idCliente) throws cinepolisException ;
 }

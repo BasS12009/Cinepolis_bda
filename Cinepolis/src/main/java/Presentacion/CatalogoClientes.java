@@ -7,6 +7,7 @@ package Presentacion;
 import DTOs.ClienteDTO;
 import Negocio.CinepolisBO;
 import excepciones.cinepolisException;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -73,7 +74,8 @@ public class CatalogoClientes extends javax.swing.JFrame {
         };
         int indiceColumnaEditar = 4;
         TableColumnModel modeloColumnas = this.tblClientes.getColumnModel();
-        modeloColumnas.getColumn(indiceColumnaEditar).setCellRenderer(new JButtonRenderer("Editar"));
+        Color color = new Color(178, 218, 250);
+        modeloColumnas.getColumn(indiceColumnaEditar).setCellRenderer(new JButtonRenderer("Editar",color));
         modeloColumnas.getColumn(indiceColumnaEditar).setCellEditor(new JButtonCellEditor("Editar", onEditarClickListener));
 
         ActionListener onEliminarClickListener = new ActionListener() {
@@ -85,7 +87,8 @@ public class CatalogoClientes extends javax.swing.JFrame {
             }
         };
         int indiceColumnaEliminar = 5;
-        modeloColumnas.getColumn(indiceColumnaEliminar).setCellRenderer(new JButtonRenderer("Eliminar"));
+        color = new Color(255, 105, 97);
+        modeloColumnas.getColumn(indiceColumnaEliminar).setCellRenderer(new JButtonRenderer("Eliminar",color));
         modeloColumnas.getColumn(indiceColumnaEliminar).setCellEditor(new JButtonCellEditor("Eliminar", onEliminarClickListener));
         }
     
@@ -98,12 +101,29 @@ public class CatalogoClientes extends javax.swing.JFrame {
         editar.show();
     } catch (excepciones.cinepolisException e) {
         System.out.println("Error: " + e.getMessage());
-        // Manejo de la excepción aquí
     }
     }
     
     private void eliminar() {
-        long idCliente = this.getIdSeleccionadoTablaClientes();
+        try {
+        long id = this.getIdSeleccionadoTablaClientes();
+        ClienteDTO cliente = cinepolisBO.obtenerClientePorID(id);
+        int confirmacion = JOptionPane.showConfirmDialog(this, 
+                            "¿Está seguro que desea eliminar al cliente?\n" +
+                            "ID: " + cliente.getId() + "\n" +
+                            "Nombre: " + cliente.getNombre() + " " + cliente.getApellidoPaterno() + " " + cliente.getApellidoMaterno() + "\n" +
+                            "Correo: " + cliente.getCorreo(),
+                            "Confirmar eliminación",
+                            JOptionPane.YES_NO_OPTION);
+        
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            cinepolisBO.eliminarCliente(id);
+            JOptionPane.showMessageDialog(this, "Cliente eliminado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            cargarClientesEnTabla();
+        }
+        } catch (cinepolisException ex) {
+            JOptionPane.showMessageDialog(this, "Error al eliminar el cliente: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     private void llenarTablaClientes(List<ClienteDTO> clienteLista) {
