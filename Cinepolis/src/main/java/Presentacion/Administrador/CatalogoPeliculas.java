@@ -4,6 +4,8 @@
  */
 package Presentacion.Administrador;
 
+import DTOs.ClasificacionDTO;
+import DTOs.GeneroDTO;
 import DTOs.PeliculaDTO;
 import Presentacion.Administrador.AgregarPeliculas;
 import Presentacion.Administrador.AdministrarCatalogos;
@@ -12,9 +14,12 @@ import excepciones.cinepolisException;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -31,6 +36,7 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
     CinepolisBO cinepolisBO;
     private int pagina=1;
     private int LIMITE=1;
+    boolean conFiltro;
     
     /**
      * Creates new form CatalalogoPeliculas
@@ -42,7 +48,35 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
         this.cinepolisBO=cinepolisBO;
         this.cargarMetodosIniciales();
         NumeroDePagina.setEditable(false);
+        conFiltro=false;
+        
+
+        
+
+        llenarComboBoxGenero();
+
+        llenarComboBoxClasificacion();
+
+        
     }
+    
+    private void llenarComboBoxGenero() {
+        boxGenero.addItem(""); // Primera opción en blanco
+        List<GeneroDTO> generos = cinepolisBO.obtenerTodosLosGeneros();
+        for (GeneroDTO genero : generos) {
+            boxGenero.addItem(genero.getTipo());
+        }
+    }
+
+    private void llenarComboBoxClasificacion() {
+            // Llenar ComboBox de Clasificación
+            boxClasificacion.addItem(""); // Primera opción en blanco
+            List<ClasificacionDTO> clasificaciones = cinepolisBO.obtenerTodasLasClasificaciones();
+            for (ClasificacionDTO clasificacion : clasificaciones) {
+                boxClasificacion.addItem(clasificacion.getTipo());
+            }
+        }
+
     
     private long getIdSeleccionadoTablaPelicula() throws cinepolisException {
          int selectedRow = tblPeliculas.getSelectedRow();
@@ -121,13 +155,13 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
             }
         }
     
-        private void llenarTablaPeliculas(List<PeliculaDTO> clienteLista) {
+        private void llenarTablaPeliculas(List<PeliculaDTO> peliculasLista) {
          DefaultTableModel modeloTabla = (DefaultTableModel) this.tblPeliculas.getModel();
 
         modeloTabla.setRowCount(0);
 
-        if (clienteLista != null) {
-            clienteLista.forEach(row -> {
+        if (peliculasLista != null) {
+            peliculasLista.forEach(row -> {
                 Object[] fila = new Object[6];
                 fila[0] = row.getId();
                 fila[1] = row.getTitulo();
@@ -183,17 +217,22 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
         tblPeliculas = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
         jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        textoTitulo = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
+        boxGenero = new javax.swing.JComboBox<>();
+        boxClasificacion = new javax.swing.JComboBox<>();
+        botonRestaurar = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        textoPais = new javax.swing.JTextField();
         btnNuevaPelicula = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
         btnAtras = new javax.swing.JButton();
         NumeroDePagina = new javax.swing.JTextField();
+        CambiarLimite = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -256,7 +295,7 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Titulo", "Descripcion", "Genero", "Eliminar", "Editar"
+                "ID", "Titulo", "Genero", "Clasificacion", "Eliminar", "Editar"
             }
         ));
         jScrollPane1.setViewportView(tblPeliculas);
@@ -271,11 +310,11 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Fecha Inicio:");
+        jLabel4.setText("Genero");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Fecha Fin:");
+        jLabel5.setText("Clasificacion");
 
         jLabel6.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
@@ -283,6 +322,22 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
 
         btnBuscar.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
+        botonRestaurar.setText("Restaurar");
+        botonRestaurar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonRestaurarActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("Pais");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -291,45 +346,59 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3)
-                .addGap(322, 322, 322))
+                .addGap(237, 237, 237)
+                .addComponent(botonRestaurar)
+                .addContainerGap())
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(53, 53, 53)
+                    .addComponent(boxGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(51, 51, 51)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
-                    .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(144, 144, 144)
+                    .addComponent(boxClasificacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(34, 34, 34)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8)
+                    .addComponent(textoPais, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(64, 64, 64)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(textoTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnBuscar)))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(botonRestaurar, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
                             .addComponent(jLabel6))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel8))
                         .addGap(5, 5, 5)))
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnBuscar)))
+                        .addComponent(textoTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnBuscar))
+                    .addComponent(boxGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(boxClasificacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(textoPais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(10, Short.MAX_VALUE))
         );
 
@@ -375,6 +444,18 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
             }
         });
         jPanel1.add(NumeroDePagina, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 520, 20, 20));
+
+        CambiarLimite.setText("1");
+        CambiarLimite.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CambiarLimiteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(CambiarLimite, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 510, 20, 40));
+
+        jLabel7.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
+        jLabel7.setText("Numero de Resultados");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 520, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -457,8 +538,119 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
+    private void CambiarLimiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CambiarLimiteActionPerformed
+            try {
+            if (!conFiltro) {
+                int nuevoLimite = Integer.parseInt(CambiarLimite.getText());
+                this.LIMITE = nuevoLimite;
+                cargarPeliculasEnTabla(); 
+                actualizarNumeroDePagina();
+            } else {
+                int nuevoLimite = Integer.parseInt(CambiarLimite.getText());
+                this.LIMITE = nuevoLimite;
+                String generoFiltro = boxGenero.getSelectedItem().toString();
+                String clasificacionFiltro = boxClasificacion.getSelectedItem().toString();
+                String tituloFiltro = textoTitulo.getText();
+                String pais = textoPais.getText();
+                cargarPeliculasEnTablaActualizada(generoFiltro, clasificacionFiltro, tituloFiltro, pais);
+                actualizarNumeroDePagina();
+                conFiltro = true;
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Ingrese un número válido para el límite", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+        }
+    }//GEN-LAST:event_CambiarLimiteActionPerformed
+
+    
+    
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        try {
+            // TODO add your handling code here:
+            String generoFiltro = boxGenero.getSelectedItem().toString();
+            String clasificacionFiltro = boxClasificacion.getSelectedItem().toString();
+            String tituloFiltro = textoTitulo.getText();
+            String pais = textoPais.getText();
+            
+            cargarPeliculasEnTablaActualizada(generoFiltro, clasificacionFiltro, tituloFiltro,pais);
+            System.out.println("CatalogoPeliculas "+generoFiltro+" "+clasificacionFiltro);
+            actualizarNumeroDePagina();
+            conFiltro = true;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void cargarPeliculasEnTablaActualizada(String generoFiltro, String clasificacionFiltro, String tituloFiltro, String paisFiltro) throws SQLException {
+        try {
+             System.out.println("Filtros: Género = " + generoFiltro + ", Clasificación = " + clasificacionFiltro + ", Título = " + tituloFiltro + ", País = " + paisFiltro);
+            int indiceInicio = (pagina - 1) * LIMITE;
+            List<PeliculaDTO> todasLasPeliculas = cinepolisBO.buscarPeliculas(tituloFiltro, generoFiltro, clasificacionFiltro, paisFiltro);
+            int indiceFin = Math.min(indiceInicio + LIMITE, todasLasPeliculas.size());
+
+            List<PeliculaDTO> peliculasPagina = obtenerPeliculasPaginaActualizado(indiceInicio, indiceFin, generoFiltro, clasificacionFiltro, tituloFiltro, paisFiltro);
+
+            cargarPeliculasEnTabla(peliculasPagina);
+
+            actualizarNumeroDePagina();
+        } catch (cinepolisException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private List<PeliculaDTO> obtenerPeliculasPaginaActualizado(int indiceInicio, int indiceFin, String generoFiltro, String clasificacionFiltro, String tituloFiltro, String paisFiltro) throws SQLException {
+        try {
+            List<PeliculaDTO> todasLasPeliculas = cinepolisBO.buscarPeliculas(tituloFiltro, generoFiltro, clasificacionFiltro, paisFiltro);
+            List<PeliculaDTO> peliculasPagina = new ArrayList<>();
+
+            indiceFin = Math.min(indiceFin, todasLasPeliculas.size());
+
+            for (int i = indiceInicio; i < indiceFin; i++) {
+                peliculasPagina.add(todasLasPeliculas.get(i));
+            }
+
+            return peliculasPagina;
+        } catch (cinepolisException ex) {
+            ex.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    
+        private void cargarPeliculasEnTabla(List<PeliculaDTO> peliculasEncontradas) {
+        DefaultTableModel modeloTabla = (DefaultTableModel) this.tblPeliculas.getModel();
+
+        modeloTabla.setRowCount(0);
+
+        if (peliculasEncontradas != null) {
+            peliculasEncontradas.forEach(row -> {
+                Object[] fila = new Object[6];
+                fila[0] = row.getId();
+                fila[1] = row.getTitulo();
+                fila[2] = row.getGenero();
+                fila[3] = row.getClasificacion();
+                fila[4] = "Eliminar";
+                fila[5] = "Editar"; 
+                modeloTabla.addRow(fila);
+            });
+        }
+    }
+    
+    private void botonRestaurarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRestaurarActionPerformed
+        conFiltro = false;
+
+        boxGenero.setSelectedIndex(0); 
+        boxClasificacion.setSelectedIndex(0);
+        textoTitulo.setText("");
+
+        cargarPeliculasEnTabla();
+
+        actualizarNumeroDePagina();
+    }//GEN-LAST:event_botonRestaurarActionPerformed
+
     private void actualizarNumeroDePagina() {
-    NumeroDePagina.setText("Página " + pagina);
+    NumeroDePagina.setText(""+ pagina);
     }
     
     /**
@@ -478,25 +670,30 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField CambiarLimite;
     private javax.swing.JTextField NumeroDePagina;
+    private javax.swing.JButton botonRestaurar;
+    private javax.swing.JComboBox<String> boxClasificacion;
+    private javax.swing.JComboBox<String> boxGenero;
     private javax.swing.JButton btnAtras;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnNuevaPelicula;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnSiguiente;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTable tblPeliculas;
+    private javax.swing.JTextField textoPais;
+    private javax.swing.JTextField textoTitulo;
     // End of variables declaration//GEN-END:variables
 }

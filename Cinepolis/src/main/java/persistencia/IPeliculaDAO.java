@@ -7,6 +7,7 @@ package persistencia;
 import DTOs.PeliculaDTO;
 import entidades.Pelicula;
 import excepciones.cinepolisException;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -25,5 +26,7 @@ public interface IPeliculaDAO {
     public PeliculaDTO obtenerPeliculaPorId(long id) throws cinepolisException;
     
     public List<PeliculaDTO> obtenerTodasLasPeliculas() throws cinepolisException;
+    
+    public List<PeliculaDTO> buscarPeliculasConFiltros(String titulo, String genero, String clasificacion, String pais) throws SQLException, cinepolisException;
     
 }

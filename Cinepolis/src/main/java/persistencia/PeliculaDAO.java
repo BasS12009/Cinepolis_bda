@@ -4,6 +4,7 @@
  */
 package persistencia;
 
+import DTOs.GeneroDTO;
 import DTOs.PeliculaDTO;
 import entidades.Pelicula;
 import excepciones.cinepolisException;
@@ -379,6 +380,7 @@ public class PeliculaDAO implements IPeliculaDAO{
     
     @Override
     public List<PeliculaDTO> obtenerTodasLasPeliculas() throws cinepolisException {
+        
         try {
             List<PeliculaDTO> peliculasLista = new ArrayList<>();
             Connection conexion = this.conexionBD.crearConexion();
@@ -408,6 +410,7 @@ public class PeliculaDAO implements IPeliculaDAO{
     }
     
     public List<Pelicula> buscarPeliculasTabla() throws cinepolisException {
+        
         try{
             List<Pelicula> pelicuasLista=null;
             Connection conexion=this.conexionBD.crearConexion();
@@ -429,4 +432,63 @@ public class PeliculaDAO implements IPeliculaDAO{
             throw new cinepolisException("Ocurrio un error al leer la base de datos, intentelo de nuevo y si el error persiste");
         }
     }
+
+    
+    @Override
+    public List<PeliculaDTO> buscarPeliculasConFiltros(String titulo, String genero, String clasificacion, String pais) throws SQLException, cinepolisException {
+        List<PeliculaDTO> peliculas = new ArrayList<>();
+        StringBuilder query = new StringBuilder("SELECT * FROM peliculas WHERE 1=1");
+
+        if (titulo != null && !titulo.isEmpty()) {
+            query.append(" AND titulo LIKE ?");
+        }
+        if (genero != null && !genero.isEmpty()) {
+            query.append(" AND idGenero = (SELECT idGenero FROM genero WHERE tipo = ?)");
+        }
+
+        if (clasificacion != null && !clasificacion.isEmpty()) {
+            query.append(" AND idClasificacion = (SELECT idClasificacion FROM clasificacion WHERE tipo = ?)");
+        }
+        if (pais != null && !pais.isEmpty()) {
+            query.append(" AND pais LIKE ?");
+        }
+        System.out.println("PeliculaDAO " + genero + " " + clasificacion);
+
+        try (Connection conexion = this.conexionBD.crearConexion();
+             PreparedStatement stmt = conexion.prepareStatement(query.toString())) {
+
+            int paramIndex = 1;
+
+            if (titulo != null && !titulo.isEmpty()) {
+                stmt.setString(paramIndex++, "%" + titulo + "%");
+            }
+            if (genero != null && !genero.isEmpty()) {
+                stmt.setString(paramIndex++, genero); 
+            }
+            if (clasificacion != null && !clasificacion.isEmpty()) {
+                stmt.setString(paramIndex++, clasificacion);
+            }
+            if (pais != null && !pais.isEmpty()) {
+                stmt.setString(paramIndex++, "%" + pais + "%");
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    PeliculaDTO pelicula = new PeliculaDTO();
+                    pelicula.setId(rs.getLong("idPelicula"));
+                    pelicula.setTitulo(rs.getString("titulo"));
+                    pelicula.setSinopsis(rs.getString("sinopsis"));
+                    pelicula.setTrailer(rs.getString("trailer"));
+                    pelicula.setDuracion(rs.getDouble("duracion"));
+                    pelicula.setPais(rs.getString("pais"));
+                    pelicula.setGenero(obtenerTipoGeneroPorID(rs.getInt("idGenero")));
+                    pelicula.setClasificacion(obtenerTipoClasificacionPorID(rs.getInt("idClasificacion")));
+                    peliculas.add(pelicula);
+                    System.out.println("Id ingresado genero: " + obtenerTipoGeneroPorID(rs.getInt("idGenero")) + " id ingresadoClasificacion: " + obtenerTipoClasificacionPorID(rs.getInt("idClasificacion")));
+                }
+            }
+        }
+        return peliculas;
+    }
+
 }

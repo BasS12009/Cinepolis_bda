@@ -14,8 +14,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import persistencia.ClienteDAO;
@@ -31,6 +33,7 @@ public class CatalogoClientes extends javax.swing.JFrame {
     private int pagina=1;
     private int LIMITE=1;
     CinepolisBO cinepolisBO;
+    boolean conFiltro;
     
     /**
      * Creates new form CatalogoClientes
@@ -42,7 +45,7 @@ public class CatalogoClientes extends javax.swing.JFrame {
         this.setSize(955, 600);
         this.cargarMetodosIniciales();
         NumeroDePagina.setEditable(false);
-        
+        conFiltro=false;
     }
     
     
@@ -182,9 +185,12 @@ public class CatalogoClientes extends javax.swing.JFrame {
                 ex.printStackTrace();
                 return Collections.emptyList();
             }
-        }
+    }
     
     
+    
+    
+//a
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -208,12 +214,15 @@ public class CatalogoClientes extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jDateChooser2 = new com.toedter.calendar.JDateChooser();
         jLabel5 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        textoFiltroNombre = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
+        botonRestaurar = new javax.swing.JButton();
         btnNuevoCliente = new javax.swing.JButton();
         btnAtras = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
         NumeroDePagina = new javax.swing.JTextField();
+        CambiarLimite = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -303,37 +312,56 @@ public class CatalogoClientes extends javax.swing.JFrame {
 
         btnBuscar.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
+        botonRestaurar.setText("Restaurar");
+        botonRestaurar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonRestaurarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(322, 322, 322))
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(49, 49, 49)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(216, 216, 216)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnBuscar)))
-                .addContainerGap(32, Short.MAX_VALUE))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(49, 49, 49)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(216, 216, 216)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(textoFiltroNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnBuscar))))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addGap(211, 211, 211)
+                        .addComponent(botonRestaurar)))
+                .addGap(0, 32, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jLabel2)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(botonRestaurar, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -343,7 +371,7 @@ public class CatalogoClientes extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(textoFiltroNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnBuscar))
                     .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(10, Short.MAX_VALUE))
@@ -384,13 +412,26 @@ public class CatalogoClientes extends javax.swing.JFrame {
         });
         jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 510, -1, -1));
 
+        NumeroDePagina.setBackground(new java.awt.Color(200, 200, 200));
         NumeroDePagina.setText("1");
         NumeroDePagina.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 NumeroDePaginaActionPerformed(evt);
             }
         });
-        jPanel1.add(NumeroDePagina, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 520, 20, 20));
+        jPanel1.add(NumeroDePagina, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 520, 20, -1));
+
+        CambiarLimite.setText("1");
+        CambiarLimite.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CambiarLimiteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(CambiarLimite, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 510, 20, 40));
+
+        jLabel7.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
+        jLabel7.setText("Numero de Resultados");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 520, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -473,8 +514,123 @@ public class CatalogoClientes extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
+    private void CambiarLimiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CambiarLimiteActionPerformed
+            try {
+                if(conFiltro=false){
+
+            int nuevoLimite = Integer.parseInt(CambiarLimite.getText());
+            this.LIMITE = nuevoLimite;
+            cargarClientesEnTabla(); 
+            actualizarNumeroDePagina();
+                }else{
+                    int nuevoLimite = Integer.parseInt(CambiarLimite.getText());
+                    this.LIMITE = nuevoLimite;
+                   String nombreFiltro = textoFiltroNombre.getText();
+                    java.sql.Date fechaInicio = null;
+                    if (jDateChooser1.getDate() != null) {
+                        fechaInicio = new java.sql.Date(jDateChooser1.getDate().getTime());
+                    }
+                    java.sql.Date fechaFin = null;
+                    if (jDateChooser2.getDate() != null) {
+                        fechaFin = new java.sql.Date(jDateChooser2.getDate().getTime());
+                    }
+                    cargarClientesEnTablaActualizada(nombreFiltro, fechaInicio, fechaFin);
+                    actualizarNumeroDePagina();
+                    conFiltro=true;
+                }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Ingrese un número válido para el límite", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_CambiarLimiteActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        String nombreFiltro = textoFiltroNombre.getText();
+        // Verificar si jDateChooser1 tiene una fecha seleccionada
+        java.sql.Date fechaInicio = null;
+        if (jDateChooser1.getDate() != null) {
+            fechaInicio = new java.sql.Date(jDateChooser1.getDate().getTime());
+        }
+        // Verificar si jDateChooser2 tiene una fecha seleccionada
+        java.sql.Date fechaFin = null;
+        if (jDateChooser2.getDate() != null) {
+            fechaFin = new java.sql.Date(jDateChooser2.getDate().getTime());
+        }
+        cargarClientesEnTablaActualizada(nombreFiltro, fechaInicio, fechaFin);
+        actualizarNumeroDePagina();
+        conFiltro=true;
+        
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void botonRestaurarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRestaurarActionPerformed
+        // TODO add your handling code here:
+        conFiltro=false;
+        textoFiltroNombre.setText("");
+        jDateChooser1.setDate(null);
+        jDateChooser2.setDate(null);
+        this.cargarMetodosIniciales();
+    }//GEN-LAST:event_botonRestaurarActionPerformed
+    
+    private List<ClienteDTO> obtenerClientesPaginaActualizado(int indiceInicio, int indiceFin,String nombreFiltro, java.sql.Date fechaInicio, java.sql.Date fechaFin) {
+            try {
+        List<ClienteDTO> todosLosClientes = cinepolisBO.buscarClientes(nombreFiltro, fechaInicio, fechaFin);
+        List<ClienteDTO> clientesPaginas = new ArrayList<>();
+
+        indiceFin = Math.min(indiceFin, todosLosClientes.size());
+
+        for (int i = indiceInicio; i < indiceFin; i++) {
+            clientesPaginas.add(todosLosClientes.get(i));
+        }
+        
+        return clientesPaginas;
+            } catch (cinepolisException ex) {
+ 
+                ex.printStackTrace();
+                return Collections.emptyList();
+            }
+    }
+    
+    
+    private void cargarClientesEnTabla(List<ClienteDTO> clientesEncontrados) {
+        DefaultTableModel modeloTabla = (DefaultTableModel) tblClientes.getModel();
+
+        // Limpiar filas existentes
+        modeloTabla.setRowCount(0);
+
+        if (clientesEncontrados != null) {
+            clientesEncontrados.forEach(row -> {
+                Object[] fila = new Object[6];
+                fila[0] = row.getId();
+                fila[1] = row.getNombre() + " " + row.getApellidoPaterno() + " " + row.getApellidoMaterno();
+                fila[2] = row.getCorreo();
+                fila[3] = row.getContrasena();
+                fila[4] = "Eliminar";
+                fila[5] = "Editar"; 
+                modeloTabla.addRow(fila);
+            });
+        }
+        
+        
+    }
+    
+    
+    private void cargarClientesEnTablaActualizada(String nombreFiltro, java.sql.Date fechaInicio, java.sql.Date fechaFin) {
+    try {
+        int indiceInicio = (pagina - 1) * LIMITE;
+        List<ClienteDTO> todosLosClientes = cinepolisBO.buscarClientes(nombreFiltro, fechaInicio, fechaFin);
+        int indiceFin = Math.min(indiceInicio + LIMITE, todosLosClientes.size());
+
+        List<ClienteDTO> clientesPagina = obtenerClientesPaginaActualizado(indiceInicio, indiceFin, nombreFiltro,fechaInicio, fechaFin);
+
+        cargarClientesEnTabla(clientesPagina);
+
+        actualizarNumeroDePagina();
+    } catch (cinepolisException ex) {
+        ex.printStackTrace();
+    }
+    }
+    
     private void actualizarNumeroDePagina() {
-    NumeroDePagina.setText("Página " + pagina);
+    NumeroDePagina.setText(""+pagina);
     }
     /**
      * @param args the command line arguments
@@ -516,7 +672,9 @@ public class CatalogoClientes extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField CambiarLimite;
     private javax.swing.JTextField NumeroDePagina;
+    private javax.swing.JButton botonRestaurar;
     private javax.swing.JButton btnAtras;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnNuevoCliente;
@@ -529,12 +687,13 @@ public class CatalogoClientes extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTable tblClientes;
+    private javax.swing.JTextField textoFiltroNombre;
     // End of variables declaration//GEN-END:variables
 }

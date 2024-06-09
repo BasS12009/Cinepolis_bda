@@ -21,7 +21,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import persistencia.ClasificacionDAO;
 import persistencia.ClienteDAO;
-import persistencia.ConexionBD;
 import persistencia.GeneroDAO;
 import persistencia.PeliculaDAO;
 
@@ -442,6 +441,33 @@ public class CinepolisBO implements ICinepolisBO{
         return PeliculasDTO;
      }
     
+    private List<Pelicula> convertirPeliculaTabla(List<PeliculaDTO> peliculasDTO) throws cinepolisException {
+        if (peliculasDTO == null) {
+        throw new cinepolisException("No se pudieron obtener las películas");
+        }
+
+        List<Pelicula> peliculas = new ArrayList<>();
+        for (PeliculaDTO peliculaDTO : peliculasDTO) {
+            Pelicula pelicula = new Pelicula();
+            pelicula.setId(peliculaDTO.getId().intValue());
+            pelicula.setTitulo(peliculaDTO.getTitulo());
+            pelicula.setSinopsis(peliculaDTO.getSinopsis());
+            pelicula.setTrailer(peliculaDTO.getTrailer());
+            pelicula.setDuracion(peliculaDTO.getDuracion());
+            pelicula.setPais(peliculaDTO.getPais());
+            try {
+                int idGenero = obtenerIdGenero(peliculaDTO.getGenero());
+                int idClasificacion = obtenerIdClasificacion(peliculaDTO.getClasificacion());
+                pelicula.setGenero(idGenero);
+                pelicula.setClasificacion(idClasificacion);
+            } catch (SQLException ex) {
+                throw new cinepolisException("Error al obtener el ID de género o clasificación.", ex);
+            }
+            peliculas.add(pelicula);
+        }
+        return peliculas;
+    }
+    
     @Override
     public PeliculaDTO editarPelicula(PeliculaDTO pelicula) throws cinepolisException {
         try {
@@ -452,6 +478,28 @@ public class CinepolisBO implements ICinepolisBO{
             return convertirAEntidad(peliculaEditado);
         } catch (SQLException ex) {
             throw new cinepolisException("Error al editar el cliente en la base de datos.", ex);
+        }
+    }
+    
+    public List<ClienteDTO> buscarClientes(String nombreFiltro, java.sql.Date fechaInicio, java.sql.Date fechaFin) throws cinepolisException {
+        try {
+        List<Cliente> clientes = clienteDAO.buscarClientesConFiltros(nombreFiltro, fechaInicio, fechaFin);
+        return convertirClienteTablaDTO(clientes);
+        } catch (cinepolisException ex) {
+            System.out.println(ex.getMessage());
+            throw new cinepolisException(ex.getMessage());
+        }
+    }
+
+    public List<PeliculaDTO> buscarPeliculas(String titulo, String genero, String clasificacion, String pais) throws cinepolisException, SQLException {
+        try {
+            System.out.println("CinepolisBO "+genero+" "+clasificacion);
+            List<PeliculaDTO> peliculas = peliculaDAO.buscarPeliculasConFiltros(titulo, genero, clasificacion, pais);
+            
+            return peliculas;
+        } catch (cinepolisException ex) {
+            System.out.println(ex.getMessage());
+            throw new cinepolisException(ex.getMessage());
         }
     }
 }

@@ -394,5 +394,82 @@ public class ClienteDAO implements IClienteDAO{
             }
         }
     }
+    
+    public List<Cliente> buscarClientesConFiltros(String nombreFiltro, Date fechaInicio, Date fechaFin) throws cinepolisException {
+        Connection conexion = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        List<Cliente> clientes = new ArrayList<>();
+
+        try {
+            conexion = this.conexionBD.crearConexion();
+            StringBuilder sqlBuilder = new StringBuilder("SELECT idCliente, nombre, apellidoPaterno, apellidoMaterno, correo, contrasena, ubicacion, fechaNacimiento FROM clientes WHERE 1=1");
+            List<Object> parametros = new ArrayList<>();
+
+            if (nombreFiltro != null && !nombreFiltro.trim().isEmpty()) {
+                sqlBuilder.append(" AND nombre LIKE ?");
+                parametros.add("%" + nombreFiltro + "%");
+            }
+
+            if (fechaInicio != null) {
+                sqlBuilder.append(" AND fechaNacimiento >= ?");
+                parametros.add(new java.sql.Date(fechaInicio.getTime()));
+            }
+
+            if (fechaFin != null) {
+                sqlBuilder.append(" AND fechaNacimiento <= ?");
+                parametros.add(new java.sql.Date(fechaFin.getTime()));
+            }
+
+            preparedStatement = conexion.prepareStatement(sqlBuilder.toString());
+
+            for (int i = 0; i < parametros.size(); i++) {
+                preparedStatement.setObject(i + 1, parametros.get(i));
+            }
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Cliente cliente = new Cliente();
+                cliente.setId(resultSet.getLong("idCliente"));
+                cliente.setNombre(resultSet.getString("nombre"));
+                cliente.setApellidoPaterno(resultSet.getString("apellidoPaterno"));
+                cliente.setApellidoMaterno(resultSet.getString("apellidoMaterno"));
+                cliente.setCorreo(resultSet.getString("correo"));
+                cliente.setContrasena(resultSet.getString("contrasena"));
+                cliente.setUbicacion(resultSet.getString("ubicacion"));
+                cliente.setFechaNacimiento(resultSet.getDate("fechaNacimiento"));
+                clientes.add(cliente);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new cinepolisException("Error al buscar clientes: " + ex.getMessage(), ex);
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el ResultSet: " + e.getMessage());
+                }
+            }
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement: " + e.getMessage());
+                }
+            }
+            if (conexion != null) {
+                try {
+                    conexion.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión: " + e.getMessage());
+                }
+            }
+        }
+
+        return clientes;
+    }
 
 }
