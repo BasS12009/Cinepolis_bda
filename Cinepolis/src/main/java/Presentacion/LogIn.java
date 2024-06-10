@@ -43,7 +43,6 @@ public class LogIn extends javax.swing.JFrame {
         correo = new javax.swing.JPasswordField();
         btnIniciarSesion = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         btnRegistrate = new javax.swing.JButton();
@@ -77,10 +76,6 @@ public class LogIn extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(12, 33, 63));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/Image_20240606_172140 (1).png"))); // NOI18N
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 230, 260));
-
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 300, 550));
 
         jLabel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -181,7 +176,6 @@ public class LogIn extends javax.swing.JFrame {
     private javax.swing.JButton btnRegistrate;
     private javax.swing.JTextField contrasena;
     private javax.swing.JPasswordField correo;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
