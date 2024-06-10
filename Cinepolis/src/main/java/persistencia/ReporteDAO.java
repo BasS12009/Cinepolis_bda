@@ -4,21 +4,32 @@
  */
 package persistencia;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPCell;
 import entidades.Reporte;
 import excepciones.cinepolisException;
-import java.awt.Font;
 import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import javax.swing.text.Document;
-import javax.swing.text.Element;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 
@@ -64,7 +75,7 @@ public class ReporteDAO  implements IReporteDAO{
 
             if (opcion == 1) {
                 Font fontSubTitulo = new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD, new BaseColor(182, 0, 0));
-                Paragraph Subtitulo = new Paragraph("Reporte de tramites de la persona: " + reportes.get(0).getNombrePersona(), fontSubTitulo);
+                Paragraph Subtitulo = new Paragraph("Reporte de la sucursal: " + reportes.get(0).getSucursal(), fontSubTitulo);
                 // Alineación a la izquierda
                 Subtitulo.setAlignment(Element.ALIGN_LEFT);
                 // Espacio después del título
