@@ -4,67 +4,31 @@
  */
 package Presentacion;
 
-import java.awt.Color;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.util.Random;
+import DTOs.ClienteDTO;
+import Negocio.CinepolisBO;
+import java.util.Locale;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author diana
  */
 public class LogIn extends javax.swing.JFrame {
-    
-    
-    private Color color1 = new Color(12,33,63);
-    private Color color2 = new Color(29,69,168);
-    private Color color3 = new Color(99,18,118);
+
     /**
      * Creates new form LogIn
      */
-    
-    
+    CinepolisBO negocio;
 
- 
-    public LogIn() {
+    public LogIn(CinepolisBO negocio) {
         initComponents();
         this.setLocationRelativeTo(this);
-        this.setSize(680, 550);
+        this.setSize(785, 560);
         
+       this.negocio=negocio;
+
     }
 
-    
-    
-    
-    public LogIn(Color c1, Color c2, Color c3){
-        color1 = c1;
-        color2 = c2; 
-        color3= c3;
-    }
-    
-    @Override
-    public void paint(Graphics g) {    
-        Graphics2D g2 = (Graphics2D) g.create();
-        Rectangle clip = g2.getClipBounds();                        
-        g2.setPaint(new GradientPaint(0.0f, 0.0f, color1.darker(),0.0f ,getHeight(), color2.darker()));        
-        g2.fillRect(clip.x, clip.y, clip.width, clip.height);        
-    }
-    
-    public void setRandomColor(){
-        Random rand = new Random();
-        this.color1 = new Color(rand.nextInt(255),rand.nextInt(255),rand.nextInt(255));
-        this.color2 = new Color(rand.nextInt(255),rand.nextInt(255),rand.nextInt(255));
-       
-    }
-    
-    public void setVistaColor(){        
-        this.color1 = new Color(12,33,63);
-        this.color2 = new Color(29,69,168); 
-        this.color3 = new Color(99,18,118);
-    }
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -75,42 +39,77 @@ public class LogIn extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        correo = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
+        contrasena = new javax.swing.JPasswordField();
+        btnIniciarSesion = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        btnRegistrate = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("STFangsong", 0, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Inicio de Sesion");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 20, -1, -1));
-
         jLabel2.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Correo:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 170, -1, -1));
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 210, 330, 40));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 150, -1, -1));
+        jPanel1.add(correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 190, 280, 40));
 
         jLabel3.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Contraseña:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 300, -1, -1));
-        jPanel1.add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 340, 320, 40));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 270, -1, -1));
+        jPanel1.add(contrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 300, 280, 30));
 
-        jButton1.setText("Iniciar Sesion");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 460, -1, -1));
+        btnIniciarSesion.setBackground(new java.awt.Color(12, 33, 63));
+        btnIniciarSesion.setFont(new java.awt.Font("Sitka Text", 0, 14)); // NOI18N
+        btnIniciarSesion.setForeground(new java.awt.Color(255, 255, 255));
+        btnIniciarSesion.setText("Iniciar Sesion");
+        btnIniciarSesion.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnIniciarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIniciarSesionActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnIniciarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 440, 140, 30));
+
+        jPanel2.setBackground(new java.awt.Color(12, 33, 63));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\diana\\OneDrive\\Documentos\\GitHub\\Cinepolis_bda\\Cinepolis\\src\\main\\java\\resources\\Image_20240606_172140 (1).png")); // NOI18N
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, -1, -1));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 300, 550));
+
+        jLabel4.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel4.setFont(new java.awt.Font("Serif", 0, 36)); // NOI18N
+        jLabel4.setText("Inicio de Sesion");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 10, -1, -1));
+
+        jLabel5.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
+        jLabel5.setText("¿No tienes una cuenta aun? ");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 500, -1, -1));
+
+        btnRegistrate.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnRegistrate.setForeground(new java.awt.Color(12, 33, 63));
+        btnRegistrate.setText("Registrate");
+        btnRegistrate.setContentAreaFilled(false);
+        btnRegistrate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrateActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnRegistrate, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 500, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -118,50 +117,47 @@ public class LogIn extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LogIn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LogIn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LogIn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LogIn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
+        // TODO add your handling code here:
+        ClienteDTO clienteDTO = new ClienteDTO();
+        clienteDTO.setCorreo(correo.getText());
+        clienteDTO.setContrasena(contrasena.getText());
+        ClienteDTO clienteAutenticado = negocio.login(clienteDTO);
+        if (clienteAutenticado != null) {
+            negocio.setId(clienteAutenticado.getId().byteValue());
+            Cartelera cartelera = new Cartelera(negocio);
+            cartelera.setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
         }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new LogIn().setVisible(true);
-            }
-        });
-    }
+
+    }//GEN-LAST:event_btnIniciarSesionActionPerformed
+
+    private void btnRegistrateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrateActionPerformed
+        // TODO add your handling code here:
+        Registro registro = new Registro();
+        registro.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnRegistrateActionPerformed
+
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnIniciarSesion;
+    private javax.swing.JButton btnRegistrate;
+    private javax.swing.JPasswordField contrasena;
+    private javax.swing.JTextField correo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 }

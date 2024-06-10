@@ -4,6 +4,8 @@
  */
 package excepciones;
 
+import java.sql.SQLException;
+
 /**
  *
  * @author 

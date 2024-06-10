@@ -4,6 +4,8 @@
  */
 package entidades;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -13,32 +15,38 @@ import java.util.List;
  */
 public class Funcion {
     
-    private Long id;
+    private int diaSemana;
+    private int duracion;
+    private int id;
     private Date fecha;
     private double horaInicio;
-    private List<Pelicula> peliculas;
+    private Pelicula pelicula;
 
     public Funcion() {
     }
 
-    public Funcion(Long id, Date fecha, double horaInicio, List<Pelicula> peliculas) {
+    public Funcion(int id, Date fecha, double horaInicio, Pelicula pelicula, int diaSemana, int duracion) {
         this.id = id;
         this.fecha = fecha;
         this.horaInicio = horaInicio;
-        this.peliculas = peliculas;
+        this.pelicula = pelicula;
+        this.diaSemana = diaSemana;
+        this.duracion = duracion;
     }
 
-    public Funcion(Date fecha, double horaInicio, List<Pelicula> peliculas) {
+    public Funcion(Date fecha, double horaInicio, Pelicula pelicula, int diaSemana, int duracion) {
         this.fecha = fecha;
         this.horaInicio = horaInicio;
-        this.peliculas = peliculas;
+        this.pelicula = pelicula;
+        this.diaSemana = diaSemana;
+        this.duracion = duracion;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -58,13 +66,42 @@ public class Funcion {
         this.horaInicio = horaInicio;
     }
 
-    public List<Pelicula> getPeliculas() {
-        return peliculas;
+    public Pelicula getPeliculas() {
+        return pelicula;
     }
 
-    public void setPeliculas(List<Pelicula> peliculas) {
-        this.peliculas = peliculas;
+    public void setPeliculas(Pelicula pelicula) {
+        this.pelicula = pelicula;
+    }
+
+    public int getDiaSemana() {
+        return diaSemana;
+    }
+
+    public void setDiaSemana(int diaSemana) {
+        this.diaSemana = diaSemana;
+    }
+
+    public int getDuracion() {
+        return duracion;
+    }
+
+    public void setDuracion(int duracion) {
+        this.duracion = duracion;
+    }
+
+    
+    
+    public Funcion convertirAEntidad(ResultSet resultado) throws SQLException {
+
+        int id = resultado.getInt("idPelicula");
+        Date fecha = resultado.getDate("fecha");
+        double horaInicio = resultado.getDouble("horaiInicio");
+        Pelicula pelicula = new Pelicula().convertirAEntidad(resultado);
+  
+
+        return new Funcion(id, fecha, horaInicio, pelicula, diaSemana, duracion);
     }
     
-    
+
 }

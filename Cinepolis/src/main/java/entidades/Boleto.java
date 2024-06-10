@@ -4,12 +4,14 @@
  */
 package entidades;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
 /**
  *
- * @author 
+ * @author stae
  */
 public class Boleto {
     
@@ -17,28 +19,45 @@ public class Boleto {
     private double costo;
     private boolean estado;
     private Date fechaCompra;
-    private List<Asiento> asientos;
-    private List<Cliente> clientes;
+    private Funcion funcion;
+    private Cliente cliente;
 
     public Boleto() {
     }
 
-    public Boleto(Long id, double costo, boolean estado, Date fechaCompra, List<Asiento> asientos, List<Cliente> clientes) {
+    public Boleto(Long id, double costo, boolean estado, Date fechaCompra, Funcion funcion, Cliente cliente) {
         this.id = id;
         this.costo = costo;
         this.estado = estado;
         this.fechaCompra = fechaCompra;
-        this.asientos = asientos;
-        this.clientes = clientes;
+        this.funcion = funcion;
+        this.cliente = cliente;
     }
 
-    public Boleto(double costo, boolean estado, Date fechaCompra, List<Asiento> asientos, List<Cliente> clientes) {
+    
+    public Boleto(double costo, boolean estado, Date fechaCompra,  Funcion funcion, Cliente cliente) {
         this.costo = costo;
         this.estado = estado;
         this.fechaCompra = fechaCompra;
-        this.asientos = asientos;
-        this.clientes = clientes;
+        this.funcion = funcion;
+        this.cliente = cliente;
     }
+    
+    public Funcion getFuncion() {
+        return funcion;
+    }
+
+    public void setFuncion(Funcion funcion) {
+        this.funcion = funcion;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }    
 
     public Long getId() {
         return id;
@@ -72,20 +91,17 @@ public class Boleto {
         this.fechaCompra = fechaCompra;
     }
 
-    public List<Asiento> getAsientos() {
-        return asientos;
-    }
+    public Boleto convertirAEntidad(ResultSet resultado) throws SQLException {
 
-    public void setAsientos(List<Asiento> asientos) {
-        this.asientos = asientos;
-    }
+        Long id = resultado.getLong("idBoleto");
+        Double costo = resultado.getDouble("costo");
+        boolean estado = resultado.getBoolean("estado");
+        Date fechaCompra = resultado.getDate("fechaCompra");
+        Funcion funcion = new Funcion().convertirAEntidad(resultado);
+        Cliente cliente = new Cliente().convertirAEntidad(resultado);
+        
 
-    public List<Cliente> getClientes() {
-        return clientes;
-    }
-
-    public void setClientes(List<Cliente> clientes) {
-        this.clientes = clientes;
+        return new Boleto(id, costo, estado, fechaCompra, funcion, cliente);
     }
     
     

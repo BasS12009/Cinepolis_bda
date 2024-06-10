@@ -4,17 +4,26 @@
  */
 package Presentacion;
 
+import DTOs.ClienteDTO;
+import Negocio.CinepolisBO;
+import excepciones.cinepolisException;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author diana
  */
 public class Registro extends javax.swing.JFrame {
 
+    CinepolisBO negocio;
+
     /**
      * Creates new form Registro
      */
     public Registro() {
         initComponents();
+        this.setLocationRelativeTo(this);
+        this.setSize(780, 560);
     }
 
     /**
@@ -27,16 +36,87 @@ public class Registro extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        txtNombre = new javax.swing.JTextField();
+        lblCorreo = new javax.swing.JLabel();
+        txtCorreo = new javax.swing.JTextField();
+        lblContraseña = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        txtContrasena = new javax.swing.JPasswordField();
+        btnRegistrarse = new javax.swing.JButton();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        txtContrasena1 = new javax.swing.JPasswordField();
+        textoCoordenadas = new javax.swing.JTextField();
+        lblContraseña1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel2.setBackground(new java.awt.Color(12, 33, 63));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel4.setIcon(new javax.swing.ImageIcon("C:\\Users\\diana\\OneDrive\\Documentos\\GitHub\\Cinepolis_bda\\Cinepolis\\src\\main\\java\\resources\\Image_20240606_172140 (1).png")); // NOI18N
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 230, 260));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 290, 550));
+
+        jLabel1.setFont(new java.awt.Font("Serif", 0, 36)); // NOI18N
+        jLabel1.setText("Registro");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 10, -1, -1));
+
+        jLabel2.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
+        jLabel2.setText("Nombre completo:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 90, 150, 20));
+        jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 120, 270, 30));
+
+        lblCorreo.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
+        lblCorreo.setText("Correo:");
+        jPanel1.add(lblCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 170, -1, -1));
+        jPanel1.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 210, 270, 30));
+
+        lblContraseña.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
+        lblContraseña.setText("Ubicacion: (coordenadas)");
+        jPanel1.add(lblContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 400, -1, -1));
+
+        jLabel3.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
+        jLabel3.setText("Fecha de nacimiento:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 250, -1, -1));
+        jPanel1.add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 360, 270, 30));
+
+        btnRegistrarse.setBackground(new java.awt.Color(12, 33, 63));
+        btnRegistrarse.setFont(new java.awt.Font("Sitka Text", 0, 14)); // NOI18N
+        btnRegistrarse.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegistrarse.setText("Registrarse");
+        btnRegistrarse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarseActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnRegistrarse, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 490, -1, -1));
+        jPanel1.add(jDateChooser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 280, 270, 30));
+        jPanel1.add(txtContrasena1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 360, 270, 30));
+
+        textoCoordenadas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textoCoordenadasActionPerformed(evt);
+            }
+        });
+        jPanel1.add(textoCoordenadas, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 430, 270, 30));
+
+        lblContraseña1.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
+        lblContraseña1.setText("Contraseña:");
+        jPanel1.add(lblContraseña1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 330, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -45,6 +125,55 @@ public class Registro extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed
+        // TODO add your handling code here:
+        try {
+            ClienteDTO clienteDTO = new ClienteDTO();
+
+            String[] nombreC = txtNombre.getText().split(" ");
+            int cantidad = nombreC.length;
+
+            if (cantidad < 3) {
+                new cinepolisException("Nombre inválido");
+            }
+
+            if (cantidad > 3) {
+                clienteDTO.setApellidoMaterno(nombreC[nombreC.length - 1]);
+                clienteDTO.setApellidoPaterno(nombreC[nombreC.length - 2]);
+                String nombreAuxiliar = "";
+                for (int i = 0; i < nombreC.length - 2; i++) {
+                    nombreAuxiliar += nombreC[i] + " ";
+                }
+                clienteDTO.setNombre(nombreAuxiliar);
+            }else{
+                clienteDTO.setNombre(nombreC[0]);
+                clienteDTO.setApellidoPaterno(nombreC[1]);
+                clienteDTO.setApellidoMaterno(nombreC[2]);
+            }
+            
+
+            clienteDTO.setCorreo(txtCorreo.getText());
+            clienteDTO.setContrasena(txtContrasena.getText());
+            clienteDTO.setFechaNacimiento(jDateChooser1.getDate());
+            clienteDTO.setUbicacion(textoCoordenadas.getText());
+
+            //
+            if (negocio.registro(clienteDTO) != null) {
+                LogIn inicioSesion = new LogIn(negocio);
+                inicioSesion.setVisible(true);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "No se pudo registrar el usuario");
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+    }//GEN-LAST:event_btnRegistrarseActionPerformed
+
+    private void textoCoordenadasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textoCoordenadasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textoCoordenadasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -82,6 +211,21 @@ public class Registro extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRegistrarse;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lblContraseña;
+    private javax.swing.JLabel lblContraseña1;
+    private javax.swing.JLabel lblCorreo;
+    private javax.swing.JTextField textoCoordenadas;
+    private javax.swing.JPasswordField txtContrasena;
+    private javax.swing.JPasswordField txtContrasena1;
+    private javax.swing.JTextField txtCorreo;
+    private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }

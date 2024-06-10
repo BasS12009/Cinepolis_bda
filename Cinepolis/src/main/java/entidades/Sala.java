@@ -4,30 +4,33 @@
  */
 package entidades;
 
-import java.util.List;
+import excepciones.cinepolisException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+                      
 
 /**
  *
- * @author 
+ * @author stae
  */
 public class Sala {
     
     private Long id;
     private int numero;
-    private List<Funcion> funciones;
+    private Funcion funcion ;
 
     public Sala() {
     }
 
-    public Sala(Long id, int numero, List<Funcion> funciones) {
+    public Sala(Long id, int numero, Funcion funcion) {
         this.id = id;
         this.numero = numero;
-        this.funciones = funciones;
+        this.funcion = funcion;
     }
 
-    public Sala(int numero, List<Funcion> funciones) {
+    public Sala(int numero, Funcion funcion) {
         this.numero = numero;
-        this.funciones = funciones;
+        this.funcion = funcion;
     }
 
     public Long getId() {
@@ -46,13 +49,24 @@ public class Sala {
         this.numero = numero;
     }
 
-    public List<Funcion> getFunciones() {
-        return funciones;
+    public Funcion getFunciones() {
+        return funcion;
     }
 
-    public void setFunciones(List<Funcion> funciones) {
-        this.funciones = funciones;
+    public void setFunciones(Funcion funcion) {
+        this.funcion = funcion;
     }
     
+    public Sala convertirAEntidad(ResultSet resultado) throws SQLException, cinepolisException {
+
+        Long id = resultado.getLong("idSalas");
+        int numero = resultado.getInt("numero");
+        Funcion funcion = new Funcion().convertirAEntidad(resultado);
+        
+
+        return new Sala(id, numero, funcion);
+    }
+    
+
     
 }

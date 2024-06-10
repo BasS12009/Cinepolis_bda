@@ -4,68 +4,71 @@
  */
 package entidades;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
 /**
  *
- * @author 
+ * @author stae
  */
 public class Pelicula {
     
-    private Long id;
+    private int idPelicula;
     private String titulo;
-    private String genero;
     private String sinopsis;
     private String trailer;
-    private Double duracion;
+    private double duracion;
     private String pais;
-    private String clasificacion;
+    private int idGenero;
+    private int idClasificacion;
+    
 
     public Pelicula() {
     }
+    
+    public Pelicula(int id) {
+        this.idPelicula=id;
+    }
 
-    public Pelicula(Long id, String titulo, String genero, String sinopsis, String trailer, Double duracion, String pais, String clasificacion) {
-        this.id = id;
+    public Pelicula(int id, String titulo, String sinopsis, String trailer, double duracion, String pais, int idGenero, int idClasificacion) {
+        this.idPelicula = id;
         this.titulo = titulo;
-        this.genero = genero;
+        this.idGenero = idGenero;
         this.sinopsis = sinopsis;
         this.trailer = trailer;
         this.duracion = duracion;
         this.pais = pais;
-        this.clasificacion = clasificacion;
+        this.idClasificacion = idClasificacion;
     }
 
-    public Pelicula(String titulo, String genero, String sinopsis, String trailer, Double duracion, String pais, String clasificacion) {
+    public Pelicula(String titulo, String sinopsis, String trailer, double duracion, String pais, int idGenero, int idClasificacion) {
         this.titulo = titulo;
-        this.genero = genero;
         this.sinopsis = sinopsis;
         this.trailer = trailer;
         this.duracion = duracion;
         this.pais = pais;
-        this.clasificacion = clasificacion;
+        this.idGenero = idGenero;
+        this.idClasificacion = idClasificacion;
     }
 
-    public Long getId() {
-        return id;
+    public int getId(){
+        return idPelicula;
     }
-
-    public void setId(Long id) {
-        this.id = id;
+    
+    public void setId(int id){
+        this.idPelicula=id;
     }
-
+    
+    
+    public void setTitulo(String titulo) {
+        this.titulo=titulo;
+    }
+    
     public String getTitulo() {
         return titulo;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getGenero() {
-        return genero;
-    }
-
-    public void setGenero(String genero) {
-        this.genero = genero;
-    }
 
     public String getSinopsis() {
         return sinopsis;
@@ -99,14 +102,39 @@ public class Pelicula {
         this.pais = pais;
     }
 
-    public String getClasificacion() {
-        return clasificacion;
+    public int getClasificacion() {
+        return idClasificacion;
     }
 
-    public void setClasificacion(String clasificacion) {
-        this.clasificacion = clasificacion;
+    public void setClasificacion(int clasificacion) {
+        this.idClasificacion = clasificacion;
     }
     
+    public int getGenero(){
+        return idGenero;
+    }
+    
+    public void setGenero(int idGenero){
+        this.idGenero=idGenero;
+    }
+    
+    public Pelicula convertirAEntidad(ResultSet resultado) throws SQLException {
+
+        int id = resultado.getInt("idPelicula");
+        String titulo = resultado.getString("titulo");
+        String sinopsis = resultado.getString("sinopsis");
+        String trailer = resultado.getString("trailer");
+        Double duracion = resultado.getDouble("duracion");
+        String pais = resultado.getString("pais");
+        int idGenero = resultado.getInt("idGenero");
+        int idClasificacion = resultado.getInt("idClasificacion");
+        
+
+        return new Pelicula(id, titulo, sinopsis, trailer, duracion, pais, idGenero, idClasificacion);
+    }
+    
+    
+
     
     
 }

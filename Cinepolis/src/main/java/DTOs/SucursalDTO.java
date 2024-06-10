@@ -5,6 +5,7 @@
 package DTOs;
 
 
+import com.itextpdf.awt.geom.Point2D;
 import java.util.List;
 
 /**
@@ -12,19 +13,40 @@ import java.util.List;
  * @author diana
  */
 public class SucursalDTO {
-    private Long id;
+  private Long id;
     private String nombre;
     private String ubicacion;
-    List<SalaDTO> salas;
+    List<SalaDTO> salaDTO;
+    private Point2D.Double coordenadas;
 
+    public void setCoordenadas(Point2D.Double coordenadas) {
+        this.coordenadas = coordenadas;
+    }
+    
+
+    public SucursalDTO(String nombre, Point2D.Double coordenadas) {
+        this.nombre = nombre;
+        this.coordenadas = coordenadas;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public Point2D.Double getCoordenadas() {
+            return coordenadas;
+        }
+    
+    
+    
     public SucursalDTO() {
     }
 
-    public SucursalDTO(Long id, String nombre, String ubicacion, List<SalaDTO> salas) {
+    public SucursalDTO(Long id, String nombre, String ubicacion, List<SalaDTO> salaDTO) {
         this.id = id;
         this.nombre = nombre;
         this.ubicacion = ubicacion;
-        this.salas = salas;
+        this.salaDTO = salaDTO;
     }
 
     public Long getId() {
@@ -35,9 +57,6 @@ public class SucursalDTO {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
@@ -51,12 +70,12 @@ public class SucursalDTO {
         this.ubicacion = ubicacion;
     }
 
-    public List<SalaDTO> getSalas() {
-        return salas;
+    public List<SalaDTO> getSalaDTO() {
+        return salaDTO;
     }
 
-    public void setSalas(List<SalaDTO> salas) {
-        this.salas = salas;
+    public void setSalaDTO(List<SalaDTO> salas) {
+        this.salaDTO = salaDTO;
     }
     
     

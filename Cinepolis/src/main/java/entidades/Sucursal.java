@@ -4,20 +4,40 @@
  */
 package entidades;
 
+import com.itextpdf.awt.geom.Point2D;
+import excepciones.cinepolisException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
- * @author 
+ * @author stae
  */
 public class Sucursal {
-    
+
     private Long id;
     private String nombre;
     private String ubicacion;
     List<Sala> salas;
+    private Point2D.Double coordenadas;
 
+        
     public Sucursal() {
+    }
+    
+    
+    
+    public Sucursal(Point2D.Double coordenadas) {
+            this.coordenadas = coordenadas;
+        }
+
+        public Point2D.Double getCoordenadas() {
+            return coordenadas;
+        }
+    public String getNombre() {
+        return nombre;
     }
 
     public Sucursal(Long id, String nombre, String ubicacion, List<Sala> salas) {
@@ -41,10 +61,6 @@ public class Sucursal {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
@@ -64,7 +80,26 @@ public class Sucursal {
     public void setSalas(List<Sala> salas) {
         this.salas = salas;
     }
-    
-    
+
+  
+
+    public Sucursal convertirAEntidad(ResultSet resultado) throws SQLException, cinepolisException {
+        Long id = resultado.getLong("idSucursales");
+        String nombre = resultado.getString("nombre");
+        String ubicacion = resultado.getString("ubicacion");
+
+        List<Sala> salas = new ArrayList<>();
+
+        while (resultado.next()) {
+            Long salaId = resultado.getLong("idSala");
+            int numero = resultado.getInt("numero");
+            Funcion funcion = new Funcion().convertirAEntidad(resultado);
+
+            salas.add(new Sala(salaId,numero, funcion));
+        }
+
+        return new Sucursal(id, nombre, ubicacion, salas);
+    }
+
     
 }

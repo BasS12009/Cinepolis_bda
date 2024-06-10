@@ -4,7 +4,7 @@
  */
 package DTOs;
 
-import java.util.List;
+
 
 /**
  *
@@ -13,17 +13,16 @@ import java.util.List;
 public class SalaDTO {
     private Long id;
     private int numero;
-    private List<FuncionDTO> funciones;
-    private int asientos;
+    private FuncionDTO funcionDTO ;
+     
 
     public SalaDTO() {
     }
 
-    public SalaDTO(Long id, int numero, List<FuncionDTO> funciones, int asientos) {
+    public SalaDTO(Long id, int numero, FuncionDTO funcionDTO) {
         this.id = id;
         this.numero = numero;
-        this.funciones = funciones;
-        this.asientos = asientos;
+        this.funcionDTO = funcionDTO;
     }
 
     public Long getId() {
@@ -42,21 +41,16 @@ public class SalaDTO {
         this.numero = numero;
     }
 
-    public List<FuncionDTO> getFunciones() {
-        return funciones;
+    public FuncionDTO getFuncionDTO() {
+        return funcionDTO;
     }
 
-    public void setFunciones(List<FuncionDTO> funciones) {
-        this.funciones = funciones;
+    public void setFuncionDTO(FuncionDTO funcionDTO) {
+        this.funcionDTO = funcionDTO;
     }
 
-    public int getAsientos() {
-        return asientos;
-    }
+   
 
-    public void setAsientos(int asientos) {
-        this.asientos = asientos;
-    }
     
     
 }
