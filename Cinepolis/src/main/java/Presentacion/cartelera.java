@@ -52,7 +52,6 @@ public class Cartelera extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         jTextField3 = new javax.swing.JTextField();
         jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
         jTextField6 = new javax.swing.JTextField();
         jTextField7 = new javax.swing.JTextField();
         jTextField8 = new javax.swing.JTextField();
@@ -121,7 +120,6 @@ public class Cartelera extends javax.swing.JFrame {
         jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 110, 150, 190));
         jPanel1.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 330, 150, 190));
         jPanel1.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 110, 150, 190));
-        jPanel1.add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 110, 150, 190));
         jPanel1.add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 110, 150, 190));
         jPanel1.add(jTextField7, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 330, 150, 190));
         jPanel1.add(jTextField8, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 330, 150, 190));
@@ -266,7 +264,6 @@ public class Cartelera extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
