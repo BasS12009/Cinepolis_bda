@@ -31,7 +31,9 @@ public class ReportePorSucursal extends javax.swing.JFrame {
         btnRegresar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        btnAgregarFuncion = new javax.swing.JButton();
+        btnGenerarReporte = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblSucursales = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -73,34 +75,51 @@ public class ReportePorSucursal extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 760, Short.MAX_VALUE)
+            .addGap(0, 970, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 40, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 760, 40));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 970, 40));
 
         jLabel1.setFont(new java.awt.Font("Serif", 0, 36)); // NOI18N
         jLabel1.setText("Reporte Por Sucursal");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 60, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 50, -1, -1));
 
-        btnAgregarFuncion.setBackground(new java.awt.Color(12, 33, 63));
-        btnAgregarFuncion.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
-        btnAgregarFuncion.setForeground(new java.awt.Color(255, 255, 255));
-        btnAgregarFuncion.setText("Generar Reporte");
-        jPanel1.add(btnAgregarFuncion, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 480, -1, 30));
+        btnGenerarReporte.setBackground(new java.awt.Color(12, 33, 63));
+        btnGenerarReporte.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
+        btnGenerarReporte.setForeground(new java.awt.Color(255, 255, 255));
+        btnGenerarReporte.setText("Generar Reporte");
+        jPanel1.add(btnGenerarReporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 490, -1, 30));
+
+        tblSucursales.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Sucursal", "Cantidad Funciones", "Fecha", "Total de ganancia por Fecha", "Total de ganancias"
+            }
+        ));
+        jScrollPane1.setViewportView(tblSucursales);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 180, 810, 230));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1006, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE)
         );
 
         pack();
@@ -147,11 +166,13 @@ public class ReportePorSucursal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgregarFuncion;
+    private javax.swing.JButton btnGenerarReporte;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblSucursales;
     // End of variables declaration//GEN-END:variables
 }

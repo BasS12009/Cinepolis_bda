@@ -27,19 +27,77 @@ public class ReportePorPeliculas extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        btnRegresar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        btnAgregarFuncion = new javax.swing.JButton();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
+        btnReporteCiudad = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblReportes = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        btnRegresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel3.setBackground(new java.awt.Color(12, 33, 63));
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 930, 40));
+
+        jLabel1.setFont(new java.awt.Font("Serif", 0, 36)); // NOI18N
+        jLabel1.setText("Reporte Por Pelicula");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 60, -1, -1));
+
+        btnReporteCiudad.setBackground(new java.awt.Color(12, 33, 63));
+        btnReporteCiudad.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
+        btnReporteCiudad.setForeground(new java.awt.Color(255, 255, 255));
+        btnReporteCiudad.setText("Generar Reporte Por Ciudad");
+        jPanel1.add(btnReporteCiudad, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 480, -1, 30));
+
+        tblReportes.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "Ciudad", "Pelicula", "Genero", "Fecha", "Total ganancias por fecha", "Total de Ganancias"
+            }
+        ));
+        jScrollPane1.setViewportView(tblReportes);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 180, 870, 230));
+
+        jButton1.setBackground(new java.awt.Color(12, 33, 63));
+        jButton1.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Generar Reporte Por Genero");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 480, 210, 30));
+
+        jButton2.setBackground(new java.awt.Color(12, 33, 63));
+        jButton2.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(255, 255, 255));
+        jButton2.setText("Generar Reporte por Pelicula");
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 480, -1, 30));
 
         jPanel2.setBackground(new java.awt.Color(12, 33, 63));
 
@@ -70,45 +128,11 @@ public class ReportePorPeliculas extends javax.swing.JFrame {
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 60, -1));
 
-        jPanel3.setBackground(new java.awt.Color(12, 33, 63));
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 760, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 40, Short.MAX_VALUE)
-        );
-
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 760, 40));
-
-        jLabel1.setFont(new java.awt.Font("Serif", 0, 36)); // NOI18N
-        jLabel1.setText("Reporte Por Pelicula");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 60, -1, -1));
-
-        btnAgregarFuncion.setBackground(new java.awt.Color(12, 33, 63));
-        btnAgregarFuncion.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
-        btnAgregarFuncion.setForeground(new java.awt.Color(255, 255, 255));
-        btnAgregarFuncion.setText("Generar Reporte");
-        jPanel1.add(btnAgregarFuncion, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 480, -1, 30));
-
-        jCheckBox1.setText("jCheckBox1");
-        jPanel1.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 190, -1, -1));
-
-        jCheckBox2.setText("jCheckBox2");
-        jPanel1.add(jCheckBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 220, -1, -1));
-
-        jCheckBox3.setText("jCheckBox3");
-        jPanel1.add(jCheckBox3, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 250, -1, -1));
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 972, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -118,9 +142,13 @@ public class ReportePorPeliculas extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     /**
@@ -159,14 +187,15 @@ public class ReportePorPeliculas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgregarFuncion;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
+    private javax.swing.JButton btnReporteCiudad;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblReportes;
     // End of variables declaration//GEN-END:variables
 }
