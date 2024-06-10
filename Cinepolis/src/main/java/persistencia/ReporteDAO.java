@@ -40,40 +40,42 @@ import java.util.logging.Logger;
  *
  * @author stae
  */
-public class ReporteDAO  implements IReporteDAO{
-    
+public class ReporteDAO implements IReporteDAO {
+
     private IConexionBD conexionBD;
-    
-    public ReporteDAO(){
+
+    public ReporteDAO() {
     }
-    public ReporteDAO(IConexionBD conexionBD){
-        this.conexionBD=conexionBD;
+
+    public ReporteDAO(IConexionBD conexionBD) {
+        this.conexionBD = conexionBD;
     }
-    
+
     
     @Override
-        public void generarReporte(Reporte reportes, int opcion) {
-        Document doc = new Document() {};
+    public void generarReporte(Reporte reportes, int opcion) {
+        Document doc = new Document() {
+        };
         try {
             LocalDateTime ahora = LocalDateTime.now();
 
             DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
 
             String ahorita = ahora.format(formato);
-            
-            PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream("Reporte_"+ahorita+".pdf"));
+
+            PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream("Reporte_" + ahorita + ".pdf"));
             doc.open();
 
             // Título del PDF
             // Fuente grande y en color rojo oscuro      
             Font fontTitulo = new Font(Font.FontFamily.HELVETICA, 24, Font.BOLD, new BaseColor(0, 0, 255));
-            
+
             Paragraph titulo = new Paragraph("Cinepolis", fontTitulo);
             // Alineación centrada
             titulo.setAlignment(Element.ALIGN_CENTER);
             // Espacio después del título
             titulo.setSpacingAfter(20);
-            
+
             doc.add(titulo);
 
             if (opcion == 1) {
@@ -86,7 +88,7 @@ public class ReporteDAO  implements IReporteDAO{
                 doc.add(Subtitulo);
             }
             if (opcion == 2) {
-                Font fontSubTitulo = new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD, new BaseColor(0, 0,255));
+                Font fontSubTitulo = new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD, new BaseColor(0, 0, 255));
                 Paragraph Subtitulo = new Paragraph("Reporte por pelicula", fontSubTitulo);
                 // Alineación a la izquierda
                 Subtitulo.setAlignment(Element.ALIGN_LEFT);
@@ -128,7 +130,7 @@ public class ReporteDAO  implements IReporteDAO{
             cellHeader.setPhrase(new Phrase("Sucursal", fontHeader));
             tabla.addCell(cellHeader);
 
-                cellHeader.setPhrase(new Phrase("Cantidad Funciones", fontHeader));
+            cellHeader.setPhrase(new Phrase("Cantidad Funciones", fontHeader));
             tabla.addCell(cellHeader);
 
             cellHeader.setPhrase(new Phrase("Fecha", fontHeader));
@@ -138,25 +140,27 @@ public class ReporteDAO  implements IReporteDAO{
             tabla.addCell(cellHeader);
 
             cellHeader.setPhrase(new Phrase("Total ganancias", fontHeader));
-            
+
             tabla.addCell(cellHeader);
 
             // Contenido de la tabla
             double totalSum = 0;
             Font fontContent = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL, BaseColor.BLACK);
-            for (Reporte reporte : reportes) {
-                tabla.addCell(new Phrase(reporte.getSucursal(), fontContent));
-                tabla.addCell(new Phrase(reporte.getCantFunciones(), fontContent));
-                tabla.addCell(new Phrase(reporte.getTipoTramite(), fontContent));
+
+            tabla.addCell(new Phrase(reportes.getSucursal(), fontContent));
+            tabla.addCell(new Phrase(reportes.getCantFunciones(), fontContent));
+            tabla.addCell(new Phrase(reportes.getTipo(), fontContent));
+           
 
                 // Convertir la fecha de Calendar a String
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                tabla.addCell(new Phrase(sdf.format(reporte.getFecha().getTime()), fontContent));
+            tabla.addCell(new Phrase(sdf.format(reportes.getFecha().getTime()), fontContent));
 
-                // Convertir el costo de double a String
-                tabla.addCell(new Phrase(String.valueOf(reporte.getTotalGFecha()), fontContent));
-                totalSum += reporte.getCosto();
-            }
+            // Convertir el costo de double a String
+            tabla.addCell(new Phrase(String.valueOf(reportes.getTotalGFecha()), fontContent));
+            tabla.addCell(new Phrase(String.valueOf(reportes.getTotalGanancias()), fontContent));
+            //totalSum += reportes.getCosto();
+
             // celda para el total
             tabla.addCell(new Phrase(" ", fontContent));
             tabla.addCell(new Phrase(" ", fontContent));
@@ -190,28 +194,27 @@ public class ReporteDAO  implements IReporteDAO{
             }
         }
     }
-        
-        public double gananciasTotalesPorPelicula(String ciudad, int peliculaId, int generoId, String fechaInicio, String fechaFin) {
-            double gananciasT = 0.0;
-            
-            try (Connection conexion = this.conexionBD.crearConexion();
-                 CallableStatement procedimiento = conexion.prepareCall("{CALL ReportePorPelicula(?, ?, ?, ?, ?)}")) {
-                procedimiento.setString(1, ciudad);
-                procedimiento.setInt(2, peliculaId);
-                procedimiento.setInt(3, generoId);
-                procedimiento.setDate(4, Date.valueOf(fechaInicio));
-                procedimiento.setDate(5, Date.valueOf(fechaFin));
-                try (ResultSet resultado = procedimiento.executeQuery()) {
-                    while (resultado.next()) {
-                        gananciasT += resultado.getDouble("totalGanancia");
-                    }
+
+    public double gananciasTotalesPorPelicula(String ciudad, int peliculaId, int generoId, String fechaInicio, String fechaFin) {
+        double gananciasT = 0.0;
+
+        try (Connection conexion = this.conexionBD.crearConexion(); CallableStatement procedimiento = conexion.prepareCall("{CALL ReportePorPelicula(?, ?, ?, ?, ?)}")) {
+            procedimiento.setString(1, ciudad);
+            procedimiento.setInt(2, peliculaId);
+            procedimiento.setInt(3, generoId);
+            procedimiento.setDate(4, Date.valueOf(fechaInicio));
+            procedimiento.setDate(5, Date.valueOf(fechaFin));
+            try (ResultSet resultado = procedimiento.executeQuery()) {
+                while (resultado.next()) {
+                    gananciasT += resultado.getDouble("totalGanancia");
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
-            return gananciasT;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-  
+        return gananciasT;
+    }
+
     
     
 }

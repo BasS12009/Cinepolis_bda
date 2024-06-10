@@ -4,10 +4,27 @@
  */
 package Negocio;
 
+import entidades.Reporte;
+import persistencia.IReporteDAO;
+import persistencia.ReporteDAO;
+
 /**
  *
  * @author diana
  */
-public class ReporteBO {
+public class ReporteBO implements IReporteDAO{
+    
+    ReporteDAO reporteDAO;
+
+    public ReporteBO(ReporteDAO reporteDAO) {
+        this.reporteDAO = reporteDAO;
+    }
+
+    @Override
+    public void generarReporte(Reporte reportes, int opcion) {
+        
+    }
+    
+    
     
 }

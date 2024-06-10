@@ -4,12 +4,14 @@
  */
 package Negocio;
 
+import entidades.Reporte;
+
 /**
  *
  * @author stae
  */
 public interface IReportesBO {
     
-    
+    public void generarReporte(Reporte reportes, int opcion);
     
 }
