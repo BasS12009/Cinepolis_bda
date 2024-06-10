@@ -24,6 +24,7 @@ public class ReporteDTO {
     private Date Fecha;
     private String totalGFecha;
     private String totalGanancias;
+    private String tipo;
     private List<Genero>  generos = new ArrayList<>();
     private List<Pelicula>  peliculas = new ArrayList<>();
     private List<Ciudad>  ciudades = new ArrayList<>();
@@ -32,7 +33,7 @@ public class ReporteDTO {
     public ReporteDTO() {
     }
 
-    public ReporteDTO(Long id, String descripcion, String sucursal, String cantFunciones, Date Fecha, String totalGFecha, String totalGanancias) {
+    public ReporteDTO(Long id, String descripcion, String sucursal, String cantFunciones, Date Fecha, String totalGFecha, String totalGanancias, String tipo) {
         this.id = id;
         this.descripcion = descripcion;
         this.sucursal = sucursal;
@@ -40,17 +41,19 @@ public class ReporteDTO {
         this.Fecha = Fecha;
         this.totalGFecha = totalGFecha;
         this.totalGanancias = totalGanancias;
+        this.tipo = tipo;
     }
     
     
 
-    public ReporteDTO(String descripcion, String sucursal, String cantFunciones, Date Fecha, String totalGFecha, String totalGanancias) {
+    public ReporteDTO(String descripcion, String sucursal, String cantFunciones, Date Fecha, String totalGFecha, String totalGanancias, String tipo) {
         this.descripcion = descripcion;
         this.sucursal = sucursal;
         this.cantFunciones = cantFunciones;
         this.Fecha = Fecha;
         this.totalGFecha = totalGFecha;
         this.totalGanancias = totalGanancias;
+        this.tipo = tipo;
     }
 
     public Long getId() {
@@ -131,6 +134,14 @@ public class ReporteDTO {
 
     public void setCiudades(List<Ciudad> ciudades) {
         this.ciudades = ciudades;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
     
     

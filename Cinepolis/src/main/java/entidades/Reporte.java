@@ -21,6 +21,7 @@ public class Reporte {
     private Date Fecha;
     private String totalGFecha;
     private String totalGanancias;
+    private String tipo;
     private List<Genero>  generos = new ArrayList<>();
     private List<Pelicula>  peliculas = new ArrayList<>();
     private List<Ciudad>  ciudades = new ArrayList<>();
@@ -28,21 +29,23 @@ public class Reporte {
     public Reporte() {
     }
 
-    public Reporte(Long id, String descripcion, String sucursal, String cantFunciones, Date Fecha, String totalGFecha, String totalGanancias) {
+    public Reporte(Long id, String descripcion, String sucursal, String cantFunciones, Date Fecha, String totalGFecha, String totalGanancias, String tipo) {
         this.id = id;
         this.descripcion = descripcion;
         this.sucursal = sucursal;
         this.cantFunciones = cantFunciones;
         this.Fecha = Fecha;
+        this.tipo = tipo;
         this.totalGFecha = totalGFecha;
         this.totalGanancias = totalGanancias;
     }
 
-    public Reporte(String descripcion, String sucursal, String cantFunciones, Date Fecha, String totalGFecha, String totalGanancias) {
+    public Reporte(String descripcion, String sucursal, String cantFunciones, Date Fecha, String totalGFecha, String totalGanancias, String tipo) {
         this.descripcion = descripcion;
         this.sucursal = sucursal;
         this.cantFunciones = cantFunciones;
         this.Fecha = Fecha;
+        this.tipo = tipo;
         this.totalGFecha = totalGFecha;
         this.totalGanancias = totalGanancias;
     }
@@ -128,7 +131,18 @@ public class Reporte {
         this.ciudades = ciudades;
     }
 
-    
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public int size() {
+        return 0;
+    }
+
     
     
 }

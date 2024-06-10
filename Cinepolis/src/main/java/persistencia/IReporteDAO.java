@@ -15,8 +15,7 @@ import java.util.List;
 public interface IReporteDAO {
     
     
-    public void generarReporteSucursal(List<Reporte> reportes, int opcion);
+    public void generarReporte(Reporte reportes, int opcion);
     
-    public void generarReportePelicula(List<Reporte> reportes, int opcion);
     
 }
