@@ -63,9 +63,9 @@ public class ReporteDAO  implements IReporteDAO{
 
             // Título del PDF
             // Fuente grande y en color rojo oscuro      
-            Font fontTitulo = new Font(Font.FontFamily.HELVETICA, 24, Font.BOLD, new BaseColor(182, 0, 0));
+            Font fontTitulo = new Font(Font.FontFamily.HELVETICA, 24, Font.BOLD, new BaseColor(0, 0, 255));
             
-            Paragraph titulo = new Paragraph("Agencia Tránsito", fontTitulo);
+            Paragraph titulo = new Paragraph("Cinepolis", fontTitulo);
             // Alineación centrada
             titulo.setAlignment(Element.ALIGN_CENTER);
             // Espacio después del título
@@ -74,7 +74,7 @@ public class ReporteDAO  implements IReporteDAO{
             doc.add(titulo);
 
             if (opcion == 1) {
-                Font fontSubTitulo = new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD, new BaseColor(182, 0, 0));
+                Font fontSubTitulo = new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD, new BaseColor(0, 0, 255));
                 Paragraph Subtitulo = new Paragraph("Reporte de la sucursal: " + reportes.get(0).getSucursal(), fontSubTitulo);
                 // Alineación a la izquierda
                 Subtitulo.setAlignment(Element.ALIGN_LEFT);
@@ -83,7 +83,7 @@ public class ReporteDAO  implements IReporteDAO{
                 doc.add(Subtitulo);
             }
             if (opcion == 2) {
-                Font fontSubTitulo = new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD, new BaseColor(182, 0, 0));
+                Font fontSubTitulo = new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD, new BaseColor(0, 0,255));
                 Paragraph Subtitulo = new Paragraph("Reporte de tramites por periodo", fontSubTitulo);
                 // Alineación a la izquierda
                 Subtitulo.setAlignment(Element.ALIGN_LEFT);
@@ -205,7 +205,7 @@ public class ReporteDAO  implements IReporteDAO{
             // Fuente grande y en color rojo oscuro      
             Font fontTitulo = new Font(Font.FontFamily.HELVETICA, 24, Font.BOLD, new BaseColor(182, 0, 0));
             
-            Paragraph titulo = new Paragraph("Agencia Tránsito", fontTitulo);
+            Paragraph titulo = new Paragraph("Cinepolis", fontTitulo);
             // Alineación centrada
             titulo.setAlignment(Element.ALIGN_CENTER);
             // Espacio después del título
@@ -215,7 +215,7 @@ public class ReporteDAO  implements IReporteDAO{
 
             if (opcion == 1) {
                 Font fontSubTitulo = new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD, new BaseColor(182, 0, 0));
-                Paragraph Subtitulo = new Paragraph("Reporte de tramites de la persona: " + reportes.get(0).getNombrePersona(), fontSubTitulo);
+                Paragraph Subtitulo = new Paragraph("Reporte de tramites de la persona: " + reportes.get(0).getPeliculas(), fontSubTitulo);
                 // Alineación a la izquierda
                 Subtitulo.setAlignment(Element.ALIGN_LEFT);
                 // Espacio después del título
