@@ -19,7 +19,9 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -187,7 +189,27 @@ public class ReporteDAO  implements IReporteDAO{
             }
         }
     }
-    
+        
+        public double gananciasTotalesPorPelicula(String ciudad, int peliculaId, int generoId, String fechaInicio, String fechaFin) {
+            double gananciasT = 0.0;
+            
+            try (Connection conexion = this.conexionBD.crearConexion();
+                 CallableStatement procedimiento = conexion.prepareCall("{CALL ReportePorPelicula(?, ?, ?, ?, ?)}")) {
+                procedimiento.setString(1, ciudad);
+                procedimiento.setInt(2, peliculaId);
+                procedimiento.setInt(3, generoId);
+                procedimiento.setDate(4, Date.valueOf(fechaInicio));
+                procedimiento.setDate(5, Date.valueOf(fechaFin));
+                try (ResultSet resultado = procedimiento.executeQuery()) {
+                    while (resultado.next()) {
+                        gananciasT += resultado.getDouble("totalGanancia");
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return gananciasT;
+        }
   
     
     
