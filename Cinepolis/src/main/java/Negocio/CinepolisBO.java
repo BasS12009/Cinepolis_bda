@@ -461,7 +461,8 @@ public class CinepolisBO implements ICinepolisBO{
 
             throw new cinepolisException("Error al obtener todas las peliculas.", ex);
         }
-    }
+    }//envíame eso por
+    
     
     @Override
     public List<PeliculaDTO> buscarPeliculasTabla() throws cinepolisException {

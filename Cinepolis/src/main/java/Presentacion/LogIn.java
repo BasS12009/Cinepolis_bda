@@ -43,6 +43,7 @@ public class LogIn extends javax.swing.JFrame {
         correo = new javax.swing.JPasswordField();
         btnIniciarSesion = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         btnRegistrate = new javax.swing.JButton();
@@ -55,12 +56,12 @@ public class LogIn extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
         jLabel2.setText("Correo:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 150, -1, -1));
-        jPanel1.add(contrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 310, 280, 40));
+        jPanel1.add(contrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 180, 280, 40));
 
         jLabel3.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
         jLabel3.setText("Contraseña:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 270, -1, -1));
-        jPanel1.add(correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 180, 280, 40));
+        jPanel1.add(correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 310, 280, 30));
 
         btnIniciarSesion.setBackground(new java.awt.Color(12, 33, 63));
         btnIniciarSesion.setFont(new java.awt.Font("Sitka Text", 0, 14)); // NOI18N
@@ -76,6 +77,10 @@ public class LogIn extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(12, 33, 63));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\diana\\OneDrive\\Documentos\\GitHub\\Cinepolis_bda\\Cinepolis\\src\\main\\java\\resources\\Image_20240606_172140 (1).png")); // NOI18N
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, -1, -1));
+
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 300, 550));
 
         jLabel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -176,6 +181,7 @@ public class LogIn extends javax.swing.JFrame {
     private javax.swing.JButton btnRegistrate;
     private javax.swing.JTextField contrasena;
     private javax.swing.JPasswordField correo;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
