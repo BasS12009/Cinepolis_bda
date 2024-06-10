@@ -20,14 +20,17 @@ import java.util.List;
  *
  * @author PC Gamer
  */
-public class PeliculaDAO implements IPeliculaDAO{
-    private IConexionBD conexionBD;
-    
-    public PeliculaDAO(){
+public class PeliculaDAO implements IPeliculaDAO {
+
+    private IConexionBD conexionBD = new ConexionBD();
+
+    public PeliculaDAO() {
     }
-    public PeliculaDAO(IConexionBD conexionBD){
-        this.conexionBD=conexionBD;
+
+    public PeliculaDAO(IConexionBD conexionBD) {
+        this.conexionBD = conexionBD;
     }
+
     //INSERTAR PELICULAS
     @Override
     public Pelicula insertarPelicula(Pelicula pelicula) throws cinepolisException {
@@ -35,10 +38,10 @@ public class PeliculaDAO implements IPeliculaDAO{
         try {
             conexion = this.conexionBD.crearConexion();
             conexion.setAutoCommit(false);
-    
+
             String codigoSQL = "SELECT idPelicula, titulo FROM peliculas WHERE titulo = ? AND idGenero = ? AND idClasificacion = ?";
             PreparedStatement comandoSQL = conexion.prepareStatement(codigoSQL);
-            comandoSQL.setString(1,pelicula.getTitulo());
+            comandoSQL.setString(1, pelicula.getTitulo());
             comandoSQL.setInt(2, pelicula.getGenero());
             comandoSQL.setInt(3, pelicula.getClasificacion());
 
@@ -100,7 +103,7 @@ public class PeliculaDAO implements IPeliculaDAO{
         try {
             conexion = this.conexionBD.crearConexion();
             conexion.setAutoCommit(false);
-            
+
             preparedStatement = conexion.prepareStatement(sql);
             preparedStatement.setString(1, pelicula.getTitulo());
             preparedStatement.setString(2, pelicula.getSinopsis());
@@ -121,7 +124,7 @@ public class PeliculaDAO implements IPeliculaDAO{
             System.out.println("idGenero = " + pelicula.getGenero());
             System.out.println("idClasificacion = " + pelicula.getClasificacion());
             System.out.println("idPelicula = " + pelicula.getId());
-            
+
             int filasAfectadas = preparedStatement.executeUpdate();
 
             if (filasAfectadas == 0) {
@@ -232,8 +235,7 @@ public class PeliculaDAO implements IPeliculaDAO{
             }
         }
     }
-    
-    
+
     //OBTENER PELICULA POR ID
     @Override
     public PeliculaDTO obtenerPeliculaPorId(long id) throws cinepolisException {
@@ -256,7 +258,7 @@ public class PeliculaDAO implements IPeliculaDAO{
                 pelicula.setTrailer(resultado.getString("trailer"));
                 pelicula.setDuracion(resultado.getDouble(("duracion")));
                 pelicula.setPais(resultado.getString("pais"));
-                
+
                 long idGenero = resultado.getLong("idGenero");
                 String tipoGenero = obtenerTipoGeneroPorID(idGenero);
                 pelicula.setGenero(tipoGenero);
@@ -287,7 +289,7 @@ public class PeliculaDAO implements IPeliculaDAO{
             }
         }
     }
-    
+
     public Pelicula obtenerPeliculaPorIdPelicula(long id) throws cinepolisException {
         Connection conexion = null;
         PreparedStatement comandoSQL = null;
@@ -333,7 +335,7 @@ public class PeliculaDAO implements IPeliculaDAO{
             }
         }
     }
-    
+
     public Pelicula obtenerPeliculaPorIda(long id) throws cinepolisException {
         Connection conexion = null;
         PreparedStatement comandoSQL = null;
@@ -380,7 +382,7 @@ public class PeliculaDAO implements IPeliculaDAO{
             }
         }
     }
-    
+
     //OBTENER IDS
     private String obtenerTipoGeneroPorID(long idGenero) throws cinepolisException {
         Connection conexion = null;
@@ -426,6 +428,7 @@ public class PeliculaDAO implements IPeliculaDAO{
 
         return tipoGenero;
     }
+
     private String obtenerTipoClasificacionPorID(long idClasificacion) throws cinepolisException {
         Connection conexion = null;
         PreparedStatement statement = null;
@@ -470,10 +473,10 @@ public class PeliculaDAO implements IPeliculaDAO{
 
         return tipoClasificacion;
     }
-    
+
     @Override
     public List<PeliculaDTO> obtenerTodasLasPeliculas() throws cinepolisException {
-        
+
         try {
             List<PeliculaDTO> peliculasLista = new ArrayList<>();
             Connection conexion = this.conexionBD.crearConexion();
@@ -501,32 +504,31 @@ public class PeliculaDAO implements IPeliculaDAO{
             throw new cinepolisException("Ocurrió un error al leer la base de datos, inténtelo de nuevo y si el error persiste", ex);
         }
     }
-    
+
     public List<Pelicula> buscarPeliculasTabla() throws cinepolisException {
-        
-        try{
-            List<Pelicula> pelicuasLista=null;
-            Connection conexion=this.conexionBD.crearConexion();
-            String codigoSQL= "SELECT idPelicula, titulo, sinopsis, trailer, duracion, pais, idGenero,idClasificacion FROM peliculas";
+
+        try {
+            List<Pelicula> pelicuasLista = null;
+            Connection conexion = this.conexionBD.crearConexion();
+            String codigoSQL = "SELECT idPelicula, titulo, sinopsis, trailer, duracion, pais, idGenero,idClasificacion FROM peliculas";
             Statement comandoSQL = conexion.createStatement();
-            ResultSet resultado=comandoSQL.executeQuery(codigoSQL);
-            while(resultado.next()){
-                if(pelicuasLista==null){
-                    pelicuasLista=new ArrayList<>();
+            ResultSet resultado = comandoSQL.executeQuery(codigoSQL);
+            while (resultado.next()) {
+                if (pelicuasLista == null) {
+                    pelicuasLista = new ArrayList<>();
                 }
                 Pelicula pelicula = new Pelicula();
-                pelicula=pelicula.convertirAEntidad(resultado);
+                pelicula = pelicula.convertirAEntidad(resultado);
                 pelicuasLista.add(pelicula);
             }
             conexion.close();
             return pelicuasLista;
-        } catch(SQLException ex){
+        } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             throw new cinepolisException("Ocurrio un error al leer la base de datos, intentelo de nuevo y si el error persiste");
         }
     }
 
-    
     @Override
     public List<PeliculaDTO> buscarPeliculasConFiltros(String titulo, String genero, String clasificacion, String pais) throws SQLException, cinepolisException {
         List<PeliculaDTO> peliculas = new ArrayList<>();
@@ -547,8 +549,7 @@ public class PeliculaDAO implements IPeliculaDAO{
         }
         System.out.println("PeliculaDAO " + genero + " " + clasificacion);
 
-        try (Connection conexion = this.conexionBD.crearConexion();
-             PreparedStatement stmt = conexion.prepareStatement(query.toString())) {
+        try (Connection conexion = this.conexionBD.crearConexion(); PreparedStatement stmt = conexion.prepareStatement(query.toString())) {
 
             int paramIndex = 1;
 
@@ -556,7 +557,7 @@ public class PeliculaDAO implements IPeliculaDAO{
                 stmt.setString(paramIndex++, "%" + titulo + "%");
             }
             if (genero != null && !genero.isEmpty()) {
-                stmt.setString(paramIndex++, genero); 
+                stmt.setString(paramIndex++, genero);
             }
             if (clasificacion != null && !clasificacion.isEmpty()) {
                 stmt.setString(paramIndex++, clasificacion);
@@ -583,13 +584,12 @@ public class PeliculaDAO implements IPeliculaDAO{
         }
         return peliculas;
     }
-    
-     public PeliculaDTO buscarPeliculaConTitulo(String titulo) throws SQLException, cinepolisException {
+
+    public PeliculaDTO buscarPeliculaConTitulo(String titulo) throws SQLException, cinepolisException {
         PeliculaDTO pelicula = null;
         String query = "SELECT * FROM peliculas WHERE titulo LIKE ?";
 
-        try (Connection conexion = this.conexionBD.crearConexion();
-             PreparedStatement stmt = conexion.prepareStatement(query)) {
+        try (Connection conexion = this.conexionBD.crearConexion(); PreparedStatement stmt = conexion.prepareStatement(query)) {
 
             stmt.setString(1, "%" + titulo + "%");
 
@@ -617,15 +617,14 @@ public class PeliculaDAO implements IPeliculaDAO{
 
     public List<String> obtenerTitulosPorGeneroYSucursal(String generoSeleccionado, String sucursalSeleccionada) throws SQLException {
         List<String> titulos = new ArrayList<>();
-        String consulta = "SELECT DISTINCT p.titulo " +
-                          "FROM funciones f " +
-                          "JOIN peliculas p ON f.idpeliculas = p.idPelicula " +
-                          "JOIN genero g ON p.idGenero = g.idGenero " +
-                          "JOIN salas sa ON f.idFuncion = sa.idfunciones " +
-                          "JOIN sucursales s ON sa.idSucursal = s.idSucursal " +
-                          "WHERE g.tipo = ? AND s.nombre = ?";
-        try (Connection conexion = this.conexionBD.crearConexion();
-             PreparedStatement pstmt = conexion.prepareStatement(consulta)) {
+        String consulta = "SELECT DISTINCT p.titulo "
+                + "FROM funciones f "
+                + "JOIN peliculas p ON f.idpeliculas = p.idPelicula "
+                + "JOIN genero g ON p.idGenero = g.idGenero "
+                + "JOIN salas sa ON f.idFuncion = sa.idfunciones "
+                + "JOIN sucursales s ON sa.idSucursal = s.idSucursal "
+                + "WHERE g.tipo = ? AND s.nombre = ?";
+        try (Connection conexion = this.conexionBD.crearConexion(); PreparedStatement pstmt = conexion.prepareStatement(consulta)) {
             pstmt.setString(1, generoSeleccionado);
             pstmt.setString(2, sucursalSeleccionada);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -639,11 +638,44 @@ public class PeliculaDAO implements IPeliculaDAO{
             throw e;
         }
         if (!titulos.isEmpty()) {
-    System.out.println(titulos.get(0));
-    }
+            System.out.println(titulos.get(0));
+        }
         return titulos;
+
+    }
+
+    public List<Pelicula> PeliculasPOrSucursal(String nombreSucursal) throws SQLException {
+        List<Pelicula> peliculas = new ArrayList<>();
+        String consulta = "SELECT * FROM  funciones JOIN  peliculas ON funciones.idpeliculas = peliculas.idPelicula "
+                + "JOIN  salas ON funciones.idsala = salas.idSala "
+                + "JOIN  sucursales ON salas.idSucursal = sucursales.idSucursal where sucursales.nombre = ?";
+        try (Connection conexion = this.conexionBD.crearConexion(); PreparedStatement pstmt = conexion.prepareStatement(consulta)) {
+            pstmt.setString(1, nombreSucursal);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Pelicula peliAuxiliar = new Pelicula();
+                    peliculas.add(peliAuxiliar.convertirAEntidad(rs));
+                }
+            }
+        }
         
+        return peliculas;
     }
     
-
+     public List<Pelicula> TodasLasPeliculas() throws SQLException {
+        List<Pelicula> peliculas = new ArrayList<>();
+        String consulta = "SELECT * FROM  funciones JOIN  peliculas ON funciones.idpeliculas = peliculas.idPelicula "
+                + "JOIN  salas ON funciones.idsala = salas.idSala "
+                + "JOIN  sucursales ON salas.idSucursal = sucursales.idSucursal";
+        try (Connection conexion = this.conexionBD.crearConexion(); PreparedStatement pstmt = conexion.prepareStatement(consulta)) {
+           
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Pelicula peliAuxiliar = new Pelicula();
+                    peliculas.add(peliAuxiliar.convertirAEntidad(rs));
+                }
+            }
+        }
+        return peliculas;
+    }
 }

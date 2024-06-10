@@ -4,10 +4,19 @@
  */
 package Presentacion;
 
+import DTOs.PeliculaDTO;
 import Negocio.CinepolisBO;
 import entidades.Pelicula;
 import java.awt.CardLayout;
+import java.awt.Image;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 /**
@@ -15,22 +24,45 @@ import javax.swing.JPanel;
  * @author diana
  */
 public class Cartelera extends javax.swing.JFrame {
- CinepolisBO cinepolisBO;
-    private int pagina=1;
-    private int LIMITE=1;
-     private List<Pelicula> peliculas; 
-     private CinepolisBO negocio ;
-     private CardLayout cardLayout;
+
+    CinepolisBO cinepolisBO = new CinepolisBO();
+    private int pagina = 1;
+    private int LIMITE = 1;
+    private List<PeliculaDTO> peliculas;
+    private CinepolisBO negocio = new CinepolisBO();
+    private CardLayout cardLayout;
     private JPanel mainPanel;
 
     /**
      * Creates new form catalogoPeliculas
      */
-    public Cartelera(CinepolisBO negocio) {
+    public Cartelera(String nombreSucursal) {
         initComponents();
-         this.setLocationRelativeTo(this);
+        this.setLocationRelativeTo(this);
         this.setSize(955, 580);
-        
+
+        try {
+            peliculas = negocio.PeliculasPOrSucursal(nombreSucursal);
+        } catch (SQLException ex) {
+            Logger.getLogger(Cartelera.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public Cartelera() {
+
+        initComponents();
+        this.setLocationRelativeTo(this);
+        this.setSize(955, 580);
+        try {
+            peliculas = negocio.TodasLasPeliculas();
+            
+            rellenarCartelera(peliculas, 6);
+        } catch (SQLException ex) {
+            Logger.getLogger(Cartelera.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Cartelera.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     /**
@@ -48,19 +80,18 @@ public class Cartelera extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         ComboBoxGenero = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
-        jTextField8 = new javax.swing.JTextField();
         btnAtras = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
         numeroPagina = new javax.swing.JTextField();
+        Pelicula1 = new javax.swing.JButton();
+        Pelicula2 = new javax.swing.JButton();
+        Pelicula3 = new javax.swing.JButton();
+        Pelicula4 = new javax.swing.JButton();
+        Pelicula5 = new javax.swing.JButton();
+        Pelicula6 = new javax.swing.JButton();
         btnMenu = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
-        jRadioButtonMenuItem3 = new javax.swing.JRadioButtonMenuItem();
+        btnVerSucursales = new javax.swing.JRadioButtonMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jRadioButtonMenuItem2 = new javax.swing.JRadioButtonMenuItem();
         jMenu1 = new javax.swing.JMenu();
@@ -82,10 +113,10 @@ public class Cartelera extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 570, Short.MAX_VALUE)
+            .addGap(0, 610, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 40, 570));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 40, 610));
 
         jPanel3.setBackground(new java.awt.Color(12, 33, 63));
 
@@ -115,14 +146,7 @@ public class Cartelera extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Serif", 0, 36)); // NOI18N
         jLabel1.setText("Cartelera ");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 40, -1, -1));
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 330, 150, 190));
-        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 110, 150, 190));
-        jPanel1.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 330, 150, 190));
-        jPanel1.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 110, 150, 190));
-        jPanel1.add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 110, 150, 190));
-        jPanel1.add(jTextField7, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 330, 150, 190));
-        jPanel1.add(jTextField8, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 330, 150, 190));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 40, -1, -1));
 
         btnAtras.setBackground(new java.awt.Color(12, 33, 63));
         btnAtras.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -133,7 +157,7 @@ public class Cartelera extends javax.swing.JFrame {
                 btnAtrasActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAtras, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 530, -1, -1));
+        jPanel1.add(btnAtras, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 560, -1, -1));
 
         btnSiguiente.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnSiguiente.setText("→");
@@ -143,16 +167,39 @@ public class Cartelera extends javax.swing.JFrame {
                 btnSiguienteActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 530, -1, -1));
+        jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 570, -1, -1));
 
         numeroPagina.setText("1");
-        jPanel1.add(numeroPagina, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 540, 20, -1));
+        jPanel1.add(numeroPagina, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 580, 20, -1));
+
+        Pelicula1.setText("jButton1");
+        jPanel1.add(Pelicula1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 130, 120, 180));
+
+        Pelicula2.setText("jButton1");
+        jPanel1.add(Pelicula2, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 130, 120, 180));
+
+        Pelicula3.setText("jButton1");
+        jPanel1.add(Pelicula3, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 130, 120, 180));
+
+        Pelicula4.setText("jButton1");
+        jPanel1.add(Pelicula4, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 350, 120, 180));
+
+        Pelicula5.setText("jButton1");
+        jPanel1.add(Pelicula5, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 350, 120, 180));
+
+        Pelicula6.setText("jButton1");
+        jPanel1.add(Pelicula6, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 350, 120, 180));
 
         jMenu2.setText("Sucursales");
 
-        jRadioButtonMenuItem3.setSelected(true);
-        jRadioButtonMenuItem3.setText("Ver Sucursales");
-        jMenu2.add(jRadioButtonMenuItem3);
+        btnVerSucursales.setSelected(true);
+        btnVerSucursales.setText("Ver Sucursales");
+        btnVerSucursales.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerSucursalesActionPerformed(evt);
+            }
+        });
+        jMenu2.add(btnVerSucursales);
 
         btnMenu.add(jMenu2);
 
@@ -203,11 +250,34 @@ public class Cartelera extends javax.swing.JFrame {
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
         // TODO add your handling code here:
-         if (pagina > 1) {
-        pagina--;
-       
+        if (pagina > 1) {
+            pagina--;
+
         }
     }//GEN-LAST:event_btnAtrasActionPerformed
+
+    private void btnVerSucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerSucursalesActionPerformed
+        // TODO add your handling code here:
+        Sucursales sucursales = new Sucursales();
+        sucursales.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnVerSucursalesActionPerformed
+
+    public void rellenarCartelera(List<PeliculaDTO> peliculas, int limite) throws IOException {
+        JButton[] botones = {this.Pelicula1, this.Pelicula2, this.Pelicula3, this.Pelicula4, this.Pelicula5, this.Pelicula6};
+        int contador = 0;
+        for (PeliculaDTO pelicula : peliculas) {
+            if (contador < limite ) {
+
+                Image img = ImageIO.read(getClass().getResource("ruta/a/tu/" + pelicula.getTitulo() + ".png"));
+
+                botones[contador].setIcon(new ImageIcon(img));
+                contador++;
+            }
+
+        }
+
+    }
 
     /**
      * @param args the command line arguments
@@ -246,9 +316,16 @@ public class Cartelera extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> ComboBoxGenero;
+    private javax.swing.JButton Pelicula1;
+    private javax.swing.JButton Pelicula2;
+    private javax.swing.JButton Pelicula3;
+    private javax.swing.JButton Pelicula4;
+    private javax.swing.JButton Pelicula5;
+    private javax.swing.JButton Pelicula6;
     private javax.swing.JButton btnAtras;
     private javax.swing.JMenuBar btnMenu;
     private javax.swing.JButton btnSiguiente;
+    private javax.swing.JRadioButtonMenuItem btnVerSucursales;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
@@ -259,14 +336,6 @@ public class Cartelera extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem2;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField numeroPagina;
     // End of variables declaration//GEN-END:variables
 }

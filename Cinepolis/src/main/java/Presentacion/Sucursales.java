@@ -27,11 +27,16 @@ public class Sucursales extends javax.swing.JFrame {
     /**
      * Creates new form Sucursales
      */
-    public Sucursales(CinepolisBO cine) throws SQLException {
+    
+    public Sucursales() { 
         initComponents();
-         this.setLocationRelativeTo(this);
+        this.setLocationRelativeTo(this);
         this.setSize(725, 560);
-        this.cine=cine;
+        this.cine= new CinepolisBO();
+    }
+
+    public Sucursales(CinepolisBO cine) throws SQLException {
+       
         
         llenarComboBoxNombreSucursal();
     }
@@ -175,7 +180,7 @@ public class Sucursales extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-      Cartelera cartelera = new Cartelera(cine);
+      Cartelera cartelera = new Cartelera(comboBoxNombreSucursal.getItemAt(0));
         cartelera.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
