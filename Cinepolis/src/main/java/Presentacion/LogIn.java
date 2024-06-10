@@ -61,7 +61,7 @@ public class LogIn extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
         jLabel3.setText("Contraseña:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 270, -1, -1));
-        jPanel1.add(correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 310, 280, 30));
+        jPanel1.add(correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 310, 280, 40));
 
         btnIniciarSesion.setBackground(new java.awt.Color(12, 33, 63));
         btnIniciarSesion.setFont(new java.awt.Font("Sitka Text", 0, 14)); // NOI18N

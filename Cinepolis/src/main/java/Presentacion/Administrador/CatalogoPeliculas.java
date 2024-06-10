@@ -233,6 +233,7 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
         NumeroDePagina = new javax.swing.JTextField();
         CambiarLimite = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
+        btnGenerarReporte = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -457,6 +458,17 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
         jLabel7.setText("Numero de Resultados");
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 520, -1, -1));
 
+        btnGenerarReporte.setBackground(new java.awt.Color(12, 33, 63));
+        btnGenerarReporte.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
+        btnGenerarReporte.setForeground(new java.awt.Color(255, 255, 255));
+        btnGenerarReporte.setText("Generar Reporte");
+        btnGenerarReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerarReporteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnGenerarReporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 60, 130, 30));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -649,6 +661,13 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
         actualizarNumeroDePagina();
     }//GEN-LAST:event_botonRestaurarActionPerformed
 
+    private void btnGenerarReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarReporteActionPerformed
+        // TODO add your handling code here:
+        ReportePorPeliculas reportePorPelicula  = new ReportePorPeliculas();
+        reportePorPelicula.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnGenerarReporteActionPerformed
+
     private void actualizarNumeroDePagina() {
     NumeroDePagina.setText(""+ pagina);
     }
@@ -677,6 +696,7 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> boxGenero;
     private javax.swing.JButton btnAtras;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnGenerarReporte;
     private javax.swing.JButton btnNuevaPelicula;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnSiguiente;

@@ -41,6 +41,7 @@ public class AdministrarCatalogos extends javax.swing.JFrame {
         btnCatalogoClientes = new javax.swing.JButton();
         btnCatalogoPeliculas = new javax.swing.JButton();
         btnAdministrarFunciones = new javax.swing.JButton();
+        btnCatalogoPeliculas1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -95,13 +96,13 @@ public class AdministrarCatalogos extends javax.swing.JFrame {
         btnCatalogoPeliculas.setBackground(new java.awt.Color(12, 33, 63));
         btnCatalogoPeliculas.setFont(new java.awt.Font("Segoe UI Symbol", 0, 18)); // NOI18N
         btnCatalogoPeliculas.setForeground(new java.awt.Color(255, 255, 255));
-        btnCatalogoPeliculas.setText("Catalogo Peliculas");
+        btnCatalogoPeliculas.setText("Reporte Sucursales");
         btnCatalogoPeliculas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCatalogoPeliculasActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCatalogoPeliculas, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 160, 260, 50));
+        jPanel1.add(btnCatalogoPeliculas, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 450, 260, 50));
 
         btnAdministrarFunciones.setBackground(new java.awt.Color(12, 33, 63));
         btnAdministrarFunciones.setFont(new java.awt.Font("Segoe UI Symbol", 0, 18)); // NOI18N
@@ -113,6 +114,17 @@ public class AdministrarCatalogos extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnAdministrarFunciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 360, 260, 50));
+
+        btnCatalogoPeliculas1.setBackground(new java.awt.Color(12, 33, 63));
+        btnCatalogoPeliculas1.setFont(new java.awt.Font("Segoe UI Symbol", 0, 18)); // NOI18N
+        btnCatalogoPeliculas1.setForeground(new java.awt.Color(255, 255, 255));
+        btnCatalogoPeliculas1.setText("Catalogo Peliculas");
+        btnCatalogoPeliculas1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCatalogoPeliculas1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnCatalogoPeliculas1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 160, 260, 50));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -131,8 +143,8 @@ public class AdministrarCatalogos extends javax.swing.JFrame {
     private void btnCatalogoPeliculasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCatalogoPeliculasActionPerformed
         // TODO add your handling code here:
         
-        CatalogoPeliculas catalogoPeliculas = new CatalogoPeliculas(cinepolisBO);
-        catalogoPeliculas.setVisible(true);
+        ReportePorSucursal reportePorSucursal = new ReportePorSucursal();
+        reportePorSucursal.setVisible(true);
         this.dispose();
         
     }//GEN-LAST:event_btnCatalogoPeliculasActionPerformed
@@ -150,6 +162,10 @@ public class AdministrarCatalogos extends javax.swing.JFrame {
         administrarFunciones.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnAdministrarFuncionesActionPerformed
+
+    private void btnCatalogoPeliculas1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCatalogoPeliculas1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCatalogoPeliculas1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -170,6 +186,7 @@ public class AdministrarCatalogos extends javax.swing.JFrame {
     private javax.swing.JButton btnAdministrarFunciones;
     private javax.swing.JButton btnCatalogoClientes;
     private javax.swing.JButton btnCatalogoPeliculas;
+    private javax.swing.JButton btnCatalogoPeliculas1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
