@@ -111,19 +111,19 @@ public class ReporteDAO  implements IReporteDAO{
             cellHeader.setBorderWidth(1);
             cellHeader.setPadding(5);
 
-            cellHeader.setPhrase(new Phrase("Nombre", fontHeader));
+            cellHeader.setPhrase(new Phrase("Sucursal", fontHeader));
             tabla.addCell(cellHeader);
 
-            cellHeader.setPhrase(new Phrase("RFC", fontHeader));
+                cellHeader.setPhrase(new Phrase("Cantidad Funciones", fontHeader));
             tabla.addCell(cellHeader);
 
-            cellHeader.setPhrase(new Phrase("Tipo de trámite", fontHeader));
+            cellHeader.setPhrase(new Phrase("Fecha", fontHeader));
             tabla.addCell(cellHeader);
 
-            cellHeader.setPhrase(new Phrase("Fecha de expedición", fontHeader));
+            cellHeader.setPhrase(new Phrase("Total Ganancias fecha", fontHeader));
             tabla.addCell(cellHeader);
 
-            cellHeader.setPhrase(new Phrase("Total", fontHeader));
+            cellHeader.setPhrase(new Phrase("Total ganancias", fontHeader));
             
             tabla.addCell(cellHeader);
 
