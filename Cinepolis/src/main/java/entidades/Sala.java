@@ -4,6 +4,7 @@
  */
 package entidades;
 
+import excepciones.cinepolisException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
                       
@@ -56,7 +57,7 @@ public class Sala {
         this.funcion = funcion;
     }
     
-    public Sala convertirAEntidad(ResultSet resultado) throws SQLException {
+    public Sala convertirAEntidad(ResultSet resultado) throws SQLException, cinepolisException {
 
         Long id = resultado.getLong("idSalas");
         int numero = resultado.getInt("numero");

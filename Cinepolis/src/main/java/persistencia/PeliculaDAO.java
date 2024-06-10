@@ -288,6 +288,99 @@ public class PeliculaDAO implements IPeliculaDAO{
         }
     }
     
+    public Pelicula obtenerPeliculaPorIdPelicula(long id) throws cinepolisException {
+        Connection conexion = null;
+        PreparedStatement comandoSQL = null;
+        Pelicula pelicula = null;
+
+        try {
+            conexion = this.conexionBD.crearConexion();
+            String codigoSQL = "SELECT idPelicula, titulo, sinopsis, trailer, duracion, pais, idGenero,idClasificacion FROM peliculas WHERE idPelicula = ?";
+            comandoSQL = conexion.prepareStatement(codigoSQL);
+            comandoSQL.setLong(1, id);
+            ResultSet resultado = comandoSQL.executeQuery();
+
+            if (resultado.next()) {
+                pelicula = new Pelicula();
+                pelicula.setId(resultado.getInt("idPelicula"));
+                pelicula.setTitulo(resultado.getString("titulo"));
+                pelicula.setSinopsis(resultado.getString("sinopsis"));
+                pelicula.setTrailer(resultado.getString("trailer"));
+                pelicula.setDuracion(resultado.getDouble(("duracion")));
+                pelicula.setPais(resultado.getString("pais"));
+                pelicula.setGenero(resultado.getInt("idGenero"));
+                pelicula.setClasificacion(resultado.getInt("idClasificacion"));
+            }
+
+            return pelicula;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new cinepolisException("Ocurrió un error al buscar el cliente por ID", ex);
+        } finally {
+            if (comandoSQL != null) {
+                try {
+                    comandoSQL.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement: " + e.getMessage());
+                }
+            }
+            if (conexion != null) {
+                try {
+                    conexion.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión: " + e.getMessage());
+                }
+            }
+        }
+    }
+    
+    public Pelicula obtenerPeliculaPorIda(long id) throws cinepolisException {
+        Connection conexion = null;
+        PreparedStatement comandoSQL = null;
+        Pelicula pelicula = null;
+
+        try {
+            conexion = this.conexionBD.crearConexion();
+            String codigoSQL = "SELECT idPelicula, titulo, sinopsis, trailer, duracion, pais, idGenero,idClasificacion FROM peliculas WHERE idPelicula = ?";
+            comandoSQL = conexion.prepareStatement(codigoSQL);
+            comandoSQL.setLong(1, id);
+            ResultSet resultado = comandoSQL.executeQuery();
+
+            if (resultado.next()) {
+                pelicula = new Pelicula();
+                pelicula.setId(resultado.getInt("idPelicula"));
+                pelicula.setTitulo(resultado.getString("titulo"));
+                pelicula.setSinopsis(resultado.getString("sinopsis"));
+                pelicula.setTrailer(resultado.getString("trailer"));
+                pelicula.setDuracion(resultado.getDouble(("duracion")));
+                pelicula.setPais(resultado.getString("pais"));
+                pelicula.setClasificacion(resultado.getInt("idClasificacion"));
+                pelicula.setGenero(resultado.getInt("idGenero"));
+
+            }
+
+            return pelicula;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new cinepolisException("Ocurrió un error al buscar el cliente por ID", ex);
+        } finally {
+            if (comandoSQL != null) {
+                try {
+                    comandoSQL.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement: " + e.getMessage());
+                }
+            }
+            if (conexion != null) {
+                try {
+                    conexion.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión: " + e.getMessage());
+                }
+            }
+        }
+    }
+    
     //OBTENER IDS
     private String obtenerTipoGeneroPorID(long idGenero) throws cinepolisException {
         Connection conexion = null;
@@ -489,6 +582,37 @@ public class PeliculaDAO implements IPeliculaDAO{
             }
         }
         return peliculas;
+    }
+    
+     public PeliculaDTO buscarPeliculaConTitulo(String titulo) throws SQLException, cinepolisException {
+        PeliculaDTO pelicula = null;
+        String query = "SELECT * FROM peliculas WHERE titulo LIKE ?";
+
+        try (Connection conexion = this.conexionBD.crearConexion();
+             PreparedStatement stmt = conexion.prepareStatement(query)) {
+
+            stmt.setString(1, "%" + titulo + "%");
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    pelicula = new PeliculaDTO();
+                    pelicula.setId(rs.getLong("idPelicula"));
+                    pelicula.setTitulo(rs.getString("titulo"));
+                    pelicula.setSinopsis(rs.getString("sinopsis"));
+                    pelicula.setTrailer(rs.getString("trailer"));
+                    pelicula.setDuracion(rs.getDouble("duracion"));
+                    pelicula.setPais(rs.getString("pais"));
+                    pelicula.setGenero(obtenerTipoGeneroPorID(rs.getInt("idGenero")));
+                    pelicula.setClasificacion(obtenerTipoClasificacionPorID(rs.getInt("idClasificacion")));
+                }
+            }
+        }
+
+        if (pelicula == null) {
+            throw new cinepolisException("No se encontró ninguna película con el título especificado");
+        }
+
+        return pelicula;
     }
 
 }

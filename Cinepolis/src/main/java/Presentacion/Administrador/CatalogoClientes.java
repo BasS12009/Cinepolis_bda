@@ -632,6 +632,8 @@ public class CatalogoClientes extends javax.swing.JFrame {
     private void actualizarNumeroDePagina() {
     NumeroDePagina.setText(""+pagina);
     }
+    
+    
     /**
      * @param args the command line arguments
      */

@@ -133,6 +133,7 @@ public class Pelicula {
         return new Pelicula(id, titulo, sinopsis, trailer, duracion, pais, idGenero, idClasificacion);
     }
     
+    
 
     
     
