@@ -22,8 +22,8 @@ public class Cinepolis {
         ClienteDAO clienteDAO= new ClienteDAO (conexion);
         CinepolisBO cinepolisBO=new CinepolisBO(clienteDAO);
         
-        //AdministrarCatalogos administrarCatalogos=new AdministrarCatalogos(cinepolisBO);
-        //administrarCatalogos.show();
+        AdministrarCatalogos administrarCatalogos=new AdministrarCatalogos(cinepolisBO);
+        administrarCatalogos.show();
         
         LogIn l=new LogIn(cinepolisBO);
         l.show();
