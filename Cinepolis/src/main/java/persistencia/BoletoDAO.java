@@ -17,9 +17,9 @@ import java.sql.Statement;
 
 /**
  *
- * @author 
+ * @author stae
  */
-public class BoletoDAO {
+public class BoletoDAO implements IBoletoDAO{
     
     private IConexionBD conexionBD;
     private Menu menu;
@@ -32,6 +32,8 @@ public class BoletoDAO {
         this.conexionBD=conexionBD;
     }
 
+    //insertar Boleto
+    @Override
     public Boleto insertarBoletoComprado(Boleto boleto) throws cinepolisException{
         Connection conexion = null;
         try{
@@ -80,5 +82,144 @@ public class BoletoDAO {
                  }
             return boleto;
     }
+    
+     //EDITAR boleto
+    @Override
+    public Boleto editarBoleto(Boleto boleto) throws cinepolisException {
+        String sql = "UPDATE boletos SET costo = ?, estado = ?, fechaCompra = ?, idFuncion = ?, idCliente = ? WHERE idBoleto = ?";
+        Connection conexion = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            conexion = this.conexionBD.crearConexion();
+            conexion.setAutoCommit(false);
+            
+            preparedStatement = conexion.prepareStatement(sql);
+            preparedStatement.setDouble(1, boleto.getCosto());
+            preparedStatement.setBoolean(2, boleto.isEstado());
+            preparedStatement.setDate(3, (Date) boleto.getFechaCompra());
+            preparedStatement.setLong(4, boleto.getFuncion().getId());
+            preparedStatement.setLong(5, boleto.getCliente().getId());
+
+            System.out.println("Ejecutando SQL: " + sql);
+            System.out.println("Con valores: ");
+            System.out.println("costo = " + boleto.getCosto());
+            System.out.println("estado = " + boleto.isEstado());
+            System.out.println("fechaCompra = " + boleto.getFechaCompra());
+            System.out.println("idFuncion = " + boleto.getFuncion().getId());
+            System.out.println("idCliente = " + boleto.getCliente().getId());
+ 
+            
+            int filasAfectadas = preparedStatement.executeUpdate();
+
+            if (filasAfectadas == 0) {
+                conexion.rollback();
+                throw new cinepolisException("No se encontró el boleto con el ID especificado");
+            }
+
+            conexion.commit();
+            return boleto;
+        } catch (SQLException ex) {
+            if (conexion != null) {
+                try {
+                    conexion.rollback();
+                } catch (SQLException rollbackEx) {
+                    System.out.println("Error al revertir la transacción: " + rollbackEx.getMessage());
+                }
+            }
+            throw new cinepolisException("Error al actualizar el boleto: " + ex.getMessage(), ex);
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement: " + e.getMessage());
+                }
+            }
+            if (conexion != null) {
+                try {
+                    conexion.setAutoCommit(true);
+                    conexion.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión: " + e.getMessage());
+                }
+            }
+        }
+    }
+    
+    //ELIMINAR Boleto
+    @Override
+    public Boleto eliminarBoletoPorID(Long idBoleto) throws cinepolisException {
+        String sqlSelect = "SELECT * FROM boletos WHERE idBoleto = ?";
+        String sqlDelete = "DELETE FROM peliculas WHERE idBoleto = ?";
+        Connection conexion = null;
+        PreparedStatement selectStatement = null;
+        PreparedStatement deleteStatement = null;
+        Boleto boleto = null;
+
+        try {
+            conexion = this.conexionBD.crearConexion();
+            conexion.setAutoCommit(false);
+
+            selectStatement = conexion.prepareStatement(sqlSelect);
+            selectStatement.setLong(1, idBoleto);
+            ResultSet resultado = selectStatement.executeQuery();
+
+            if (resultado.next()) {
+                boleto = new Boleto();
+                boleto.setId(resultado.getLong("idBoleto"));
+                boleto.setCosto(resultado.getDouble("costo"));
+                boleto.setEstado((boolean) resultado.getBoolean("estado"));
+                boleto.setFechaCompra(resultado.getDate("fechaCompra"));
+                //boleto.setFuncion(resultado.getString("idFuncion"));
+                //boleto.setCliente(resultado.getInt("idCliente"));
+      
+            } else {
+                conexion.rollback();
+                throw new cinepolisException("No se encontró boleto con el ID especificado");
+            }
+
+            deleteStatement = conexion.prepareStatement(sqlDelete);
+            deleteStatement.setLong(1, idBoleto);
+            deleteStatement.executeUpdate();
+
+            conexion.commit();
+            return boleto;
+        } catch (SQLException ex) {
+            if (conexion != null) {
+                try {
+                    conexion.rollback();
+                } catch (SQLException rollbackEx) {
+                    System.out.println("Error al revertir la transacción: " + rollbackEx.getMessage());
+                }
+            }
+            throw new cinepolisException("Hubo un error al eliminar el boleto: " + ex.getMessage(), ex);
+        } finally {
+            if (selectStatement != null) {
+                try {
+                    selectStatement.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el selectStatement: " + e.getMessage());
+                }
+            }
+            if (deleteStatement != null) {
+                try {
+                    deleteStatement.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el deleteStatement: " + e.getMessage());
+                }
+            }
+            if (conexion != null) {
+                try {
+                    conexion.setAutoCommit(true);
+                    conexion.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión: " + e.getMessage());
+                }
+            }
+        }
+    }
+    
+
     
 }

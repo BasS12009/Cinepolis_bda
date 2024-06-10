@@ -4,10 +4,19 @@
  */
 package persistencia;
 
+import entidades.Boleto;
+import excepciones.cinepolisException;
+
 /**
  *
- * @author usuario2
+ * @author 
  */
 public interface IBoletoDAO {
+    
+    public Boleto insertarBoletoComprado(Boleto boleto) throws cinepolisException;
+    
+    public Boleto editarBoleto(Boleto boleto) throws cinepolisException;
+    
+    public Boleto eliminarBoletoPorID(Long idBoleto) throws cinepolisException;
     
 }

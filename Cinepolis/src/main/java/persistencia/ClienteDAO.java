@@ -9,6 +9,8 @@ import persistencia.IClienteDAO;
 import entidades.Cliente;
 import excepciones.cinepolisException;
 import java.awt.Menu;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -17,6 +19,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import persistencia.IConexionBD;
 
 /**
@@ -38,6 +42,8 @@ public class ClienteDAO implements IClienteDAO{
     public IConexionBD getConexion(){
        return conexionBD;
     }
+    
+    
     
     //INSERTAR CLIENTES
     @Override
@@ -65,13 +71,19 @@ public class ClienteDAO implements IClienteDAO{
                 throw new cinepolisException("El cliente ya existe");
             }
             
+            
+            
+            
             codigoSQL = "INSERT INTO clientes (nombre, apellidoPaterno, apellidoMaterno, correo, contrasena, ubicacion, fechaNacimiento) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement insertCommand = conexion.prepareStatement(codigoSQL, Statement.RETURN_GENERATED_KEYS);
             insertCommand.setString(1, cliente.getNombre());
             insertCommand.setString(2, cliente.getApellidoPaterno());
             insertCommand.setString(3, cliente.getApellidoMaterno());
             insertCommand.setString(4, cliente.getCorreo());
-            insertCommand.setString(5, cliente.getContrasena());
+            
+            String contraseñaAuxiliar = encriptar(cliente.getContrasena());
+            
+            insertCommand.setString(5, contraseñaAuxiliar);
             insertCommand.setString(6, cliente.getUbicacion());
             insertCommand.setDate(7, new Date(cliente.getFechaNacimiento().getTime()));
             
@@ -96,7 +108,9 @@ public class ClienteDAO implements IClienteDAO{
                 System.out.println(ex.getMessage());
                 throw new cinepolisException("Hubo un error al registrar el cliente",ex);
                 
-            }finally {
+            } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally {
         
                 if (conexion != null) {
                     try {
@@ -110,6 +124,23 @@ public class ClienteDAO implements IClienteDAO{
             return cliente;
             }
     
+    public String encriptar(String contra) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        byte[] hashBytes = md.digest(contra.getBytes());
+
+        StringBuilder hexString = new StringBuilder();
+        for (byte hashByte : hashBytes) {
+            String hex = Integer.toHexString(0xff & hashByte);
+            if (hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+
+        return hexString.toString().substring(0, Math.min(hexString.length(), 10));
+    }
+    
+    //Login Clientes 
     public Cliente login(Cliente cliente) throws cinepolisException{
         
         Connection conexion = null;
@@ -162,6 +193,8 @@ public class ClienteDAO implements IClienteDAO{
                  }
             return cliente;
     }
+    
+    
     
     //EDITAR CLIENTES
     @Override

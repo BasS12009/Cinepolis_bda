@@ -10,7 +10,7 @@ import java.util.Date;
 
 /**
  *
- * @author
+ * @author stae
  */
 public class Cliente {
 

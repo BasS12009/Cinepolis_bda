@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  *
- * @author 
+ * @author stae
  */
 public class Boleto {
     
