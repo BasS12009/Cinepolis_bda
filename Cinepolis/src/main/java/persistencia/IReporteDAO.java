@@ -17,6 +17,6 @@ public interface IReporteDAO {
     
     public void generarReporteSucursal(List<Reporte> reportes, int opcion);
     
-    
+    public void generarReportePelicula(List<Reporte> reportes, int opcion);
     
 }
