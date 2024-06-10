@@ -4,18 +4,15 @@
  */
 package entidades;
 
-import com.itextpdf.awt.geom.Point2D;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Date;
 
 /**
  *
- * @author stae
+ * @author 
  */
 public class Cliente {
-
-    private Long id;
+    
+    private int id;
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
@@ -23,20 +20,12 @@ public class Cliente {
     private String contrasena;
     private String ubicacion;
     private Date fechaNacimiento;
-    private Point2D.Double coordenadas;
     
-    public Cliente() {
-
-    }
-    public Cliente(Point2D.Double coordenadas) {
-        this.coordenadas = coordenadas;
+    public Cliente(){
+        
     }
 
-    public Point2D.Double getCoordenadas() {
-        return coordenadas;
-    }
-
-    public Cliente(Long id, String nombre, String apellidoPaterno, String apellidoMaterno, String correo, String contrasena, String ubicacion, Date fechaNacimiento) {
+    public Cliente(int id, String nombre, String apellidoPaterno, String apellidoMaterno, String correo, String contrasena, String ubicacion, Date fechaNacimiento) {
         this.id = id;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -57,11 +46,11 @@ public class Cliente {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -120,21 +109,7 @@ public class Cliente {
     public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
-
-    public Cliente convertirAEntidad(ResultSet resultado) throws SQLException {
-
-        Long id = resultado.getLong("idCliente");
-        String nombre = resultado.getString("nombre");
-        String paterno = resultado.getString("apellidoPaterno");
-        String materno = resultado.getString("apellidoMaterno");
-        String correo = resultado.getString("correo");
-        String contrasena = resultado.getString("contrasena");
-        String ubicacion = resultado.getString("ubicacion");
-        Date fechaN = resultado.getDate("fechaNacimiento");
-
-        return new Cliente(id, nombre, paterno, materno, correo, contrasena, ubicacion, fechaN);
-    }
-
+    
     
     
 }

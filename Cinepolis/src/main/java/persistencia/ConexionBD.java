@@ -25,9 +25,4 @@ public class ConexionBD implements IConexionBD {
         Connection conexion = DriverManager.getConnection(CADENA_CONEXION, USUARIO, CONTRASEÑA);
         return conexion;   
     }
-
-    @Override
-    public Connection obtenerConexion() throws SQLException {
-        return DriverManager.getConnection(CADENA_CONEXION, USUARIO, CONTRASEÑA);
-    }
 }
