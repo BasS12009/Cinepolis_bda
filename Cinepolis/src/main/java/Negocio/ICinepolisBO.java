@@ -6,6 +6,7 @@ package Negocio;
 
 import DTOs.ClasificacionDTO;
 import DTOs.ClienteDTO;
+import DTOs.FuncionDTO;
 import DTOs.GeneroDTO;
 import DTOs.PeliculaDTO;
 
@@ -55,5 +56,8 @@ public interface ICinepolisBO {
     
     public List<PeliculaDTO> buscarPeliculasTabla() throws cinepolisException;
     
-   public PeliculaDTO editarPelicula(PeliculaDTO pelicula) throws cinepolisException;  
+   public PeliculaDTO editarPelicula(PeliculaDTO pelicula) throws cinepolisException;
+   
+   public FuncionDTO obtenerFuncionPorId(long id) throws cinepolisException, SQLException;
+   public List<FuncionDTO> buscarFuncionesTabla() throws cinepolisException;
 }

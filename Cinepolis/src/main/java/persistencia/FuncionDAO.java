@@ -13,6 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -22,8 +24,8 @@ public class FuncionDAO implements IFuncionDAO{
     private IConexionBD conexionBD;
     private Menu menu;
     
-    public FuncionDAO(){
-         this.conexionBD = new ConexionBD();
+    public FuncionDAO(IConexionBD conexionBD){
+         this.conexionBD = conexionBD;
     }
     
     //INSERTAR FUNCION
@@ -32,7 +34,7 @@ public class FuncionDAO implements IFuncionDAO{
         String sql = "INSERT INTO funciones (fecha, horaInicio, idpeliculas) VALUES (?, ?, ?)";
         Connection conexion = null;
         PreparedStatement preparedStatement = null;
-
+        System.out.println("funcionDAO "+funcion.getPeliculas().getId());
         try {
             conexion = this.conexionBD.crearConexion();
             conexion.setAutoCommit(false);
@@ -201,6 +203,98 @@ public class FuncionDAO implements IFuncionDAO{
             }
         }
     }
+
+    @Override
+    public Funcion buscarPorId(int idFuncion) throws cinepolisException {
+        String query = "SELECT * FROM funciones WHERE idFuncion = ?";
+        Funcion funcion = null;
+        Connection conexion = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conexion = this.conexionBD.crearConexion();
+
+            conexion.setAutoCommit(false);
+
+            stmt = conexion.prepareStatement(query);
+            stmt.setInt(1, idFuncion);
+
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                funcion = new Funcion();
+                PeliculaDAO pelicula=new PeliculaDAO(this.conexionBD);
+                funcion.setId(rs.getInt("idFuncion"));
+                funcion.setFecha(rs.getDate("fecha"));
+                funcion.setHoraInicio(rs.getDouble("horaInicio"));
+                funcion.setPeliculas(pelicula.obtenerPeliculaPorIda(rs.getInt("idpeliculas")));
+            } else {
+                throw new cinepolisException("No se encontró una función con el ID especificado");
+            }
+            conexion.commit();
+
+        } catch (SQLException e) {
+            if (conexion != null) {
+                try {
+                    conexion.rollback();
+                } catch (SQLException ex) {
+                    throw new cinepolisException("Error al realizar rollback de la transacción", ex);
+                }
+            }
+            throw new cinepolisException("Error al buscar la función por ID", e);
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (conexion != null) {
+                try {
+                    conexion.setAutoCommit(true);
+                    conexion.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return funcion;
+        }
+
+    @Override
+    public List<Funcion> buscarFuncionesTabla() throws cinepolisException {
+            List<Funcion> funcionLista = new ArrayList<>();
+        try (Connection conexion = this.conexionBD.crearConexion()) {
+            String codigoSQL = "SELECT idFuncion, fecha, horaInicio, idpeliculas FROM funciones"; // Adjust column name if necessary
+            Statement comandoSQL = conexion.createStatement();
+            ResultSet resultado = comandoSQL.executeQuery(codigoSQL);
+            while (resultado.next()) {
+                Funcion funcion = new Funcion();
+                funcion.setId(resultado.getInt("idFuncion"));
+                funcion.setFecha(resultado.getDate("fecha"));
+                funcion.setHoraInicio(resultado.getDouble("horaInicio"));
+                PeliculaDAO p=new PeliculaDAO(conexionBD);
+                Pelicula pelicula=new Pelicula();
+                pelicula=p.obtenerPeliculaPorIdPelicula(resultado.getLong("idpeliculas"));
+                funcion.setPeliculas(pelicula); 
+                funcionLista.add(funcion);
+            }
+        } catch (SQLException ex) {
+            System.out.println("SQLException: " + ex.getMessage());
+            throw new cinepolisException("Ocurrio un error al leer la base de datos, intentelo de nuevo y si el error persiste", ex);
+        }
+        return funcionLista;
+    }
+    
     
     
     

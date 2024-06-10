@@ -6,6 +6,7 @@ package persistencia;
 
 import entidades.Funcion;
 import excepciones.cinepolisException;
+import java.util.List;
 
 /**
  *
@@ -18,4 +19,8 @@ public interface IFuncionDAO {
     public Funcion editarFuncion(Funcion funcion) throws cinepolisException;
     
     public Funcion eliminarFuncionPorId(int idFuncion) throws cinepolisException;
+    
+    public Funcion buscarPorId(int idFuncion) throws cinepolisException;
+    
+    public List<Funcion> buscarFuncionesTabla() throws cinepolisException;
 }

@@ -4,9 +4,25 @@
  */
 package Presentacion.Administrador;
 
+import DTOs.FuncionDTO;
 import Negocio.CinepolisBO;
+import excepciones.cinepolisException;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import persistencia.ClienteDAO;
 import persistencia.ConexionBD;
+import utilerias.JButtonCellEditor;
+import utilerias.JButtonRenderer;
 
 /**
  *
@@ -14,17 +30,164 @@ import persistencia.ConexionBD;
  */
 public class AdministrarFunciones extends javax.swing.JFrame {
     CinepolisBO cinepolisBO;
+    private int pagina=1;
+    private int LIMITE=1;
+    boolean conFiltro;
+    
+    
     /**
      * Creates new form AdministrarFunciones
+     * @param cinepolisBO
      */
     public AdministrarFunciones(CinepolisBO cinepolisBO) {
         initComponents();
         this.setLocationRelativeTo(this);
         this.setSize(955, 600);
         this.cinepolisBO=cinepolisBO;
-        
+        this.cargarMetodosIniciales();
     } 
+    
+    private long getIdSeleccionadoTablaFunciones() {
+        int indiceFilaSeleccionada = this.tblFunciones.getSelectedRow();
+        if (indiceFilaSeleccionada != -1) {
+            DefaultTableModel modelo = (DefaultTableModel) this.tblFunciones.getModel();
+            long indiceColumnaId = 0;
+            long idSocioSeleccionado = (long) modelo.getValueAt(indiceFilaSeleccionada,
+                   (int) indiceColumnaId);
+            return idSocioSeleccionado;
+        } else {
+            return 0;
+        }
+    }
+    
+    private void cargarMetodosIniciales() {
+        this.cargarConfiguracionInicialTablaFunciones();
+        this.cargarFuncionesEnTabla();
+    }
+    
+    private void cargarConfiguracionInicialTablaFunciones() {
+        ActionListener onEditarClickListener = new ActionListener() {
+            final int columnaId = 0;
 
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    //Metodo para editar un alumno
+                    editar();
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        };
+        int indiceColumnaEditar = 4;
+        TableColumnModel modeloColumnas = this.tblFunciones.getColumnModel();
+        Color color = new Color(178, 218, 250);
+        modeloColumnas.getColumn(indiceColumnaEditar).setCellRenderer(new JButtonRenderer("Editar",color));
+        modeloColumnas.getColumn(indiceColumnaEditar).setCellEditor(new JButtonCellEditor("Editar", onEditarClickListener));
+
+        ActionListener onEliminarClickListener = new ActionListener() {
+            final int columnaId = 0;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    eliminar();
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        };
+        int indiceColumnaEliminar = 5;
+        color = new Color(255, 105, 97);
+        modeloColumnas.getColumn(indiceColumnaEliminar).setCellRenderer(new JButtonRenderer("Eliminar",color));
+        modeloColumnas.getColumn(indiceColumnaEliminar).setCellEditor(new JButtonCellEditor("Eliminar", onEliminarClickListener));
+        }
+    
+    private void editar() throws SQLException {
+        long id = this.getIdSeleccionadoTablaFunciones();
+        EditarFuncion editar = new EditarFuncion(this.cinepolisBO, (int) id);
+        this.setVisible(false);
+        editar.show();
+    }
+    
+    private void eliminar() throws SQLException {
+        try {
+        long id = this.getIdSeleccionadoTablaFunciones();
+        FuncionDTO funcion = cinepolisBO.obtenerFuncionPorId(id);
+        int confirmacion = JOptionPane.showConfirmDialog(this, 
+                            "¿Está seguro que desea eliminar al cliente?\n" +
+                            "ID: " + funcion.getId()+ "\n" +
+                            "Pelicula: " + funcion.getPeliculaDTO().getTitulo()+ "\n" +
+                            "Fecha: " + funcion.getFecha().toString(),
+                            "Confirmar eliminación",
+                            JOptionPane.YES_NO_OPTION);
+        
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            cinepolisBO.eliminarFuncion(id);
+            JOptionPane.showMessageDialog(this, "Cliente eliminado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            cargarFuncionesEnTabla();
+        }
+        } catch (cinepolisException ex) {
+            JOptionPane.showMessageDialog(this, "Error al eliminar el cliente: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void llenarTablaFunciones(List<FuncionDTO> clienteLista) {
+         DefaultTableModel modeloTabla = (DefaultTableModel) this.tblFunciones.getModel();
+
+    // Clear existing rows
+    modeloTabla.setRowCount(0);
+
+    if (clienteLista != null) {
+        clienteLista.forEach(row -> {
+            Object[] fila = new Object[6];
+            fila[0] = row.getId();
+            fila[1] = row.getFecha();
+            fila[2] = row.getHoraInicio();
+            fila[3] = row.getPeliculaDTO().getDuracion();
+            fila[4] = "Eliminar";
+            fila[5] = "Editar"; 
+            modeloTabla.addRow(fila); 
+        });
+    }
+    }
+    
+    private void cargarFuncionesEnTabla() {
+    try {
+        int indiceInicio = (pagina - 1) * LIMITE;
+        List<FuncionDTO> todasLasFunciones = cinepolisBO.buscarFuncionesTabla();
+        int indiceFin = Math.min(indiceInicio + LIMITE, todasLasFunciones.size());
+
+        List<FuncionDTO> funcionesPagina = obtenerFuncionesPagina(indiceInicio, indiceFin);
+
+        llenarTablaFunciones(funcionesPagina);
+
+        actualizarNumeroDePagina();
+    } catch (cinepolisException ex) {
+        ex.printStackTrace();
+    }
+    }
+    
+    private List<FuncionDTO> obtenerFuncionesPagina(int indiceInicio, int indiceFin) {
+            try {
+        List<FuncionDTO> todasLasFunciones = cinepolisBO.buscarFuncionesTabla();
+        List<FuncionDTO> funcionesPaginas = new ArrayList<>();
+
+        indiceFin = Math.min(indiceFin, todasLasFunciones.size());
+
+        for (int i = indiceInicio; i < indiceFin; i++) {
+            funcionesPaginas.add(todasLasFunciones.get(i));
+        }
+        
+        return funcionesPaginas;
+            } catch (cinepolisException ex) {
+ 
+                ex.printStackTrace();
+                return Collections.emptyList();
+            }
+    }
+
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -44,6 +207,9 @@ public class AdministrarFunciones extends javax.swing.JFrame {
         btnNuevaFuncion = new javax.swing.JButton();
         btnAtras = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
+        NumeroDePagina = new javax.swing.JTextField();
+        CambiarLimite = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -139,7 +305,33 @@ public class AdministrarFunciones extends javax.swing.JFrame {
         btnSiguiente.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
         btnSiguiente.setForeground(new java.awt.Color(255, 255, 255));
         btnSiguiente.setText("Siguiente");
+        btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiguienteActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnSiguiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 510, -1, -1));
+
+        NumeroDePagina.setBackground(new java.awt.Color(200, 200, 200));
+        NumeroDePagina.setText("1");
+        NumeroDePagina.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NumeroDePaginaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(NumeroDePagina, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 510, 20, -1));
+
+        CambiarLimite.setText("1");
+        CambiarLimite.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CambiarLimiteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(CambiarLimite, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 500, 20, 40));
+
+        jLabel7.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
+        jLabel7.setText("Numero de Resultados");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 510, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -171,10 +363,79 @@ public class AdministrarFunciones extends javax.swing.JFrame {
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
         // TODO add your handling code here:
-        
+            if (pagina > 1) {
+           pagina--;
+           cargarFuncionesEnTabla();
+           actualizarNumeroDePagina();
+       }
             
     }//GEN-LAST:event_btnAtrasActionPerformed
 
+    private void NumeroDePaginaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NumeroDePaginaActionPerformed
+        // TODO add your handling code here:
+        try {
+            List<FuncionDTO> todasLasFunciones = cinepolisBO.buscarFuncionesTabla();
+
+            int totalPaginas = (int) Math.ceil((double) todasLasFunciones.size() / LIMITE);
+
+            int nuevaPagina = Integer.parseInt(NumeroDePagina.getText());
+
+            if (nuevaPagina >= 1 && nuevaPagina <= totalPaginas) {
+                pagina = nuevaPagina;
+
+                cargarFuncionesEnTabla();
+
+                actualizarNumeroDePagina();
+            } else {
+                JOptionPane.showMessageDialog(this, "Número de página inválido", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Ingrese un número válido para la página", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (cinepolisException ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_NumeroDePaginaActionPerformed
+
+    private void CambiarLimiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CambiarLimiteActionPerformed
+        try {
+            if(conFiltro=false){
+
+                int nuevoLimite = Integer.parseInt(CambiarLimite.getText());
+                this.LIMITE = nuevoLimite;
+                cargarFuncionesEnTabla();
+                actualizarNumeroDePagina();
+            }else{
+                
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Ingrese un número válido para el límite", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_CambiarLimiteActionPerformed
+
+    private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
+       try {
+        List<FuncionDTO> todasLasFunciones = cinepolisBO.buscarFuncionesTabla();
+
+        int totalPaginas = (int) Math.ceil((double) todasLasFunciones.size() / LIMITE);
+
+        if (pagina < totalPaginas) {
+            pagina++;
+            cargarFuncionesEnTabla();
+            actualizarNumeroDePagina();
+        } else {
+
+            JOptionPane.showMessageDialog(this, "No hay más páginas disponibles", "Información", JOptionPane.INFORMATION_MESSAGE);
+        }
+    } catch (cinepolisException ex) {
+        ex.printStackTrace();
+    }
+    }//GEN-LAST:event_btnSiguienteActionPerformed
+    
+    
+    private void actualizarNumeroDePagina() {
+    NumeroDePagina.setText(""+pagina);
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -191,11 +452,14 @@ public class AdministrarFunciones extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField CambiarLimite;
+    private javax.swing.JTextField NumeroDePagina;
     private javax.swing.JButton btnAtras;
     private javax.swing.JButton btnNuevaFuncion;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnSiguiente;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

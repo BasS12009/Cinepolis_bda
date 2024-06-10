@@ -4,8 +4,16 @@
  */
 package Presentacion.Administrador;
 
+import DTOs.FuncionDTO;
 import Presentacion.Administrador.AdministrarFunciones;
 import Negocio.CinepolisBO;
+import excepciones.cinepolisException;
+import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import persistencia.ClienteDAO;
 import persistencia.ConexionBD;
 
@@ -15,13 +23,26 @@ import persistencia.ConexionBD;
  */
 public class EditarFuncion extends javax.swing.JFrame {
     CinepolisBO cinepolisBO;
+    int idFuncion;
+    
     /**
      * Creates new form EditarFuncion
      */
-    public EditarFuncion(CinepolisBO cinepolisBO) {
+    public EditarFuncion(CinepolisBO cinepolisBO, int id) throws SQLException {
         initComponents();
         
         this.cinepolisBO= cinepolisBO;
+        this.idFuncion=id;
+        
+        try {
+            FuncionDTO funcion = cinepolisBO.obtenerFuncionPorId(id);
+            jDateChooser1.setDate(funcion.getFecha());
+            jTextField1.setText(String.valueOf(funcion.getHoraInicio()));
+
+        } catch (cinepolisException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al obtener los detalles de la función: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -42,7 +63,7 @@ public class EditarFuncion extends javax.swing.JFrame {
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jLabel3 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        botonEditar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -107,11 +128,16 @@ public class EditarFuncion extends javax.swing.JFrame {
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 290, -1, -1));
         jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 330, 240, 30));
 
-        jButton1.setBackground(new java.awt.Color(12, 33, 63));
-        jButton1.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Editar");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 480, 120, 30));
+        botonEditar.setBackground(new java.awt.Color(12, 33, 63));
+        botonEditar.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
+        botonEditar.setForeground(new java.awt.Color(255, 255, 255));
+        botonEditar.setText("Editar");
+        botonEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonEditarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(botonEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 480, 120, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -134,25 +160,44 @@ public class EditarFuncion extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
+    private void botonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEditarActionPerformed
+        try {
+            Date fecha = jDateChooser1.getDate();
+            String horaInicioText = jTextField1.getText();
+            double horaInicio = Double.parseDouble(horaInicioText); 
+            
+            FuncionDTO funcionEditada = new FuncionDTO();
+            funcionEditada=cinepolisBO.obtenerFuncionPorId(idFuncion);
+            funcionEditada.setFecha(fecha);
+            funcionEditada.setHoraInicio(horaInicio);
 
-        ConexionBD conexion = new ConexionBD();
-        ClienteDAO clienteDAO= new ClienteDAO (conexion);
-        CinepolisBO cinepolisBO=new CinepolisBO(clienteDAO);
-        
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new EditarFuncion(cinepolisBO).setVisible(true);
-            }
-        });
-    }
+            // Assuming cinepolisBO.editarFuncion exists and can handle the editing operation
+            cinepolisBO.editarFuncion(funcionEditada);
+
+            JOptionPane.showMessageDialog(this, "Función editada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+            // Assuming you want to close the current window and open a new one after editing
+            this.dispose();
+            // Assuming CatalogoFunciones is the name of the window to display after editing
+            AdministrarFunciones catalogoFunciones = new AdministrarFunciones(cinepolisBO);
+            catalogoFunciones.setVisible(true);
+
+        } catch (cinepolisException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al editar la función: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (NumberFormatException ex) {
+            // Handle the case where parsing of integers or doubles fails
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error en el formato de entrada. Asegúrate de ingresar números válidos.", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_botonEditarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botonEditar;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JButton jButton1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

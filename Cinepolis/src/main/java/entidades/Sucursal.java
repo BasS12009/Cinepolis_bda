@@ -4,6 +4,7 @@
  */
 package entidades;
 
+import excepciones.cinepolisException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class Sucursal {
 
   
 
-    public Sucursal convertirAEntidad(ResultSet resultado) throws SQLException {
+    public Sucursal convertirAEntidad(ResultSet resultado) throws SQLException, cinepolisException {
         Long id = resultado.getLong("idSucursales");
         String nombre = resultado.getString("nombre");
         String ubicacion = resultado.getString("ubicacion");

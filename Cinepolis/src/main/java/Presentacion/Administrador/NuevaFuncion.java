@@ -4,7 +4,17 @@
  */
 package Presentacion.Administrador;
 
+import DTOs.FuncionDTO;
+import DTOs.PeliculaDTO;
 import Negocio.CinepolisBO;
+import excepciones.cinepolisException;
+import java.sql.SQLException;
+import java.sql.Time;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import persistencia.ClienteDAO;
 import persistencia.ConexionBD;
 
@@ -21,6 +31,15 @@ public class NuevaFuncion extends javax.swing.JFrame {
     public NuevaFuncion(CinepolisBO cinepolisBO) {
         initComponents();
          this.cinepolisBO= cinepolisBO;
+         
+         try {
+            List<PeliculaDTO> peliculas = cinepolisBO.buscarPeliculasTabla();
+            for (PeliculaDTO pelicula : peliculas) {
+                comboBoxPelicula.addItem(pelicula.getTitulo());
+            }
+        } catch (cinepolisException e) {
+             System.out.println(e.getMessage());
+        }
     }
 
     /**
@@ -40,10 +59,10 @@ public class NuevaFuncion extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        textoHoraInicio = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         btnAgregarFuncion = new javax.swing.JButton();
+        comboBoxPelicula = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -106,18 +125,29 @@ public class NuevaFuncion extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
         jLabel3.setText("Hora Inicio:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 230, -1, 20));
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 260, 250, 30));
+        jPanel1.add(textoHoraInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 260, 250, 30));
 
         jLabel4.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
-        jLabel4.setText("Duracion:");
+        jLabel4.setText("Pelicula:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 320, -1, -1));
-        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 350, 250, 30));
 
         btnAgregarFuncion.setBackground(new java.awt.Color(12, 33, 63));
         btnAgregarFuncion.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
         btnAgregarFuncion.setForeground(new java.awt.Color(255, 255, 255));
         btnAgregarFuncion.setText("Agregar Funcion");
-        jPanel1.add(btnAgregarFuncion, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 480, -1, 30));
+        btnAgregarFuncion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarFuncionActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnAgregarFuncion, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 470, -1, 30));
+
+        comboBoxPelicula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxPeliculaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(comboBoxPelicula, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 370, 250, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -127,7 +157,7 @@ public class NuevaFuncion extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)
         );
 
         pack();
@@ -139,6 +169,65 @@ public class NuevaFuncion extends javax.swing.JFrame {
         administrarFunciones.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
+
+    private void btnAgregarFuncionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarFuncionActionPerformed
+            try {                                                  
+            Date fecha = jDateChooser1.getDate();
+            String horaInicioStr = textoHoraInicio.getText();
+            String peliculaSeleccionada = (String) comboBoxPelicula.getSelectedItem();
+
+            if (fecha == null || horaInicioStr.isEmpty() || peliculaSeleccionada.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            double horaInicio;
+            try {
+                String[] partesHora = horaInicioStr.split(":");
+                int horas = Integer.parseInt(partesHora[0]);
+                int minutos = Integer.parseInt(partesHora[1]);
+
+                horaInicio = horas + minutos / 60.0;
+            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                JOptionPane.showMessageDialog(this, "Formato de hora incorrecto", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            System.out.println(fecha + " " + horaInicioStr + " " + peliculaSeleccionada);
+
+            // Obtener datos de la UI y crear un objeto Funcion
+            FuncionDTO nuevaFuncion = new FuncionDTO();
+            nuevaFuncion.setFecha(fecha);
+            nuevaFuncion.setHoraInicio(horaInicio);
+
+            PeliculaDTO pelicula = cinepolisBO.buscarPeliculaPorTitulo(peliculaSeleccionada);
+            if (pelicula == null) {
+                JOptionPane.showMessageDialog(this, "La película seleccionada no existe", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            nuevaFuncion.setPeliculaDTO(pelicula);
+
+            try {
+                System.out.println(pelicula.getId());
+                cinepolisBO.agregarFuncion(nuevaFuncion);
+                JOptionPane.showMessageDialog(this, "Función agregada exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+                jDateChooser1.setDate(null);
+                textoHoraInicio.setText("");
+                comboBoxPelicula.setSelectedIndex(0);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error al agregar función: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } catch (cinepolisException ex) {
+            System.out.println(ex.getMessage());
+        }   
+    }//GEN-LAST:event_btnAgregarFuncionActionPerformed
+
+    private void comboBoxPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxPeliculaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxPeliculaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -181,6 +270,7 @@ public class NuevaFuncion extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarFuncion;
     private javax.swing.JButton btnRegresar;
+    private javax.swing.JComboBox<String> comboBoxPelicula;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -189,7 +279,6 @@ public class NuevaFuncion extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField textoHoraInicio;
     // End of variables declaration//GEN-END:variables
 }
