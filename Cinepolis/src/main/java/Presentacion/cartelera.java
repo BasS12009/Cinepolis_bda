@@ -19,14 +19,14 @@ public class Cartelera extends javax.swing.JFrame {
     private int pagina=1;
     private int LIMITE=1;
      private List<Pelicula> peliculas; 
-
+     private CinepolisBO negocio ;
      private CardLayout cardLayout;
     private JPanel mainPanel;
 
     /**
      * Creates new form catalogoPeliculas
      */
-    public Cartelera() {
+    public Cartelera(CinepolisBO negocio) {
         initComponents();
          this.setLocationRelativeTo(this);
         this.setSize(955, 580);
@@ -239,7 +239,7 @@ public class Cartelera extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Cartelera().setVisible(true);
+                //new Cartelera(negocio).setVisible(true);
             }
         });
     }

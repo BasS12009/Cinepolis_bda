@@ -5,6 +5,7 @@
 package DTOs;
 
 
+import com.itextpdf.awt.geom.Point2D;
 import java.util.List;
 
 /**
@@ -16,7 +17,28 @@ public class SucursalDTO {
     private String nombre;
     private String ubicacion;
     List<SalaDTO> salaDTO;
+    private Point2D.Double coordenadas;
 
+    public void setCoordenadas(Point2D.Double coordenadas) {
+        this.coordenadas = coordenadas;
+    }
+    
+
+    public SucursalDTO(String nombre, Point2D.Double coordenadas) {
+        this.nombre = nombre;
+        this.coordenadas = coordenadas;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public Point2D.Double getCoordenadas() {
+            return coordenadas;
+        }
+    
+    
+    
     public SucursalDTO() {
     }
 
@@ -35,9 +57,6 @@ public class SucursalDTO {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;

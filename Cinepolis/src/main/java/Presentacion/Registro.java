@@ -48,6 +48,9 @@ public class Registro extends javax.swing.JFrame {
         txtContrasena = new javax.swing.JPasswordField();
         btnRegistrarse = new javax.swing.JButton();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        txtContrasena1 = new javax.swing.JPasswordField();
+        textoCoordenadas = new javax.swing.JTextField();
+        lblContraseña1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -74,11 +77,11 @@ public class Registro extends javax.swing.JFrame {
         lblCorreo.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         lblCorreo.setText("Correo:");
         jPanel1.add(lblCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 170, -1, -1));
-        jPanel1.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 200, 270, 30));
+        jPanel1.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 210, 270, 30));
 
         lblContraseña.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
-        lblContraseña.setText("Contraseña:");
-        jPanel1.add(lblContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 330, -1, -1));
+        lblContraseña.setText("Ubicacion: (coordenadas)");
+        jPanel1.add(lblContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 400, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
         jLabel3.setText("Fecha de nacimiento:");
@@ -96,6 +99,18 @@ public class Registro extends javax.swing.JFrame {
         });
         jPanel1.add(btnRegistrarse, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 490, -1, -1));
         jPanel1.add(jDateChooser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 280, 270, 30));
+        jPanel1.add(txtContrasena1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 360, 270, 30));
+
+        textoCoordenadas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textoCoordenadasActionPerformed(evt);
+            }
+        });
+        jPanel1.add(textoCoordenadas, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 430, 270, 30));
+
+        lblContraseña1.setFont(new java.awt.Font("Serif", 0, 18)); // NOI18N
+        lblContraseña1.setText("Contraseña:");
+        jPanel1.add(lblContraseña1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 330, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -140,10 +155,12 @@ public class Registro extends javax.swing.JFrame {
 
             clienteDTO.setCorreo(txtCorreo.getText());
             clienteDTO.setContrasena(txtContrasena.getText());
-            //clienteDTO.setFechaNacimiento(dateChooserNacimiento.getDate());
+            clienteDTO.setFechaNacimiento(jDateChooser1.getDate());
+            clienteDTO.setUbicacion(textoCoordenadas.getText());
 
+            //
             if (negocio.registro(clienteDTO) != null) {
-                LogIn inicioSesion = new LogIn();
+                LogIn inicioSesion = new LogIn(negocio);
                 inicioSesion.setVisible(true);
                 dispose();
             } else {
@@ -153,6 +170,10 @@ public class Registro extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
     }//GEN-LAST:event_btnRegistrarseActionPerformed
+
+    private void textoCoordenadasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textoCoordenadasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textoCoordenadasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -199,8 +220,11 @@ public class Registro extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblContraseña;
+    private javax.swing.JLabel lblContraseña1;
     private javax.swing.JLabel lblCorreo;
+    private javax.swing.JTextField textoCoordenadas;
     private javax.swing.JPasswordField txtContrasena;
+    private javax.swing.JPasswordField txtContrasena1;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables

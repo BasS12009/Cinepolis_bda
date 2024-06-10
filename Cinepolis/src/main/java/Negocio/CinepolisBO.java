@@ -9,11 +9,14 @@ import DTOs.ClienteDTO;
 import DTOs.FuncionDTO;
 import DTOs.GeneroDTO;
 import DTOs.PeliculaDTO;
+import DTOs.SucursalDTO;
+import com.itextpdf.awt.geom.Point2D;
 import entidades.Clasificacion;
 import entidades.Cliente;
 import entidades.Funcion;
 import entidades.Genero;
 import entidades.Pelicula;
+import entidades.Reporte;
 import excepciones.cinepolisException;
 import java.sql.SQLException;
 import java.sql.Time;
@@ -27,6 +30,8 @@ import persistencia.ClienteDAO;
 import persistencia.FuncionDAO;
 import persistencia.GeneroDAO;
 import persistencia.PeliculaDAO;
+import persistencia.ReporteDAO;
+import persistencia.SucursalesDAO;
 
 /**
  *
@@ -39,13 +44,34 @@ public class CinepolisBO implements ICinepolisBO{
     ClasificacionDAO clasificacionDAO;
     GeneroDAO generoDAO;
     FuncionDAO funcionDAO;
-            
+    ReporteDAO reporteDAO;
+    SucursalesDAO sucursalesDAO;  
+    int id;
+    
     public CinepolisBO(ClienteDAO clienteDAO){
         this.clienteDAO=clienteDAO;
         this.peliculaDAO=new PeliculaDAO(clienteDAO.getConexion());
         this.clasificacionDAO=new ClasificacionDAO(clienteDAO.getConexion());
         this.generoDAO=new GeneroDAO(clienteDAO.getConexion());
         this.funcionDAO=new FuncionDAO(clienteDAO.getConexion());
+        this.reporteDAO=new ReporteDAO(clienteDAO.getConexion());
+        this.sucursalesDAO = new SucursalesDAO(clienteDAO.getConexion());
+    }
+    
+    
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public CinepolisBO() {
+    }
+    
+    public void obtenerIdClienteLogiado() throws cinepolisException{
+        this.obtenerClientePorID(id);
     }
     
     @Override
@@ -652,11 +678,74 @@ public class CinepolisBO implements ICinepolisBO{
         FuncionDTO funcion=new FuncionDTO();
         try {
             funcion=convertirAEntidad(funcionDAO.eliminarFuncionPorId((int) idFuncion));
+            return funcion;
         } catch(SQLException ex){
             System.out.println(ex.getMessage());
             throw new cinepolisException(ex.getMessage());
         }
-        return funcion;
     }
+    
+        public Reporte generarReporte(String ciudad, int peliculaId, int generoId, String fechaInicio, String fechaFin) {
+            double gananciasPelicula = gananciasTotalesPorPelicula(ciudad, peliculaId, generoId, fechaInicio, fechaFin);
+
+            Reporte reporte = new Reporte();
+            reporte.setSucursal(ciudad);
+            reporte.setPeliculaId(peliculaId);
+            reporte.setGeneroId(generoId);
+
+            reporteDAO.generarReporte(reporte, 2); 
+
+            return reporte;
+        }
+
+        public double gananciasTotalesPorPelicula(String ciudad, int peliculaId, int generoId, String fechaInicio, String fechaFin) {
+            return reporteDAO.gananciasTotalesPorPelicula(ciudad, peliculaId, generoId, fechaInicio, fechaFin);
+        }
+        
+        public List<SucursalDTO> obtenerCoordenadasSucursales() throws SQLException {
+        List<SucursalDTO> sucursales = new ArrayList<>();
+        List<String> nombresSucursales = obtenerNombresSucursales();
+
+        for (String nombre : nombresSucursales) {
+            List<Point2D.Double> coordenadas = obtenerCoordenadasSucursalesConNombreSucursal(nombre);
+            if (coordenadas != null && !coordenadas.isEmpty()) {
+                // Aquí puedes asumir que las coordenadas están asociadas al primer resultado
+                sucursales.add(new SucursalDTO(nombre, coordenadas.get(0)));
+            }
+        }
+
+        return sucursales;
+        }
+        
+        public List<Point2D.Double> obtenerCoordenadasSucursalesConNombreSucursal(String nombre) {
+        return (List<Point2D.Double>) sucursalesDAO.obtenerCoordenadas(nombre);
+        }
+        
+        public Point2D.Double obtenerCoordenadasCliente(int id){
+            return clienteDAO.conseguirCordenas(id);
+        }
+
+    public List<String> obtenerNombresSucursales() {
+        return sucursalesDAO.obtenerNombreSucursales();
+    }
+
+    public List<SucursalDTO> obtenerSucursales() {
+        try {
+            return sucursalesDAO.obtenerSucursales();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return null;
+    }
+
+    public List<String> obtenerTitulosPeliculasPorGeneroYSucursal(String generoSeleccionado, String sucursalSeleccionada) {
+        try {
+            // Utiliza el DAO para obtener los títulos de películas
+            return peliculaDAO.obtenerTitulosPorGeneroYSucursal(generoSeleccionado, sucursalSeleccionada);
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return null;
+        }
 }
 

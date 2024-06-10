@@ -7,6 +7,7 @@ package com.mycompany.cinepolis;
 import Negocio.CinepolisBO;
 import Presentacion.Administrador.AdministrarCatalogos;
 import Presentacion.Administrador.CatalogoClientes;
+import Presentacion.LogIn;
 import persistencia.ClienteDAO;
 import persistencia.ConexionBD;
 
@@ -21,7 +22,10 @@ public class Cinepolis {
         ClienteDAO clienteDAO= new ClienteDAO (conexion);
         CinepolisBO cinepolisBO=new CinepolisBO(clienteDAO);
         
-        AdministrarCatalogos administrarCatalogos=new AdministrarCatalogos(cinepolisBO);
-        administrarCatalogos.show();
+        //AdministrarCatalogos administrarCatalogos=new AdministrarCatalogos(cinepolisBO);
+        //administrarCatalogos.show();
+        
+        LogIn l=new LogIn(cinepolisBO);
+        l.show();
     }
 }

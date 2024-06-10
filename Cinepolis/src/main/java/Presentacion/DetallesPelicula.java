@@ -4,12 +4,15 @@
  */
 package Presentacion;
 
+import Negocio.CinepolisBO;
+
 /**
  *
  * @author diana
  */
 public class DetallesPelicula extends javax.swing.JFrame {
-
+    CinepolisBO cine;
+    
     /**
      * Creates new form DetallesPelicula
      */
@@ -98,7 +101,7 @@ public class DetallesPelicula extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        Cartelera cartelera = new Cartelera();
+        Cartelera cartelera = new Cartelera(cine);
         cartelera.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed

@@ -39,7 +39,7 @@ public class AdministrarCatalogos extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         btnCatalogoClientes = new javax.swing.JButton();
-        btnCatalogoPeliculas = new javax.swing.JButton();
+        btnReporteSucursales = new javax.swing.JButton();
         btnAdministrarFunciones = new javax.swing.JButton();
         btnCatalogoPeliculas1 = new javax.swing.JButton();
 
@@ -93,16 +93,16 @@ public class AdministrarCatalogos extends javax.swing.JFrame {
         });
         jPanel1.add(btnCatalogoClientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 260, 260, 50));
 
-        btnCatalogoPeliculas.setBackground(new java.awt.Color(12, 33, 63));
-        btnCatalogoPeliculas.setFont(new java.awt.Font("Segoe UI Symbol", 0, 18)); // NOI18N
-        btnCatalogoPeliculas.setForeground(new java.awt.Color(255, 255, 255));
-        btnCatalogoPeliculas.setText("Reporte Sucursales");
-        btnCatalogoPeliculas.addActionListener(new java.awt.event.ActionListener() {
+        btnReporteSucursales.setBackground(new java.awt.Color(12, 33, 63));
+        btnReporteSucursales.setFont(new java.awt.Font("Segoe UI Symbol", 0, 18)); // NOI18N
+        btnReporteSucursales.setForeground(new java.awt.Color(255, 255, 255));
+        btnReporteSucursales.setText("Reporte Sucursales");
+        btnReporteSucursales.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCatalogoPeliculasActionPerformed(evt);
+                btnReporteSucursalesActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCatalogoPeliculas, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 450, 260, 50));
+        jPanel1.add(btnReporteSucursales, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 450, 260, 50));
 
         btnAdministrarFunciones.setBackground(new java.awt.Color(12, 33, 63));
         btnAdministrarFunciones.setFont(new java.awt.Font("Segoe UI Symbol", 0, 18)); // NOI18N
@@ -140,14 +140,14 @@ public class AdministrarCatalogos extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnCatalogoPeliculasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCatalogoPeliculasActionPerformed
+    private void btnReporteSucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteSucursalesActionPerformed
         // TODO add your handling code here:
         
         ReportePorSucursal reportePorSucursal = new ReportePorSucursal();
         reportePorSucursal.setVisible(true);
         this.dispose();
         
-    }//GEN-LAST:event_btnCatalogoPeliculasActionPerformed
+    }//GEN-LAST:event_btnReporteSucursalesActionPerformed
 
     private void btnCatalogoClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCatalogoClientesActionPerformed
 
@@ -185,8 +185,8 @@ public class AdministrarCatalogos extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdministrarFunciones;
     private javax.swing.JButton btnCatalogoClientes;
-    private javax.swing.JButton btnCatalogoPeliculas;
     private javax.swing.JButton btnCatalogoPeliculas1;
+    private javax.swing.JButton btnReporteSucursales;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

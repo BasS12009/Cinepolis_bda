@@ -4,6 +4,7 @@
  */
 package entidades;
 
+import com.itextpdf.awt.geom.Point2D;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -22,9 +23,17 @@ public class Cliente {
     private String contrasena;
     private String ubicacion;
     private Date fechaNacimiento;
-
+    private Point2D.Double coordenadas;
+    
     public Cliente() {
 
+    }
+    public Cliente(Point2D.Double coordenadas) {
+        this.coordenadas = coordenadas;
+    }
+
+    public Point2D.Double getCoordenadas() {
+        return coordenadas;
     }
 
     public Cliente(Long id, String nombre, String apellidoPaterno, String apellidoMaterno, String correo, String contrasena, String ubicacion, Date fechaNacimiento) {

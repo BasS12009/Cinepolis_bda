@@ -20,10 +20,12 @@ public class LogIn extends javax.swing.JFrame {
      */
     CinepolisBO negocio;
 
-    public LogIn() {
+    public LogIn(CinepolisBO negocio) {
         initComponents();
         this.setLocationRelativeTo(this);
         this.setSize(785, 560);
+        
+       this.negocio=negocio;
 
     }
 
@@ -38,9 +40,9 @@ public class LogIn extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        contrasena = new javax.swing.JTextField();
+        correo = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        correo = new javax.swing.JPasswordField();
+        contrasena = new javax.swing.JPasswordField();
         btnIniciarSesion = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -56,12 +58,12 @@ public class LogIn extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
         jLabel2.setText("Correo:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 150, -1, -1));
-        jPanel1.add(contrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 180, 280, 40));
+        jPanel1.add(correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 190, 280, 40));
 
         jLabel3.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
         jLabel3.setText("Contraseña:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 270, -1, -1));
-        jPanel1.add(correo, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 310, 280, 40));
+        jPanel1.add(contrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 300, 280, 30));
 
         btnIniciarSesion.setBackground(new java.awt.Color(12, 33, 63));
         btnIniciarSesion.setFont(new java.awt.Font("Sitka Text", 0, 14)); // NOI18N
@@ -123,11 +125,13 @@ public class LogIn extends javax.swing.JFrame {
         ClienteDTO clienteDTO = new ClienteDTO();
         clienteDTO.setCorreo(correo.getText());
         clienteDTO.setContrasena(contrasena.getText());
-        if (negocio.login(clienteDTO) != null) {
-            Cartelera cartelera = new Cartelera();
+        ClienteDTO clienteAutenticado = negocio.login(clienteDTO);
+        if (clienteAutenticado != null) {
+            negocio.setId(clienteAutenticado.getId().byteValue());
+            Cartelera cartelera = new Cartelera(negocio);
             cartelera.setVisible(true);
             this.dispose();
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
         }
 
@@ -141,46 +145,13 @@ public class LogIn extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnRegistrateActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LogIn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LogIn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LogIn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LogIn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new LogIn().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIniciarSesion;
     private javax.swing.JButton btnRegistrate;
-    private javax.swing.JTextField contrasena;
-    private javax.swing.JPasswordField correo;
+    private javax.swing.JPasswordField contrasena;
+    private javax.swing.JTextField correo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

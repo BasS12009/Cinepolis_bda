@@ -5,6 +5,7 @@
 package persistencia;
 
 import DTOs.ClienteDTO;
+import com.itextpdf.awt.geom.Point2D;
 import persistencia.IClienteDAO;
 import entidades.Cliente;
 import excepciones.cinepolisException;
@@ -503,6 +504,27 @@ public class ClienteDAO implements IClienteDAO{
         }
 
         return clientes;
+    }
+    
+    public Point2D.Double conseguirCordenas(int idCliente){
+        Point2D.Double coordenadasCliente = null;
+    try (Connection conn = conexionBD.obtenerConexion();
+         PreparedStatement pstmt = conn.prepareStatement("SELECT ubicacion FROM clientes WHERE idCliente = ?");
+    ) { 
+        pstmt.setInt(1, idCliente);
+        try (ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                String coordenadasStr = rs.getString("ubicacion");
+                String[] coordenadasArray = coordenadasStr.split(",");
+                double latitud = Double.parseDouble(coordenadasArray[0]);
+                double longitud = Double.parseDouble(coordenadasArray[1]);
+                coordenadasCliente = new Point2D.Double(latitud, longitud);
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return coordenadasCliente;
     }
 
 }
