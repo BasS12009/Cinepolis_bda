@@ -25,7 +25,9 @@ public class Reporte {
     private List<Genero>  generos = new ArrayList<>();
     private List<Pelicula>  peliculas = new ArrayList<>();
     private List<Ciudad>  ciudades = new ArrayList<>();
-
+    private int peliculaId;
+    private int generoId;
+    
     public Reporte() {
     }
 
@@ -59,6 +61,14 @@ public class Reporte {
         this.id = id;
     }
 
+    public void setPeliculaId(int peliculaId) {
+        this.peliculaId = peliculaId;
+    }
+
+    public void setGeneroId(int generoId) {
+        this.generoId = generoId;
+    }
+    
     public String getDescripcion() {
         return descripcion;
     }

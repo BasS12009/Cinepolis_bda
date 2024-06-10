@@ -4,19 +4,46 @@
  */
 package Presentacion.Administrador;
 
+import DTOs.ClasificacionDTO;
+import DTOs.GeneroDTO;
+import DTOs.ReporteDTO;
+import Negocio.CinepolisBO;
+import excepciones.cinepolisException;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import persistencia.ClienteDAO;
+import persistencia.ConexionBD;
+
 /**
  *
  * @author stae
  */
 public class ReportePorPeliculas extends javax.swing.JFrame {
-
+    CinepolisBO cine;
+    
+    
     /**
      * Creates new form ReportePorPeliculas
+     * @param cine
      */
-    public ReportePorPeliculas() {
+    public ReportePorPeliculas(CinepolisBO cine) {
         initComponents();
+        this.cine=cine;
+        this.llenarComboBoxGenero();  
+    }
+    
+    private void llenarComboBoxGenero() {
+        boxGenero.addItem("");
+        List<GeneroDTO> generos = cine.obtenerTodosLosGeneros();
+        for (GeneroDTO genero : generos) {
+            boxGenero.addItem(genero.getTipo());
+        }
     }
 
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -36,6 +63,14 @@ public class ReportePorPeliculas extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         btnRegresar = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        textoTitulo = new javax.swing.JTextField();
+        boxGenero = new javax.swing.JComboBox<>();
+        jLabel8 = new javax.swing.JLabel();
+        boxCiudad = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -59,12 +94,17 @@ public class ReportePorPeliculas extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Serif", 0, 36)); // NOI18N
         jLabel1.setText("Reporte Por Pelicula");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 60, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 40, -1, -1));
 
         btnReporteCiudad.setBackground(new java.awt.Color(12, 33, 63));
         btnReporteCiudad.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
         btnReporteCiudad.setForeground(new java.awt.Color(255, 255, 255));
         btnReporteCiudad.setText("Generar Reporte Por Ciudad");
+        btnReporteCiudad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteCiudadActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnReporteCiudad, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 480, -1, 30));
 
         tblReportes.setModel(new javax.swing.table.DefaultTableModel(
@@ -97,6 +137,11 @@ public class ReportePorPeliculas extends javax.swing.JFrame {
         jButton2.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Generar Reporte por Pelicula");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 480, -1, 30));
 
         jPanel2.setBackground(new java.awt.Color(12, 33, 63));
@@ -128,6 +173,74 @@ public class ReportePorPeliculas extends javax.swing.JFrame {
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 60, -1));
 
+        jPanel6.setBackground(new java.awt.Color(12, 33, 63));
+
+        jLabel3.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Filtro de Busqueda");
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Genero");
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Peliculas:");
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("Ciudad");
+
+        boxCiudad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cd.Obregon", "Hermosillo", "Navojoa", "Culiacan", "Mazatlan" }));
+        boxCiudad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boxCiudadActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addGap(322, 322, 322))
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(boxGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(57, 57, 57)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(boxCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 287, Short.MAX_VALUE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(textoTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addGap(40, 40, 40))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(boxGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(boxCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(textoTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(11, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 90, 770, 80));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -151,6 +264,52 @@ public class ReportePorPeliculas extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnRegresarActionPerformed
 
+    private void btnReporteCiudadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteCiudadActionPerformed
+        // TODO add your handling code here:
+        // Obtenemos la ciudad seleccionada por el usuario
+            String ciudad = obtenerCiudadSeleccionada();
+
+            // Llamamos al método en CinepolisBO para generar el reporte por ciudad
+            int idG = 0;
+        try {
+            idG = cine.obtenerIdGenero(boxGenero.getSelectedItem().toString());
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } catch (cinepolisException ex) {
+            System.out.println(ex.getMessage());
+        }
+          List<ReporteDTO> reportes = (List<ReporteDTO>) cine.generarReporte(ciudad, 0, idG, "fechaInicio", "fechaFin");
+    
+        // Llenamos la tabla con los datos obtenidos
+        llenarTabla(reportes);
+    }//GEN-LAST:event_btnReporteCiudadActionPerformed
+    
+    private void llenarTabla(List<ReporteDTO> reportes) {
+    DefaultTableModel model = (DefaultTableModel) tblReportes.getModel();
+    model.setRowCount(0); // Limpiamos la tabla antes de llenarla nuevamente
+
+    // Aquí puedes obtener los datos del reporte generados y agregarlos a la tabla
+    // Por ejemplo, supongamos que tienes una lista de objetos ReporteDTO llamada reportes
+    for (ReporteDTO reporte : reportes) {
+        model.addRow(new Object[]{reporte.getCiudades(), reporte.getPeliculas(), reporte.getGeneros(), reporte.getFecha(), reporte.getTotalGFecha(), reporte.getTotalGanancias()});
+    }
+    }
+    
+    private String obtenerCiudadSeleccionada() {
+    return boxCiudad.getSelectedItem().toString();
+    }
+    
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void boxCiudadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxCiudadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_boxCiudadActionPerformed
+
+    
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -177,25 +336,38 @@ public class ReportePorPeliculas extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(ReportePorPeliculas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        ConexionBD conexion = new ConexionBD();
+        ClienteDAO clienteDAO= new ClienteDAO (conexion);
+        CinepolisBO cinepolisBO=new CinepolisBO(clienteDAO);
+        
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ReportePorPeliculas().setVisible(true);
+                new ReportePorPeliculas(cinepolisBO).setVisible(true);
+               
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> boxCiudad;
+    private javax.swing.JComboBox<String> boxGenero;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnReporteCiudad;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblReportes;
+    private javax.swing.JTextField textoTitulo;
     // End of variables declaration//GEN-END:variables
 }

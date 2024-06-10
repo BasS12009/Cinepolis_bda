@@ -4,6 +4,7 @@
  */
 package entidades;
 
+import com.itextpdf.awt.geom.Point2D;
 import excepciones.cinepolisException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,8 +21,23 @@ public class Sucursal {
     private String nombre;
     private String ubicacion;
     List<Sala> salas;
+    private Point2D.Double coordenadas;
 
+        
     public Sucursal() {
+    }
+    
+    
+    
+    public Sucursal(Point2D.Double coordenadas) {
+            this.coordenadas = coordenadas;
+        }
+
+        public Point2D.Double getCoordenadas() {
+            return coordenadas;
+        }
+    public String getNombre() {
+        return nombre;
     }
 
     public Sucursal(Long id, String nombre, String ubicacion, List<Sala> salas) {
@@ -43,10 +59,6 @@ public class Sucursal {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
     }
 
     public void setNombre(String nombre) {

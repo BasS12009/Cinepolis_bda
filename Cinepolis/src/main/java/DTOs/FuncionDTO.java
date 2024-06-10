@@ -17,6 +17,7 @@ public class FuncionDTO {
     private Date fecha;
     private double horaInicio;
     private PeliculaDTO peliculaDTO;
+    private double horaFin;
     
     public FuncionDTO() {
     }
@@ -60,6 +61,28 @@ public class FuncionDTO {
         this.peliculaDTO = peliculaDTO;
     }
 
-    
+        public String calcularHoraFin() {
+        String horaFinStr = "";
+
+        if (peliculaDTO != null) {
+            double duracionPelicula = peliculaDTO.getDuracion();
+
+            // Convertir la duración de la película a horas y minutos
+            int horas = (int) (duracionPelicula / 60);
+            int minutos = (int) (duracionPelicula % 60);
+
+            // Sumar la duración a la hora de inicio
+            double horaFinEnHoras = this.horaInicio + horas + (minutos / 60.0);
+
+            // Obtener la parte entera (horas) y la parte decimal (minutos)
+            int horasFin = (int) Math.floor(horaFinEnHoras);
+            int minutosFin = (int) Math.round((horaFinEnHoras - horasFin) * 60);
+
+            // Formatear la hora de finalización en una cadena de texto en formato HH:mm
+            horaFinStr = String.format("%02d:%02d", horasFin, minutosFin);
+        }
+
+        return horaFinStr;
+    }
     
 }

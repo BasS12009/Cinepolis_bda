@@ -35,7 +35,7 @@ import utilerias.JButtonRenderer;
 public class CatalogoPeliculas extends javax.swing.JFrame {
     CinepolisBO cinepolisBO;
     private int pagina=1;
-    private int LIMITE=1;
+    private int LIMITE=3;
     boolean conFiltro;
     
     /**

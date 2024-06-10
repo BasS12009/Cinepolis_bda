@@ -4,21 +4,68 @@
  */
 package Presentacion;
 
+import DTOs.SucursalDTO;
+import Negocio.CinepolisBO;
+import com.itextpdf.awt.geom.Point2D;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import persistencia.ClienteDAO;
+import persistencia.ConexionBD;
+
 /**
  *
  * @author diana
  */
 public class Sucursales extends javax.swing.JFrame {
-
+    CinepolisBO cine;
     /**
      * Creates new form Sucursales
      */
-    public Sucursales() {
+    public Sucursales(CinepolisBO cine) throws SQLException {
         initComponents();
          this.setLocationRelativeTo(this);
         this.setSize(725, 560);
+        this.cine=cine;
+        
+        llenarComboBoxNombreSucursal();
     }
 
+    private void llenarComboBoxNombreSucursal() throws SQLException {
+        // Obtener la lista de sucursales
+            Point2D.Double coordenadasCliente = cine.obtenerCoordenadasCliente(cine.getId());
+
+        // Obtener la lista de sucursales
+        List<SucursalDTO> sucursales = cine.obtenerSucursales();
+
+        // Crear un mapa para almacenar las distancias entre el cliente y cada sucursal
+        Map<String, Double> distancias = new HashMap<>();
+
+        // Calcular la distancia entre el cliente y cada sucursal y almacenarla en el mapa
+        for (SucursalDTO sucursal : sucursales) {
+            Point2D.Double coordenadasSucursal = sucursal.getCoordenadas();
+            double distancia = calcularDistancia(coordenadasCliente, coordenadasSucursal);
+            distancias.put(sucursal.getNombre(), distancia);
+        }
+
+        // Ordenar las sucursales por distancia
+        List<Map.Entry<String, Double>> listaDistanciasOrdenadas = new ArrayList<>(distancias.entrySet());
+        listaDistanciasOrdenadas.sort(Map.Entry.comparingByValue());
+
+        // Limpiar el combo box antes de agregar los nuevos elementos
+        comboBoxNombreSucursal.removeAllItems();
+
+        // Agregar los nombres de las sucursales más cercanas al combo box
+        for (Map.Entry<String, Double> entry : listaDistanciasOrdenadas) {
+            comboBoxNombreSucursal.addItem(entry.getKey());
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,12 +80,8 @@ public class Sucursales extends javax.swing.JFrame {
         btnRegresar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        comboBoxCiudades = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         comboBoxNombreSucursal = new javax.swing.JComboBox<>();
-        jLabel4 = new javax.swing.JLabel();
-        comboBoxCoordenadas = new javax.swing.JComboBox<>();
         btnConfirmarSucursal = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -91,44 +134,29 @@ public class Sucursales extends javax.swing.JFrame {
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 660, 40));
 
         jLabel1.setFont(new java.awt.Font("Serif", 0, 36)); // NOI18N
-        jLabel1.setText("Sucursales");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 40, -1, -1));
-
-        jLabel2.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
-        jLabel2.setText("Ciudades:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 130, -1, -1));
-
-        comboBoxCiudades.setBackground(new java.awt.Color(12, 33, 63));
-        comboBoxCiudades.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
-        comboBoxCiudades.setForeground(new java.awt.Color(255, 255, 255));
-        comboBoxCiudades.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ciudad Obregon", "Hermosillo ", "Navojoa", "Culiacan ", "Mazatlan", " ", " " }));
-        jPanel1.add(comboBoxCiudades, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 160, 370, 30));
+        jLabel1.setText("Sucursales mas cercanas");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 70, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
         jLabel3.setText("Nombre Sucursal:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 250, -1, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 220, -1, -1));
 
         comboBoxNombreSucursal.setBackground(new java.awt.Color(12, 33, 63));
         comboBoxNombreSucursal.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
         comboBoxNombreSucursal.setForeground(new java.awt.Color(255, 255, 255));
         comboBoxNombreSucursal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cinepolis Bella Vista", "Cinepolis Sendero", "Cinepolis Navojoa ", "Cinepolis Patio Hermosillo" }));
-        jPanel1.add(comboBoxNombreSucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 280, 370, 30));
-
-        jLabel4.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
-        jLabel4.setText("Coordenadas:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 350, -1, -1));
-
-        comboBoxCoordenadas.setBackground(new java.awt.Color(12, 33, 63));
-        comboBoxCoordenadas.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
-        comboBoxCoordenadas.setForeground(new java.awt.Color(255, 255, 255));
-        comboBoxCoordenadas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(comboBoxCoordenadas, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 390, 370, 30));
+        jPanel1.add(comboBoxNombreSucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 270, 370, 30));
 
         btnConfirmarSucursal.setBackground(new java.awt.Color(12, 33, 63));
         btnConfirmarSucursal.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
         btnConfirmarSucursal.setForeground(new java.awt.Color(255, 255, 255));
         btnConfirmarSucursal.setText("Confirmar Sucursal");
         btnConfirmarSucursal.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnConfirmarSucursal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfirmarSucursalActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnConfirmarSucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 470, 150, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -147,11 +175,65 @@ public class Sucursales extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-      Cartelera cartelera = new Cartelera();
+      Cartelera cartelera = new Cartelera(cine);
         cartelera.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
+    private void btnConfirmarSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarSucursalActionPerformed
+//        try {
+//            Point2D.Double coordenadasCliente = obtenerCoordenadasCliente();
+//            
+//            String nombreSucursalSeleccionada = comboBoxNombreSucursal.getSelectedItem().toString();
+//            
+//            List<Point2D.Double> coordenadasSucursales = obtenerCoordenadasSucursales();
+//            
+//            List<SucursalDTO> sucursalesCercanas = encontrarSucursalesCercanas(coordenadasCliente, coordenadasSucursales);
+//        } catch (SQLException ex) {
+//            System.out.println(ex.getMessage());
+//        }
+
+    }//GEN-LAST:event_btnConfirmarSucursalActionPerformed
+
+        private Point2D.Double obtenerCoordenadasCliente() {
+            int idCliente = cine.getId();
+            
+            return cine.obtenerCoordenadasCliente(idCliente);
+     }
+
+    private List<SucursalDTO> obtenerCoordenadasSucursales() throws SQLException {
+    return cine.obtenerCoordenadasSucursales();
+    }
+
+    private List<SucursalDTO> encontrarSucursalesCercanas(Point2D.Double coordenadasCliente, List<Point2D.Double> coordenadasSucursales) {
+        List<SucursalDTO> sucursalesCercanas = new ArrayList<>();
+        double distanciaMinima = Double.MAX_VALUE;
+        for (Point2D.Double coordenadas : coordenadasSucursales) {
+            double distancia = calcularDistancia(coordenadasCliente, coordenadas);
+            if (distancia < distanciaMinima) {
+                distanciaMinima = distancia;
+                sucursalesCercanas.clear();
+                SucursalDTO sucursal = obtenerSucursalPorCoordenadas(coordenadas);
+                sucursalesCercanas.add(sucursal);
+            } else if (distancia == distanciaMinima) {
+                SucursalDTO sucursal = obtenerSucursalPorCoordenadas(coordenadas);
+                sucursalesCercanas.add(sucursal);
+            }
+        }
+        return sucursalesCercanas;
+    }
+    
+    private double calcularDistancia(Point2D.Double coordenadasCliente, Point2D.Double coordenadasSucursal) {
+        double dx = coordenadasCliente.getX() - coordenadasSucursal.getX();
+        double dy = coordenadasCliente.getY() - coordenadasSucursal.getY();
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    private SucursalDTO obtenerSucursalPorCoordenadas(Point2D.Double coordenadas) {
+        SucursalDTO sucursal = new SucursalDTO();
+        sucursal.setCoordenadas(coordenadas);
+        return sucursal;
+    }
     /**
      * @param args the command line arguments
      */
@@ -178,11 +260,17 @@ public class Sucursales extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Sucursales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        ConexionBD conexion = new ConexionBD();
+        ClienteDAO clienteDAO= new ClienteDAO (conexion);
+        CinepolisBO cinepolisBO=new CinepolisBO(clienteDAO);
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Sucursales().setVisible(true);
+                try {
+                    new Sucursales(cinepolisBO).setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Sucursales.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -190,13 +278,9 @@ public class Sucursales extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfirmarSucursal;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JComboBox<String> comboBoxCiudades;
-    private javax.swing.JComboBox<String> comboBoxCoordenadas;
     private javax.swing.JComboBox<String> comboBoxNombreSucursal;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

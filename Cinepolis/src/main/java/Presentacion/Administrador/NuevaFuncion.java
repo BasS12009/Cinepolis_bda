@@ -60,9 +60,9 @@ public class NuevaFuncion extends javax.swing.JFrame {
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jLabel3 = new javax.swing.JLabel();
         textoHoraInicio = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
         btnAgregarFuncion = new javax.swing.JButton();
         comboBoxPelicula = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -127,10 +127,6 @@ public class NuevaFuncion extends javax.swing.JFrame {
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 230, -1, 20));
         jPanel1.add(textoHoraInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 260, 250, 30));
 
-        jLabel4.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
-        jLabel4.setText("Pelicula:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 320, -1, -1));
-
         btnAgregarFuncion.setBackground(new java.awt.Color(12, 33, 63));
         btnAgregarFuncion.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
         btnAgregarFuncion.setForeground(new java.awt.Color(255, 255, 255));
@@ -148,6 +144,10 @@ public class NuevaFuncion extends javax.swing.JFrame {
             }
         });
         jPanel1.add(comboBoxPelicula, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 370, 250, 40));
+
+        jLabel5.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
+        jLabel5.setText("Pelicula:");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 330, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -275,7 +275,7 @@ public class NuevaFuncion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

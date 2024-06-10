@@ -615,4 +615,35 @@ public class PeliculaDAO implements IPeliculaDAO{
         return pelicula;
     }
 
+    public List<String> obtenerTitulosPorGeneroYSucursal(String generoSeleccionado, String sucursalSeleccionada) throws SQLException {
+        List<String> titulos = new ArrayList<>();
+        String consulta = "SELECT DISTINCT p.titulo " +
+                          "FROM funciones f " +
+                          "JOIN peliculas p ON f.idpeliculas = p.idPelicula " +
+                          "JOIN genero g ON p.idGenero = g.idGenero " +
+                          "JOIN salas sa ON f.idFuncion = sa.idfunciones " +
+                          "JOIN sucursales s ON sa.idSucursal = s.idSucursal " +
+                          "WHERE g.tipo = ? AND s.nombre = ?";
+        try (Connection conexion = this.conexionBD.crearConexion();
+             PreparedStatement pstmt = conexion.prepareStatement(consulta)) {
+            pstmt.setString(1, generoSeleccionado);
+            pstmt.setString(2, sucursalSeleccionada);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String titulo = rs.getString("titulo");
+                    titulos.add(titulo);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        if (!titulos.isEmpty()) {
+    System.out.println(titulos.get(0));
+    }
+        return titulos;
+        
+    }
+    
+
 }
