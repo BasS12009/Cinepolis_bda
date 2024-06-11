@@ -7,6 +7,7 @@ package Presentacion;
 import DTOs.SucursalDTO;
 import Negocio.CinepolisBO;
 import com.itextpdf.awt.geom.Point2D;
+import java.awt.BorderLayout;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,9 +15,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import persistencia.ClienteDAO;
 import persistencia.ConexionBD;
+import persistencia.SucursalesDAO;
 
 /**
  *
@@ -64,6 +68,7 @@ public class Sucursales extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         comboBoxNombreSucursal = new javax.swing.JComboBox<>();
         btnConfirmarSucursal = new javax.swing.JButton();
+        botonCalcularSucursalMasCercana = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -138,7 +143,19 @@ public class Sucursales extends javax.swing.JFrame {
                 btnConfirmarSucursalActionPerformed(evt);
             }
         });
-        jPanel1.add(btnConfirmarSucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 470, 150, 40));
+        jPanel1.add(btnConfirmarSucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 480, 150, 40));
+
+        botonCalcularSucursalMasCercana.setBackground(new java.awt.Color(12, 33, 63));
+        botonCalcularSucursalMasCercana.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
+        botonCalcularSucursalMasCercana.setForeground(new java.awt.Color(255, 255, 255));
+        botonCalcularSucursalMasCercana.setText("Buscar sucursal más cercana");
+        botonCalcularSucursalMasCercana.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        botonCalcularSucursalMasCercana.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonCalcularSucursalMasCercanaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(botonCalcularSucursalMasCercana, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 490, 190, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -162,60 +179,50 @@ public class Sucursales extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnConfirmarSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarSucursalActionPerformed
-//        try {
-//            Point2D.Double coordenadasCliente = obtenerCoordenadasCliente();
-//            
-//            String nombreSucursalSeleccionada = comboBoxNombreSucursal.getSelectedItem().toString();
-//            
-//            List<Point2D.Double> coordenadasSucursales = obtenerCoordenadasSucursales();
-//            
-//            List<SucursalDTO> sucursalesCercanas = encontrarSucursalesCercanas(coordenadasCliente, coordenadasSucursales);
-//        } catch (SQLException ex) {
-//            System.out.println(ex.getMessage());
-//        }
-
+        String nombreSucursalSeleccionada = (String) comboBoxNombreSucursal.getSelectedItem();
+        cartelera c = new cartelera(nombreSucursalSeleccionada,cine);
+        c.setVisible(true);
+        this.disable();
     }//GEN-LAST:event_btnConfirmarSucursalActionPerformed
 
-        private Point2D.Double obtenerCoordenadasCliente() {
-            long idCliente = cine.getId();
-            
-            return cine.obtenerCoordenadasCliente(idCliente);
-     }
+    private void botonCalcularSucursalMasCercanaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCalcularSucursalMasCercanaActionPerformed
+        Point2D.Double ubicacionUsuario = cine.obtenerCoordenadasCliente(cine.getId());
 
-    private List<SucursalDTO> obtenerCoordenadasSucursales() throws SQLException {
-    return cine.obtenerCoordenadasSucursales();
-    }
+        try {
+            SucursalDTO sucursalMasCercana = cine.obtenerSucursalMasCercana(ubicacionUsuario);
 
-    private List<SucursalDTO> encontrarSucursalesCercanas(Point2D.Double coordenadasCliente, List<Point2D.Double> coordenadasSucursales) {
-        List<SucursalDTO> sucursalesCercanas = new ArrayList<>();
-        double distanciaMinima = Double.MAX_VALUE;
-        for (Point2D.Double coordenadas : coordenadasSucursales) {
-            double distancia = calcularDistancia(coordenadasCliente, coordenadas);
-            if (distancia < distanciaMinima) {
-                distanciaMinima = distancia;
-                sucursalesCercanas.clear();
-                SucursalDTO sucursal = obtenerSucursalPorCoordenadas(coordenadas);
-                sucursalesCercanas.add(sucursal);
-            } else if (distancia == distanciaMinima) {
-                SucursalDTO sucursal = obtenerSucursalPorCoordenadas(coordenadas);
-                sucursalesCercanas.add(sucursal);
+            // Mostrar la sucursal más cercana en un JPanel
+            if (sucursalMasCercana != null) {
+                JPanel panelInformacion = crearPanelInformacion(sucursalMasCercana);
+                int respuesta = JOptionPane.showConfirmDialog(null, panelInformacion, "Confirmación", JOptionPane.YES_NO_OPTION);
+                if (respuesta == JOptionPane.YES_OPTION) {
+                    // Redirigir al formulario de cartelera
+                    cartelera formCartelera = new cartelera(sucursalMasCercana.getNombre(),cine);
+                    formCartelera.setVisible(true);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontraron sucursales.", "Información", JOptionPane.INFORMATION_MESSAGE);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return sucursalesCercanas;
+    }//GEN-LAST:event_botonCalcularSucursalMasCercanaActionPerformed
+
+    
+    private JPanel crearPanelInformacion(SucursalDTO sucursalMasCercana) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+
+        JLabel label = new JLabel("Sucursal más cercana: " + sucursalMasCercana.getNombre() + " (" + sucursalMasCercana.getCoordenadas().getX() + ", " + sucursalMasCercana.getCoordenadas().getY() + ")");
+        panel.add(label, BorderLayout.CENTER);
+
+        return panel;
     }
     
-    private double calcularDistancia(Point2D.Double coordenadasCliente, Point2D.Double coordenadasSucursal) {
-        double dx = coordenadasCliente.getX() - coordenadasSucursal.getX();
-        double dy = coordenadasCliente.getY() - coordenadasSucursal.getY();
-        return Math.sqrt(dx * dx + dy * dy);
-    }
-
-    private SucursalDTO obtenerSucursalPorCoordenadas(Point2D.Double coordenadas) {
-        SucursalDTO sucursal = new SucursalDTO();
-        sucursal.setCoordenadas(coordenadas);
-        return sucursal;
-    }
-    /**
+    
+    
+    
+      /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -258,6 +265,7 @@ public class Sucursales extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botonCalcularSucursalMasCercana;
     private javax.swing.JButton btnConfirmarSucursal;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JComboBox<String> comboBoxNombreSucursal;

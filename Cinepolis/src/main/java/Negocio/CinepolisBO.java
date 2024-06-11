@@ -17,6 +17,7 @@ import entidades.Funcion;
 import entidades.Genero;
 import entidades.Pelicula;
 import entidades.Reporte;
+import entidades.Sucursal;
 import excepciones.cinepolisException;
 import java.sql.SQLException;
 import java.sql.Time;
@@ -775,5 +776,27 @@ public class CinepolisBO implements ICinepolisBO {
             peliculas.add(convertirAEntidad(pelicula));
         }
         return peliculas;
+    }
+    
+    public SucursalDTO obtenerSucursalMasCercana(Point2D.Double ubicacionUsuario) throws SQLException {
+    List<SucursalDTO> sucursales = sucursalesDAO.obtenerSucursales();
+    SucursalDTO sucursalMasCercana = null;
+    double menorDistancia = Double.MAX_VALUE;
+
+    for (SucursalDTO sucursal : sucursales) {
+        double distancia = calcularDistancia(ubicacionUsuario, sucursal.getCoordenadas());
+        if (distancia < menorDistancia) {
+            menorDistancia = distancia;
+            sucursalMasCercana = new SucursalDTO(sucursal.getCoordenadas(), sucursal.getNombre());
+        }
+    }
+
+    return sucursalMasCercana;
+    }
+    
+    private double calcularDistancia(Point2D.Double p1, Point2D.Double p2) {
+        double dx = p1.getX() - p2.getX();
+        double dy = p1.getY() - p2.getY();
+        return Math.sqrt(dx * dx + dy * dy);
     }
 }

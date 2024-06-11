@@ -23,6 +23,11 @@ public class SucursalDTO {
         this.coordenadas = coordenadas;
     }
     
+    public SucursalDTO(Point2D.Double coordenadas, String nombre) {
+        this.coordenadas = coordenadas;
+        this.nombre = nombre;
+    }
+    
 
     public SucursalDTO(String nombre, Point2D.Double coordenadas) {
         this.nombre = nombre;
