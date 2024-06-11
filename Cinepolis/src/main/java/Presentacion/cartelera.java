@@ -57,6 +57,7 @@ public class Cartelera extends javax.swing.JFrame {
             peliculas = negocio.TodasLasPeliculas();
             
             rellenarCartelera(peliculas, 6);
+            
         } catch (SQLException ex) {
             Logger.getLogger(Cartelera.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -269,7 +270,7 @@ public class Cartelera extends javax.swing.JFrame {
         for (PeliculaDTO pelicula : peliculas) {
             if (contador < limite ) {
 
-                Image img = ImageIO.read(getClass().getResource("ruta/a/tu/" + pelicula.getTitulo() + ".png"));
+                Image img = ImageIO.read(getClass().getResource("resources/" + pelicula.getTitulo() + ".png"));
 
                 botones[contador].setIcon(new ImageIcon(img));
                 contador++;

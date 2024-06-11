@@ -258,7 +258,7 @@ public class Funcion extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        cartelera cartelera = new cartelera(negocio);
+        Cartelera cartelera = new Cartelera(negocio);
         cartelera.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
