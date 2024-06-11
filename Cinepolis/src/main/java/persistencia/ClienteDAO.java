@@ -32,7 +32,7 @@ public class ClienteDAO implements IClienteDAO{
     private IConexionBD conexionBD;
     private Menu menu;
     
-    public ClienteDAO(){
+    public ClienteDAO() throws SQLException{
         this.conexionBD = new ConexionBD();
     }
     
@@ -92,7 +92,7 @@ public class ClienteDAO implements IClienteDAO{
 
             ResultSet generatedKeys = insertCommand.getGeneratedKeys();
             if (generatedKeys.next()) {
-                cliente.setId(generatedKeys.getLong(1));
+                cliente.setId(generatedKeys.getInt(1));
             }
   
             conexion.commit();
@@ -275,7 +275,7 @@ public class ClienteDAO implements IClienteDAO{
 
             if (resultado.next()) {
                 cliente = new Cliente();
-                cliente.setId(resultado.getLong("idCliente"));
+                cliente.setId(resultado.getInt("idCliente"));
                 cliente.setNombre(resultado.getString("nombre"));
                 cliente.setApellidoPaterno(resultado.getString("apellidoPaterno"));
                 cliente.setApellidoMaterno(resultado.getString("apellidoMaterno"));
@@ -465,7 +465,7 @@ public class ClienteDAO implements IClienteDAO{
 
             while (resultSet.next()) {
                 Cliente cliente = new Cliente();
-                cliente.setId(resultSet.getLong("idCliente"));
+                cliente.setId(resultSet.getInt("idCliente"));
                 cliente.setNombre(resultSet.getString("nombre"));
                 cliente.setApellidoPaterno(resultSet.getString("apellidoPaterno"));
                 cliente.setApellidoMaterno(resultSet.getString("apellidoMaterno"));

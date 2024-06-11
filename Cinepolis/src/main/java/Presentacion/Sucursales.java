@@ -28,7 +28,7 @@ public class Sucursales extends javax.swing.JFrame {
      * Creates new form Sucursales
      */
     
-    public Sucursales() { 
+    public Sucursales() throws SQLException { 
         initComponents();
         this.setLocationRelativeTo(this);
         this.setSize(725, 560);
@@ -179,10 +179,14 @@ public class Sucursales extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        // TODO add your handling code here:
-      Cartelera cartelera = new Cartelera(comboBoxNombreSucursal.getItemAt(0));
-        cartelera.setVisible(true);
-        this.dispose();
+        try {
+            // TODO add your handling code here:
+            Cartelera cartelera = new Cartelera(comboBoxNombreSucursal.getItemAt(0));
+            cartelera.setVisible(true);
+            this.dispose();
+        } catch (SQLException ex) {
+            Logger.getLogger(Sucursales.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnConfirmarSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarSucursalActionPerformed
@@ -242,7 +246,7 @@ public class Sucursales extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws SQLException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.

@@ -23,7 +23,7 @@ public class GeneroDAO implements IGeneroDAO {
     
     private IConexionBD conexionBD;
 
-     public GeneroDAO(){}
+     public GeneroDAO(){ }
     
     public GeneroDAO(IConexionBD conexion) {
         this.conexionBD = conexion;

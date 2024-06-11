@@ -15,6 +15,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -257,10 +259,14 @@ public class Funcion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        // TODO add your handling code here:
-        Cartelera cartelera = new Cartelera();
-        cartelera.setVisible(true);
-        this.dispose();
+        try {
+            // TODO add your handling code here:
+            Cartelera cartelera = new Cartelera(negocio);
+            cartelera.setVisible(true);
+            this.dispose();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void NumeroDePaginaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NumeroDePaginaActionPerformed
@@ -324,7 +330,7 @@ public class Funcion extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws SQLException {
         ConexionBD conexion = new ConexionBD();
         ClienteDAO clienteDAO= new ClienteDAO (conexion);
         CinepolisBO cinepolisBO=new CinepolisBO(clienteDAO);

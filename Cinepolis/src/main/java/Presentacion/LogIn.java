@@ -6,8 +6,13 @@ package Presentacion;
 
 import DTOs.ClienteDTO;
 import Negocio.CinepolisBO;
+import java.sql.SQLException;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import persistencia.ClienteDAO;
+import persistencia.ConexionBD;
 
 /**
  *
@@ -21,10 +26,6 @@ public class LogIn extends javax.swing.JFrame {
      */
     CinepolisBO negocio;
 
-    public LogIn() {
-        initComponents();
-        this.negocio = new CinepolisBO();
-    }
 
     public LogIn(CinepolisBO negocio) {
         initComponents();
@@ -133,10 +134,14 @@ public class LogIn extends javax.swing.JFrame {
         clienteDTO.setContrasena(contrasena.getText());
         ClienteDTO clienteAutenticado = negocio.login(clienteDTO);
         if (clienteAutenticado != null) {
-            negocio.setId(clienteAutenticado.getId().byteValue());
-            Cartelera cartelera = new Cartelera();
-            cartelera.setVisible(true);
-            this.dispose();
+            try {
+                negocio.setId(clienteAutenticado.getId().byteValue());
+                Cartelera cartelera = new Cartelera(negocio);
+                cartelera.setVisible(true);
+                this.dispose();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
         }
@@ -151,38 +156,15 @@ public class LogIn extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnRegistrateActionPerformed
 
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Registro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Registro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Registro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Registro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new LogIn().setVisible(true);
-            }
-        });
+    public static void main(String[] args) throws SQLException {
+        ConexionBD conexion = new ConexionBD();
+            ClienteDAO clienteDAO= new ClienteDAO(conexion);
+            CinepolisBO cinepolisBO=new CinepolisBO(clienteDAO);
+            LogIn i=new LogIn(cinepolisBO);
+            i.show();
+    // Your main method code here
     }
-
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIniciarSesion;

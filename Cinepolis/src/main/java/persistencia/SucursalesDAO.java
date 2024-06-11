@@ -24,7 +24,7 @@ import java.util.List;
 public class SucursalesDAO implements ISucursalesDAO {
     private IConexionBD conexionBD;
 
-    public SucursalesDAO() {
+    public SucursalesDAO() throws SQLException {
         this.conexionBD = new ConexionBD();
     }
 

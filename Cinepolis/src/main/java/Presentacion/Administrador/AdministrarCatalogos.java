@@ -6,6 +6,7 @@ package Presentacion.Administrador;
 
 import Presentacion.Administrador.AdministrarFunciones;
 import Negocio.CinepolisBO;
+import java.sql.SQLException;
 import persistencia.ClienteDAO;
 import persistencia.ConexionBD;
 
@@ -165,12 +166,15 @@ public class AdministrarCatalogos extends javax.swing.JFrame {
 
     private void btnCatalogoPeliculas1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCatalogoPeliculas1ActionPerformed
         // TODO add your handling code here:
+        CatalogoPeliculas catalogoPeliculas= new CatalogoPeliculas(cinepolisBO);
+        catalogoPeliculas.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnCatalogoPeliculas1ActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws SQLException {
     ConexionBD conexion = new ConexionBD();
         ClienteDAO clienteDAO= new ClienteDAO (conexion);
         CinepolisBO cinepolisBO=new CinepolisBO(clienteDAO);

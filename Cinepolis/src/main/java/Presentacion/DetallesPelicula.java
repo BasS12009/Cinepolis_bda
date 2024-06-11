@@ -5,6 +5,9 @@
 package Presentacion;
 
 import Negocio.CinepolisBO;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -101,7 +104,12 @@ public class DetallesPelicula extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        Cartelera cartelera = new Cartelera();
+        Cartelera cartelera = null;
+        try {
+            cartelera = new Cartelera(cine);
+        } catch (SQLException ex) {
+            Logger.getLogger(DetallesPelicula.class.getName()).log(Level.SEVERE, null, ex);
+        }
         cartelera.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed

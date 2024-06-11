@@ -127,6 +127,7 @@ public class Pelicula {
         Double duracion = resultado.getDouble("duracion");
         String pais = resultado.getString("pais");
         int idGenero = resultado.getInt("idGenero");
+        System.out.println(idGenero);
         int idClasificacion = resultado.getInt("idClasificacion");
         
 

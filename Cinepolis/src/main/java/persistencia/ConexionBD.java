@@ -19,10 +19,28 @@ public class ConexionBD implements IConexionBD {
     final String CADENA_CONEXION = "jdbc:mysql://" + SERVER + "/" + BASE_DATOS; // URL de conexión a la base de datos
     final String USUARIO = "sgroot"; // Usuario de la base de datos
     final String CONTRASEÑA ="CZHEl@zTU5Bnpg5K" ;
+    private Connection conexion;
+    
+    public ConexionBD() throws SQLException {
+        this.conexion=crearConexion();
+    }
     
     @Override
     public Connection crearConexion() throws SQLException {
-        Connection conexion = DriverManager.getConnection(CADENA_CONEXION, USUARIO, CONTRASEÑA);
-        return conexion;   
+            try {
+                conexion = DriverManager.getConnection(CADENA_CONEXION, USUARIO, CONTRASEÑA);
+            } catch (SQLException e) {
+                // Log the exception or handle it according to your needs
+                throw new SQLException("Error al crear la conexión a la base de datos", e);
+        }
+        return conexion;
+    }
+
+    @Override
+    public Connection obtenerConexion() throws SQLException {
+        if (conexion == null || conexion.isClosed()) {
+            return crearConexion();
+        }
+        return conexion;
     }
 }
