@@ -324,6 +324,12 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
             }
         });
 
+        boxGenero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boxGeneroActionPerformed(evt);
+            }
+        });
+
         botonRestaurar.setText("Restaurar");
         botonRestaurar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -662,6 +668,10 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
         reportePorPelicula.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnGenerarReporteActionPerformed
+
+    private void boxGeneroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxGeneroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_boxGeneroActionPerformed
 
     private void actualizarNumeroDePagina() {
     NumeroDePagina.setText(""+ pagina);

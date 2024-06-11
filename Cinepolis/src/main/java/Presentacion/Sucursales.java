@@ -199,6 +199,7 @@ public class Sucursales extends javax.swing.JFrame {
                     // Redirigir al formulario de cartelera
                     cartelera formCartelera = new cartelera(sucursalMasCercana.getNombre(),cine);
                     formCartelera.setVisible(true);
+                    this.disable();
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "No se encontraron sucursales.", "Información", JOptionPane.INFORMATION_MESSAGE);
