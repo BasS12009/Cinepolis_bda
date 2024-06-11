@@ -34,6 +34,8 @@ public class ReportePorPeliculas extends javax.swing.JFrame {
      */
     public ReportePorPeliculas(CinepolisBO cine) {
         initComponents();
+           this.setLocationRelativeTo(this);
+        this.setSize(930, 580);
         this.cine=cine;
         this.llenarComboBoxGenero();  
     }

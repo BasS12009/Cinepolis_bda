@@ -27,6 +27,8 @@ public class EditarCliente extends javax.swing.JFrame {
         initComponents();
     this.cinepolisBO = cinepolisBO;
     this.idCliente = idCliente;
+     this.setLocationRelativeTo(this);
+        this.setSize(930, 580);
 
     try {
         ClienteDTO cliente = cinepolisBO.obtenerClientePorID(idCliente);

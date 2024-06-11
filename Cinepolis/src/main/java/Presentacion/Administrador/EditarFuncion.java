@@ -30,7 +30,8 @@ public class EditarFuncion extends javax.swing.JFrame {
      */
     public EditarFuncion(CinepolisBO cinepolisBO, int id) throws SQLException {
         initComponents();
-        
+        this.setLocationRelativeTo(this);
+        this.setSize(750, 570);
         this.cinepolisBO= cinepolisBO;
         this.idFuncion=id;
         

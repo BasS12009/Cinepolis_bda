@@ -15,6 +15,8 @@ public class ReportePorSucursal extends javax.swing.JFrame {
      */
     public ReportePorSucursal() {
         initComponents();
+           this.setLocationRelativeTo(this);
+        this.setSize(930, 580);
     }
 
     /**

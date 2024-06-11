@@ -23,6 +23,8 @@ public class AdministrarCatalogos extends javax.swing.JFrame {
     public AdministrarCatalogos(CinepolisBO cinepolisBO) {
         initComponents();
         this.cinepolisBO=cinepolisBO;
+         this.setLocationRelativeTo(this);
+        this.setSize(690, 560);
     }
 
     /**

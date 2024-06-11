@@ -31,7 +31,8 @@ public class NuevaFuncion extends javax.swing.JFrame {
     public NuevaFuncion(CinepolisBO cinepolisBO) {
         initComponents();
          this.cinepolisBO= cinepolisBO;
-         
+            this.setLocationRelativeTo(this);
+        this.setSize(800, 580);
          try {
             List<PeliculaDTO> peliculas = cinepolisBO.buscarPeliculasTabla();
             for (PeliculaDTO pelicula : peliculas) {
