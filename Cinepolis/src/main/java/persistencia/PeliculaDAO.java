@@ -696,4 +696,56 @@ public class PeliculaDAO implements IPeliculaDAO {
         }
         return peliculas;
     }
+
+    public List<PeliculaDTO> obtenerDatosPorGeneroYSucursal(String generoSeleccionado, String sucursalSeleccionada) throws SQLException {
+        List<PeliculaDTO> peliculas = new ArrayList<>();
+        StringBuilder consulta = new StringBuilder("SELECT " +
+                "    p.titulo AS Titulo_Pelicula, " +
+                "    p.sinopsis AS Sinopsis_Pelicula, " +
+                "    p.duracion AS Duracion_Pelicula " +
+                "FROM " +
+                "    funciones f " +
+                "JOIN " +
+                "    peliculas p ON f.idpeliculas = p.idPelicula " +
+                "JOIN " +
+                "    salas s ON f.idFuncion = s.idfunciones " +
+                "JOIN " +
+                "    sucursales sc ON s.idSucursal = sc.idSucursal ");
+
+        // Agregar filtro de género si se proporciona
+        if (generoSeleccionado != null && !generoSeleccionado.isEmpty()) {
+            consulta.append("JOIN " +
+                            "    genero g ON p.idGenero = g.idGenero " +
+                            "WHERE " +
+                            "    g.tipo = ? ");
+        }
+
+        // Agregar filtro de sucursal
+        consulta.append("AND sc.nombre = ? ");
+
+        try (Connection conexion = this.conexionBD.crearConexion(); PreparedStatement pstmt = conexion.prepareStatement(consulta.toString())) {
+            int index = 1;
+            // Asignar valores de parámetros
+            if (generoSeleccionado != null && !generoSeleccionado.isEmpty()) {
+                pstmt.setString(index++, generoSeleccionado);
+            }
+            pstmt.setString(index, sucursalSeleccionada);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    PeliculaDTO pelicula = new PeliculaDTO();
+                    pelicula.setTitulo(rs.getString("Titulo_Pelicula"));
+                    pelicula.setSinopsis(rs.getString("Sinopsis_Pelicula"));
+                    pelicula.setDuracion(rs.getDouble("Duracion_Pelicula"));
+                    peliculas.add(pelicula);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        if (!peliculas.isEmpty()) {
+            System.out.println(peliculas.get(0).getTitulo());
+        }
+        return peliculas;
+    }
 }

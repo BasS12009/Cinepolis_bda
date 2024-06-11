@@ -799,4 +799,16 @@ public class CinepolisBO implements ICinepolisBO {
         double dy = p1.getY() - p2.getY();
         return Math.sqrt(dx * dx + dy * dy);
     }
+
+    public List<PeliculaDTO> obtenerDatosPeliculasPorGeneroYSucursal(String generoSeleccionado, String sucursalSeleccionada) {
+        try {
+            List<PeliculaDTO> p;
+            p=peliculaDAO.obtenerDatosPorGeneroYSucursal(generoSeleccionado, sucursalSeleccionada);
+            
+            return p;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return null;
+    }
 }

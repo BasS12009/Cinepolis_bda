@@ -356,6 +356,8 @@ public class AdministrarFunciones extends javax.swing.JFrame {
 
     private void btnNuevaFuncionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaFuncionActionPerformed
         // TODO add your handling code here:
+        
+        
         NuevaFuncion nuevaFuncion = new NuevaFuncion(cinepolisBO);
         nuevaFuncion.setVisible(true);
         this.dispose();
