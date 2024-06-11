@@ -4,13 +4,16 @@
  */
 package Negocio;
 
+import DTOs.BoletoDTO;
 import DTOs.ClasificacionDTO;
 import DTOs.ClienteDTO;
 import DTOs.FuncionDTO;
 import DTOs.GeneroDTO;
 import DTOs.PeliculaDTO;
+import DTOs.SalaDTO;
 import DTOs.SucursalDTO;
 import com.itextpdf.awt.geom.Point2D;
+import entidades.Boleto;
 import entidades.Clasificacion;
 import entidades.Cliente;
 import entidades.Funcion;
@@ -26,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import persistencia.BoletoDAO;
 import persistencia.ClasificacionDAO;
 import persistencia.ClienteDAO;
 import persistencia.FuncionDAO;
@@ -48,6 +52,8 @@ public class CinepolisBO implements ICinepolisBO {
     ReporteDAO reporteDAO;
     SucursalesDAO sucursalesDAO;
     long id;
+    BoletoDAO boletoDAO;
+    
 
     public CinepolisBO(ClienteDAO clienteDAO) {
         this.clienteDAO = clienteDAO;
@@ -57,6 +63,7 @@ public class CinepolisBO implements ICinepolisBO {
         this.funcionDAO = new FuncionDAO(clienteDAO.getConexion());
         this.reporteDAO = new ReporteDAO(clienteDAO.getConexion());
         this.sucursalesDAO = new SucursalesDAO(clienteDAO.getConexion());
+        this.boletoDAO=new BoletoDAO(clienteDAO.getConexion());
     }
 
     public CinepolisBO() {
@@ -285,7 +292,7 @@ public class CinepolisBO implements ICinepolisBO {
         p = convertirAEntidadEd(funcionDTO.getPeliculaDTO());
         funcion.setPeliculas(p);
 
-        System.out.println("ConvertirAEntidad: " + funcion.getPeliculas().getId() + " " + funcion.getFecha());
+        System.out.println("ConvertirAEntidad: " +"ID: "+funcion.getId()+" "+ funcion.getPeliculas().getId() + " " + funcion.getFecha());
 
         return funcion;
     }
@@ -811,4 +818,43 @@ public class CinepolisBO implements ICinepolisBO {
         }
         return null;
     }
+
+    public void insertarBoleto(BoletoDTO boleto){
+        try {
+            boletoDAO.insertarBoletoComprado(convertirBoletoDTOADAO(boleto));
+        } catch (cinepolisException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    private Boleto convertirBoletoDTOADAO(BoletoDTO boleto) {
+        Boleto boletoDAO = new Boleto();
+    
+        // Asignar los valores del BoletoDTO al BoletoDAO
+        boletoDAO.setCosto(boleto.getCosto());
+        boletoDAO.setEstado(true);
+        boletoDAO.setFechaCompra(boleto.getFechaCompra());
+        boletoDAO.setCliente(boleto.getCliente());
+        boletoDAO.setFuncion(boleto.getFuncion());
+
+    return boletoDAO;   
+    }
+
+        public FuncionDTO obtenerIdFuncionPorSucursalYPelicula(String sucursal, Long id) {
+        try {
+            FuncionDTO f=this.obtenerFuncionPorId(funcionDAO.obtenerIdFuncionPorSucursalYPelicula(sucursal, id).getId());
+            return f;
+        } catch (cinepolisException ex) {
+            System.out.println(ex.getMessage());
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return null;
+        }
+
+    public SalaDTO obtenerSalaFuncionSucursal(String sucursal, FuncionDTO f) {
+        return funcionDAO.obtenerSalaFuncionSucursal(sucursal,f.getId());
+    }
+        
+        
 }

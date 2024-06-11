@@ -700,6 +700,7 @@ public class PeliculaDAO implements IPeliculaDAO {
     public List<PeliculaDTO> obtenerDatosPorGeneroYSucursal(String generoSeleccionado, String sucursalSeleccionada) throws SQLException {
         List<PeliculaDTO> peliculas = new ArrayList<>();
         StringBuilder consulta = new StringBuilder("SELECT " +
+                "    p.idPelicula AS ID_Pelicula, " +
                 "    p.titulo AS Titulo_Pelicula, " +
                 "    p.sinopsis AS Sinopsis_Pelicula, " +
                 "    p.duracion AS Duracion_Pelicula " +
@@ -721,7 +722,7 @@ public class PeliculaDAO implements IPeliculaDAO {
         }
 
         // Agregar filtro de sucursal
-        consulta.append("AND sc.nombre = ? ");
+        consulta.append(generoSeleccionado != null && !generoSeleccionado.isEmpty() ? " AND sc.nombre = ? " : " WHERE sc.nombre = ? ");
 
         try (Connection conexion = this.conexionBD.crearConexion(); PreparedStatement pstmt = conexion.prepareStatement(consulta.toString())) {
             int index = 1;
@@ -733,6 +734,7 @@ public class PeliculaDAO implements IPeliculaDAO {
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     PeliculaDTO pelicula = new PeliculaDTO();
+                    pelicula.setId(rs.getLong("ID_Pelicula"));
                     pelicula.setTitulo(rs.getString("Titulo_Pelicula"));
                     pelicula.setSinopsis(rs.getString("Sinopsis_Pelicula"));
                     pelicula.setDuracion(rs.getDouble("Duracion_Pelicula"));
@@ -747,5 +749,5 @@ public class PeliculaDAO implements IPeliculaDAO {
             System.out.println(peliculas.get(0).getTitulo());
         }
         return peliculas;
-    }
+        }
 }

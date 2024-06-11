@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 
 /**
  *
@@ -39,12 +40,14 @@ public class BoletoDAO implements IBoletoDAO{
         try{
             conexion = this.conexionBD.crearConexion();
             conexion.setAutoCommit(false);
-            
-            String codigoSQL = "INSERT INTO boletos (costo, estado, fechaCompra, idFuncion, idCliente) VALUES (?, ?, ?, ?, ?)";
+             LocalDate fechaActual = LocalDate.now();
+        // Convertir LocalDate a java.sql.Date
+            java.sql.Date fechaSql = java.sql.Date.valueOf(fechaActual);
+            String codigoSQL = "INSERT INTO boleto (costo, estado, fechaCompra, idFuncion, idCliente) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement insertCommand = conexion.prepareStatement(codigoSQL, Statement.RETURN_GENERATED_KEYS);
             insertCommand.setDouble(1, boleto.getCosto());
             insertCommand.setBoolean(2, boleto.isEstado());
-            insertCommand.setDate(3, (Date) boleto.getFechaCompra());
+            insertCommand.setDate(3, fechaSql);
             insertCommand.setLong(4, boleto.getFuncion().getId());
             insertCommand.setLong(5, boleto.getCliente().getId());
             

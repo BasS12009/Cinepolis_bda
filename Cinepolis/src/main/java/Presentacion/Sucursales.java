@@ -186,7 +186,7 @@ public class Sucursales extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConfirmarSucursalActionPerformed
 
     private void botonCalcularSucursalMasCercanaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCalcularSucursalMasCercanaActionPerformed
-        Point2D.Double ubicacionUsuario = cine.obtenerCoordenadasCliente(cine.getId());
+        Point2D.Double ubicacionUsuario = (Point2D.Double) cine.obtenerCoordenadasCliente(cine.getId());
 
         try {
             SucursalDTO sucursalMasCercana = cine.obtenerSucursalMasCercana(ubicacionUsuario);

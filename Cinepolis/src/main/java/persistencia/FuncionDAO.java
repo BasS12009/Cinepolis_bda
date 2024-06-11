@@ -4,6 +4,8 @@
  */
 package persistencia;
 
+import DTOs.FuncionDTO;
+import DTOs.SalaDTO;
 import entidades.Funcion;
 import entidades.Pelicula;
 import excepciones.cinepolisException;
@@ -327,8 +329,67 @@ public class FuncionDAO implements IFuncionDAO{
             }
             return funcionLista;
         }
-    
-    
-    
-    
+
+        public FuncionDTO obtenerIdFuncionPorSucursalYPelicula(String sucursal, Long id) {
+            String consulta = "SELECT f.idFuncion " +
+                              "FROM funciones f " +
+                              "JOIN peliculas p ON f.idpeliculas = p.idPelicula " +
+                              "JOIN salas s ON f.idFuncion = s.idfunciones " +
+                              "JOIN sucursales sc ON s.idSucursal = sc.idSucursal " +
+                              "WHERE sc.nombre = ? AND p.idPelicula = ?";
+
+            System.out.println("Sucursal: " + sucursal);
+            System.out.println("ID Película: " + id);
+
+            try (Connection conexion = this.conexionBD.crearConexion();
+                 PreparedStatement pstmt = conexion.prepareStatement(consulta)) {
+                pstmt.setString(1, sucursal);
+                pstmt.setLong(2, id);
+                System.out.println("Executing query: " + pstmt);
+
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        FuncionDTO funcion = new FuncionDTO();
+                        funcion.setId(rs.getLong("idFuncion"));
+                        return funcion;
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null; 
+        }
+
+    public SalaDTO obtenerSalaFuncionSucursal(String sucursal, Long id) {
+        String consulta = "SELECT s.*\n" +
+                    "FROM salas s\n" +
+                    "JOIN funciones f ON s.idfunciones = f.idFuncion\n" +
+                    "JOIN sucursales sc ON s.idSucursal = sc.idSucursal " + 
+                    "WHERE sc.nombre = ? AND f.idFuncion = ?";
+
+           try (Connection conexion = this.conexionBD.crearConexion();
+                PreparedStatement pstmt = conexion.prepareStatement(consulta)) {
+               pstmt.setString(1, sucursal);
+               pstmt.setLong(2, id);
+               try (ResultSet rs = pstmt.executeQuery()) {
+                   if (rs.next()) {
+                       SalaDTO sala = new SalaDTO();
+                       sala.setId(rs.getLong("idSala"));
+                       sala.setNumero(rs.getInt("numero"));
+                       return sala;
+                   }
+               }
+           } catch (SQLException e) {
+               e.printStackTrace();
+           }
+           return null;
+       }
 }
+    
+    
+
+    
+    
+    
+    
+

@@ -32,7 +32,7 @@ public class SeleccionarSala extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        comboBoxNombreSucursal = new javax.swing.JComboBox<>();
+        comboBoxNumeroDeSala = new javax.swing.JComboBox<>();
         btnConfirmarSala = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -92,11 +92,11 @@ public class SeleccionarSala extends javax.swing.JFrame {
         jLabel3.setText("Tipos de Salas");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 160, -1, 30));
 
-        comboBoxNombreSucursal.setBackground(new java.awt.Color(12, 33, 63));
-        comboBoxNombreSucursal.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
-        comboBoxNombreSucursal.setForeground(new java.awt.Color(255, 255, 255));
-        comboBoxNombreSucursal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Kids", "Tradicional ", "Premium", "VIP", "Itson", " " }));
-        jPanel1.add(comboBoxNombreSucursal, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 210, 370, 30));
+        comboBoxNumeroDeSala.setBackground(new java.awt.Color(12, 33, 63));
+        comboBoxNumeroDeSala.setFont(new java.awt.Font("Segoe UI Symbol", 0, 12)); // NOI18N
+        comboBoxNumeroDeSala.setForeground(new java.awt.Color(255, 255, 255));
+        comboBoxNumeroDeSala.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Kids", "Tradicional ", "Premium", "VIP", "Itson", " " }));
+        jPanel1.add(comboBoxNumeroDeSala, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 210, 370, 50));
 
         btnConfirmarSala.setBackground(new java.awt.Color(12, 33, 63));
         btnConfirmarSala.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
@@ -119,10 +119,7 @@ public class SeleccionarSala extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        // TODO add your handling code here:
-        Cartelera cartelera = new Cartelera();
-        cartelera.setVisible(true);
-        this.dispose();
+
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     /**
@@ -163,7 +160,7 @@ public class SeleccionarSala extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfirmarSala;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JComboBox<String> comboBoxNombreSucursal;
+    private javax.swing.JComboBox<String> comboBoxNumeroDeSala;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;

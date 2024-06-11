@@ -99,6 +99,11 @@ public class SucursalesDAO implements ISucursalesDAO {
     return new Point2D.Double(x, y);
     }   
 
+    /**
+     *
+     * @param nombreSucursal
+     * @return
+     */
     @Override
     public Point2D.Double obtenerCoordenadas(String nombreSucursal) {
         Point2D.Double coordenadas = null;

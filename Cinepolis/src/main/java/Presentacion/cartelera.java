@@ -35,30 +35,20 @@ public class cartelera extends javax.swing.JFrame {
     public cartelera(String sucursal, CinepolisBO negocio) {
         this.negocio = negocio;
         this.sucursalSeleccionada = sucursal;
+        this.sucursal=sucursal;
         initComponents();
         this.setLocationRelativeTo(null);
         this.setSize(955, 580);
         setVisible(true);
         
         llenarComboBoxGenero();
-        ComboBoxGenero.addActionListener(new ActionListener() {
-            
-<<<<<<< HEAD
-            rellenarCartelera(peliculas, 6);
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(Cartelera.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Cartelera.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
-=======
+        ComboBoxGenero.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 llenarBotonesPeliculas(pagina);
             }
         });
->>>>>>> 9a3279e73707aa7f34288b7c496735a24d400023
     }
 
 
@@ -379,15 +369,13 @@ public class cartelera extends javax.swing.JFrame {
     confirmarCompra(tituloPelicula, datosPeliculas); 
     }//GEN-LAST:event_botonPelicula3ActionPerformed
 
-<<<<<<< HEAD
-                Image img = ImageIO.read(getClass().getResource("resources/" + pelicula.getTitulo() + ".png"));
-=======
+
     private void botonPelicula7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPelicula7ActionPerformed
      JButton boton = (JButton) evt.getSource(); // Obtener el botón que activó el evento
     String tituloPelicula = boton.getText(); // Obtener el texto del botón
     confirmarCompra(tituloPelicula, datosPeliculas); 
     }//GEN-LAST:event_botonPelicula7ActionPerformed
->>>>>>> 9a3279e73707aa7f34288b7c496735a24d400023
+
 
     private void botonPelicula1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPelicula1ActionPerformed
     JButton boton = (JButton) evt.getSource(); // Obtener el botón que activó el evento

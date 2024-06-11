@@ -4,9 +4,21 @@
  */
 package Presentacion;
 
+import DTOs.BoletoDTO;
+import DTOs.FuncionDTO;
+import DTOs.GeneradorTicketPDF;
 import DTOs.PeliculaDTO;
+import DTOs.SalaDTO;
 import DTOs.SucursalDTO;
 import Negocio.CinepolisBO;
+import Presentacion.cartelera;
+import excepciones.cinepolisException;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -26,7 +38,12 @@ public class CompraBoleto extends javax.swing.JFrame {
         this.setSize(690, 560);
         this.c=c;
         this.pelicula=pelicula;
+        System.out.println(s);
         this.sucursal=s;
+        
+        for (int i = 1; i <= 10; i++) {
+            comboBoxCantidadBoletos.addItem(i);
+        }
         
     }
 
@@ -45,8 +62,9 @@ public class CompraBoleto extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         btnRegresar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        comboBoxCantidadBoletos = new javax.swing.JComboBox<>();
         btnCompraBoletos = new javax.swing.JButton();
+        informacionDeFuncion = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -71,7 +89,7 @@ public class CompraBoleto extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Serif", 0, 36)); // NOI18N
         jLabel1.setText("Compra de Boletos");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 50, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 60, 310, 80));
 
         jPanel2.setBackground(new java.awt.Color(12, 33, 63));
 
@@ -104,16 +122,32 @@ public class CompraBoleto extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Serif", 0, 24)); // NOI18N
         jLabel2.setText("Cantidad de Boletos:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 150, -1, -1));
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 190, 200, 30));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 200, -1, 50));
+        jPanel1.add(comboBoxCantidadBoletos, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 260, 200, 40));
 
         btnCompraBoletos.setBackground(new java.awt.Color(12, 33, 63));
         btnCompraBoletos.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
         btnCompraBoletos.setForeground(new java.awt.Color(255, 255, 255));
         btnCompraBoletos.setText("Confirmar Compra");
-        jPanel1.add(btnCompraBoletos, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 420, -1, 40));
+        btnCompraBoletos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCompraBoletosActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnCompraBoletos, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 430, -1, 40));
+
+        javax.swing.GroupLayout informacionDeFuncionLayout = new javax.swing.GroupLayout(informacionDeFuncion);
+        informacionDeFuncion.setLayout(informacionDeFuncionLayout);
+        informacionDeFuncionLayout.setHorizontalGroup(
+            informacionDeFuncionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 270, Short.MAX_VALUE)
+        );
+        informacionDeFuncionLayout.setVerticalGroup(
+            informacionDeFuncionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 230, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(informacionDeFuncion, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 170, 270, 230));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -138,11 +172,67 @@ public class CompraBoleto extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
+    private void btnCompraBoletosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompraBoletosActionPerformed
+        int cantidadBoletos = (int) comboBoxCantidadBoletos.getSelectedItem();
+        
+        if (sucursal == null || pelicula.getId() == null) {
+        System.out.println("Sucursal o ID de Película es nulo"+sucursal+" s "+ pelicula.getId()+" ");
+        return;
+        }
+
+        if (cantidadBoletos != 0 ) {
+            if (cantidadBoletos > 0) {
+                int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas comprar " + cantidadBoletos+" boletos para la película '" +" a "+cantidadBoletos*50 +" Para: " + pelicula.getTitulo() + "' en la sucursal '" + sucursal + "'?", "Confirmar Compra", JOptionPane.YES_NO_OPTION);
+                if (confirmacion == JOptionPane.YES_OPTION) {
+                    try {
+                        JOptionPane.showMessageDialog(this, "¡Compra de " + cantidadBoletos + " boletos confirmada!", "Compra Confirmada", JOptionPane.INFORMATION_MESSAGE);
+                        BoletoDTO boleto=new BoletoDTO();
+                        
+                        boleto.setCosto(cantidadBoletos*50);
+                        boleto.setEstado(true);
+                        boleto.setFechaCompra(new Date());
+                        
+                        boleto.setCliente(c.convertirAEntidad(c.obtenerClientePorID(c.getId())));
+                        FuncionDTO f=c.obtenerIdFuncionPorSucursalYPelicula(sucursal, pelicula.getId());
+                        boleto.setFuncion(c.convertirAEntidadED(f));
+                        
+                        
+                        c.insertarBoleto(boleto);
+                        SalaDTO sala=c.obtenerSalaFuncionSucursal(sucursal,f);
+                        System.out.println(" "+sala.getNumero());
+                        try {
+                            GeneradorTicketPDF.generarTicketPDF(boleto, sucursal, pelicula, sala, cantidadBoletos);
+                        } catch (IOException ex) {
+                            System.out.println(ex.getMessage());
+                        }
+                        cartelera ca=new cartelera(sucursal,c);
+                        ca.setVisible(true);
+                        this.dispose();
+                        
+                    } catch (SQLException ex) {
+                        System.out.println(ex.getMessage());
+                    } catch (cinepolisException ex) {
+                        System.out.println(ex.getMessage());
+                    }
+                    
+                    
+                } else {
+                    JOptionPane.showMessageDialog(this, "Compra cancelada.", "Compra Cancelada", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Por favor, selecciona una cantidad válida de boletos.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona una cantidad de boletos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnCompraBoletosActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCompraBoletos;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<Integer> comboBoxCantidadBoletos;
+    private javax.swing.JPanel informacionDeFuncion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
