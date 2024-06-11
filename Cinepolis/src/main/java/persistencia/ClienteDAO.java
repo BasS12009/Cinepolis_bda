@@ -33,7 +33,6 @@ public class ClienteDAO implements IClienteDAO{
     private Menu menu;
     
     public ClienteDAO(){
-        this.conexionBD = new ConexionBD();
     }
     
     public ClienteDAO(IConexionBD conexionBD){

@@ -4,7 +4,6 @@
  */
 package excepciones;
 
-import Presentacion.Menu;
 import entidades.Cliente;
 import java.sql.Connection;
 import java.sql.Date;
@@ -20,7 +19,6 @@ import persistencia.IConexionBD;
  */
 public class ClienteDAO implements IClienteDAO{
     private IConexionBD conexionBD;
-    private Menu menu;
     
     public ClienteDAO(IConexionBD conexionBD){
         this.conexionBD=conexionBD;

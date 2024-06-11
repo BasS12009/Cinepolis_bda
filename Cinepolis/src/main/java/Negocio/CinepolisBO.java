@@ -46,7 +46,7 @@ public class CinepolisBO implements ICinepolisBO {
     FuncionDAO funcionDAO;
     ReporteDAO reporteDAO;
     SucursalesDAO sucursalesDAO;
-    int id;
+    long id;
 
     public CinepolisBO(ClienteDAO clienteDAO) {
         this.clienteDAO = clienteDAO;
@@ -68,11 +68,11 @@ public class CinepolisBO implements ICinepolisBO {
         this.sucursalesDAO = new SucursalesDAO(clienteDAO.getConexion());
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -715,8 +715,8 @@ public class CinepolisBO implements ICinepolisBO {
         return (List<Point2D.Double>) sucursalesDAO.obtenerCoordenadas(nombre);
     }
 
-    public Point2D.Double obtenerCoordenadasCliente(int id) {
-        return clienteDAO.conseguirCordenas(id);
+    public Point2D.Double obtenerCoordenadasCliente(long id) {
+        return clienteDAO.conseguirCordenas((int) id);
     }
 
     public List<String> obtenerNombresSucursales() {

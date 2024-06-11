@@ -272,28 +272,61 @@ public class FuncionDAO implements IFuncionDAO{
 
     @Override
     public List<Funcion> buscarFuncionesTabla() throws cinepolisException {
-            List<Funcion> funcionLista = new ArrayList<>();
-        try (Connection conexion = this.conexionBD.crearConexion()) {
-            String codigoSQL = "SELECT idFuncion, fecha, horaInicio, idpeliculas FROM funciones"; // Adjust column name if necessary
-            Statement comandoSQL = conexion.createStatement();
-            ResultSet resultado = comandoSQL.executeQuery(codigoSQL);
-            while (resultado.next()) {
-                Funcion funcion = new Funcion();
-                funcion.setId(resultado.getInt("idFuncion"));
-                funcion.setFecha(resultado.getDate("fecha"));
-                funcion.setHoraInicio(resultado.getDouble("horaInicio"));
-                PeliculaDAO p=new PeliculaDAO(conexionBD);
-                Pelicula pelicula=new Pelicula();
-                pelicula=p.obtenerPeliculaPorIdPelicula(resultado.getLong("idpeliculas"));
-                funcion.setPeliculas(pelicula); 
-                funcionLista.add(funcion);
+           List<Funcion> funcionLista = new ArrayList<>();
+            Connection conexion = null;
+            PreparedStatement comandoSQL = null;
+            ResultSet resultado = null;
+
+            try {
+                conexion = this.conexionBD.crearConexion();
+                String codigoSQL = "SELECT f.idFuncion, f.fecha, f.horaInicio, p.idPelicula, p.titulo, p.sinopsis, p.trailer, p.duracion, p.pais, p.idGenero, p.idClasificacion\n" +
+                                    "FROM funciones f\n" +
+                                    "INNER JOIN peliculas p ON f.idpeliculas = p.idPelicula";
+                comandoSQL = conexion.prepareStatement(codigoSQL);
+                resultado = comandoSQL.executeQuery();
+
+                while (resultado.next()) {
+                    Funcion funcion = new Funcion();
+                    funcion.setId(resultado.getInt("idFuncion"));
+                    funcion.setFecha(resultado.getDate("fecha"));
+                    funcion.setHoraInicio(resultado.getDouble("horaInicio"));
+
+                    Pelicula pelicula = new Pelicula();
+                    pelicula=pelicula.convertirAEntidad(resultado);
+
+                    funcion.setPeliculas(pelicula);
+
+                    funcionLista.add(funcion);
+                }
+            } catch (SQLException ex) {
+                System.out.println("SQLException: " + ex.getMessage());
+                throw new cinepolisException("Ocurrió un error al leer la base de datos, intentelo de nuevo y si el error persiste", ex);
+            } finally {
+                // Cerrar ResultSet, PreparedStatement y Connection en el bloque finally
+                if (resultado != null) {
+                    try {
+                        resultado.close();
+                    } catch (SQLException e) {
+                        System.out.println("Error al cerrar el ResultSet: " + e.getMessage());
+                    }
+                }
+                if (comandoSQL != null) {
+                    try {
+                        comandoSQL.close();
+                    } catch (SQLException e) {
+                        System.out.println("Error al cerrar el PreparedStatement: " + e.getMessage());
+                    }
+                }
+                if (conexion != null) {
+                    try {
+                        conexion.close();
+                    } catch (SQLException e) {
+                        System.out.println("Error al cerrar la conexión: " + e.getMessage());
+                    }
+                }
             }
-        } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            throw new cinepolisException("Ocurrio un error al leer la base de datos, intentelo de nuevo y si el error persiste", ex);
+            return funcionLista;
         }
-        return funcionLista;
-    }
     
     
     

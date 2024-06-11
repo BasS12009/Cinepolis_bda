@@ -133,8 +133,8 @@ public class LogIn extends javax.swing.JFrame {
         clienteDTO.setContrasena(contrasena.getText());
         ClienteDTO clienteAutenticado = negocio.login(clienteDTO);
         if (clienteAutenticado != null) {
-            negocio.setId(clienteAutenticado.getId().byteValue());
-            Cartelera cartelera = new Cartelera();
+            negocio.setId(clienteAutenticado.getId());
+            cartelera cartelera = new cartelera(negocio);
             cartelera.setVisible(true);
             this.dispose();
         } else {

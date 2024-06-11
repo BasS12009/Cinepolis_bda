@@ -14,5 +14,7 @@ public class Cinepolis {
 
     public static void main(String[] args) {
         ConexionBD conexion = new ConexionBD();
+        
+        
     }
 }

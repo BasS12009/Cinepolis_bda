@@ -4,6 +4,8 @@
  */
 package entidades;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 
 /**
@@ -12,7 +14,7 @@ import java.util.Date;
  */
 public class Cliente {
     
-    private int id;
+    private long id;
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
@@ -25,7 +27,7 @@ public class Cliente {
         
     }
 
-    public Cliente(int id, String nombre, String apellidoPaterno, String apellidoMaterno, String correo, String contrasena, String ubicacion, Date fechaNacimiento) {
+    public Cliente(long id, String nombre, String apellidoPaterno, String apellidoMaterno, String correo, String contrasena, String ubicacion, Date fechaNacimiento) {
         this.id = id;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -46,11 +48,11 @@ public class Cliente {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -111,5 +113,17 @@ public class Cliente {
     }
     
     
+    public static Cliente convertirAEntidad(ResultSet resultado) throws SQLException {
+        int idCliente = resultado.getInt("idCliente");
+        String nombre = resultado.getString("nombre");
+        String apellidoPaterno = resultado.getString("apellidoPaterno");
+        String apellidoMaterno = resultado.getString("apellidoMaterno");
+        String correo = resultado.getString("correo");
+        String contrasena = resultado.getString("contrasena");
+        String ubicacion = resultado.getString("ubicacion");
+        Date fechaNacimiento = resultado.getDate("fechaNacimiento");
+
+        return new Cliente(idCliente, nombre, apellidoPaterno, apellidoMaterno, correo, contrasena, ubicacion, fechaNacimiento);
+    }
     
 }

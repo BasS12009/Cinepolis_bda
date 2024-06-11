@@ -13,4 +13,6 @@ import java.sql.SQLException;
  */
 public interface IConexionBD {
     public Connection crearConexion() throws SQLException;
+    public Connection obtenerConexion() throws SQLException;
+
 }

@@ -180,7 +180,7 @@ public class Sucursales extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-      Cartelera cartelera = new Cartelera(comboBoxNombreSucursal.getItemAt(0));
+      cartelera cartelera = new cartelera(comboBoxNombreSucursal.getItemAt(0),cine);
         cartelera.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
@@ -201,7 +201,7 @@ public class Sucursales extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConfirmarSucursalActionPerformed
 
         private Point2D.Double obtenerCoordenadasCliente() {
-            int idCliente = cine.getId();
+            long idCliente = cine.getId();
             
             return cine.obtenerCoordenadasCliente(idCliente);
      }

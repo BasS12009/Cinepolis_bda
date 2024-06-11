@@ -49,15 +49,10 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
         this.cargarMetodosIniciales();
         NumeroDePagina.setEditable(false);
         conFiltro=false;
-        
-
-        
 
         llenarComboBoxGenero();
-
         llenarComboBoxClasificacion();
-
-        
+  
     }
     
     private void llenarComboBoxGenero() {

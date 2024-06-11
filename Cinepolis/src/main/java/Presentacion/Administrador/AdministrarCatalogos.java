@@ -165,6 +165,9 @@ public class AdministrarCatalogos extends javax.swing.JFrame {
 
     private void btnCatalogoPeliculas1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCatalogoPeliculas1ActionPerformed
         // TODO add your handling code here:
+        CatalogoPeliculas p= new CatalogoPeliculas(cinepolisBO);
+        p.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnCatalogoPeliculas1ActionPerformed
 
     /**
