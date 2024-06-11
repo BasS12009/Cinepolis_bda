@@ -74,17 +74,22 @@ public class SucursalesDAO implements ISucursalesDAO {
     }
     
     private Point2D.Double parsearWKT(String wkt) {
-     // Eliminar el prefijo "POINT" y los paréntesis del texto WKT
-     String coordenadasStr = wkt.replace("POINT(", "").replace(")", "");
+        Point2D.Double coordenadas = null;
+        try {
+            // Eliminar el prefijo "POINT" y los paréntesis del texto WKT
+            String coordenadasStr = wkt.replace("POINT(", "").replace(")", "");
 
-     // Separar las coordenadas en X y Y
-     String[] partes = coordenadasStr.split(" ");
-     double x = Double.parseDouble(partes[0]);
-     double y = Double.parseDouble(partes[1]);
+            // Separar las coordenadas en X y Y
+            String[] partes = coordenadasStr.split(" ");
+            double x = Double.parseDouble(partes[0]);
+            double y = Double.parseDouble(partes[1]);
 
-     // Crear un objeto Point2D.Double con las coordenadas
-     return new Point2D.Double(x, y);
- }
+            coordenadas = new Point2D.Double(x, y);
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+        return coordenadas;
+    }
     
     public Point2D.Double obtenerCoordenadasa(String coordenadasStr) {
     coordenadasStr = coordenadasStr.replace("POINT (", "").replace(")", ""); // Elimina el texto adicional y los paréntesis
@@ -131,23 +136,18 @@ public class SucursalesDAO implements ISucursalesDAO {
     }
 
     public List<SucursalDTO> obtenerSucursales() throws SQLException {
-            Point2D.Double coordenadas = null;
             List<SucursalDTO> sucursales = new ArrayList<>();
             try (Connection conn = conexionBD.obtenerConexion();
-                 PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM sucursales");
+                 PreparedStatement pstmt = conn.prepareStatement("SELECT idSucursal,nombre,ST_AsText(ubicacion) AS ubicacion FROM sucursales");
                  ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     // Obtener los datos de la sucursal y crear un objeto SucursalDTO
                     SucursalDTO sucursal = new SucursalDTO();
                     sucursal.setId(rs.getLong("idSucursal"));
                     sucursal.setNombre(rs.getString("nombre"));
-                    String coordenadasStr = rs.getString("ubicacion");
-                    String[] coordenadasArray = coordenadasStr.split(",");
-                    double x = Double.parseDouble(coordenadasArray[0]);
-                    double y = Double.parseDouble(coordenadasArray[1]);
-                    coordenadas = new Point2D.Double(x, y);
+                    String wkt = rs.getString("ubicacion");
+                    Point2D.Double coordenadas = parsearWKT(wkt);
                     sucursal.setCoordenadas(coordenadas);
-                    
                     sucursales.add(sucursal);
                 }
             }

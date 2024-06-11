@@ -142,56 +142,55 @@ public class ClienteDAO implements IClienteDAO{
     
     //Login Clientes 
     public Cliente login(Cliente cliente) throws cinepolisException{
-        
         Connection conexion = null;
-        try{
-            conexion = this.conexionBD.crearConexion();
+        PreparedStatement comandoSQL = null;
+        ResultSet resultado = null;
+
+        try {
+            conexion = conexionBD.crearConexion();
             conexion.setAutoCommit(false);
-            
-            String codigoSQL = "SELECT * FROM clientes "
-                    + "WHERE correo = ? AND contrasena = ?";
-            PreparedStatement comandoSQL = conexion.prepareStatement(codigoSQL);
+
+            String codigoSQL = "SELECT * FROM clientes WHERE correo = ? AND contrasena = ?";
+            comandoSQL = conexion.prepareStatement(codigoSQL);
             comandoSQL.setString(1, cliente.getCorreo());
             comandoSQL.setString(2, cliente.getContrasena());
 
+            resultado = comandoSQL.executeQuery();
 
-            
-            ResultSet resultado = comandoSQL.executeQuery();
             if (!resultado.next()) {
-                conexion.rollback();
                 throw new cinepolisException("El cliente no existe");
             }
-            
+
+            cliente = cliente.convertirAEntidad(resultado);
 
             conexion.commit();
-            
-            cliente = cliente.convertirAEntidad(resultado);
-            
-            } catch (SQLException ex) {
-                
-                if (conexion != null) {
-                    try {
-                        conexion.rollback();
-                    } catch (SQLException rollbackEx) {
-                        System.out.println("Error al revertir la transacción: " + rollbackEx.getMessage());
-                    }
+        } catch (SQLException ex) {
+            if (conexion != null) {
+                try {
+                    conexion.rollback();
+                } catch (SQLException rollbackEx) {
+                    System.out.println("Error al revertir la transacción: " + rollbackEx.getMessage());
                 }
-                
-                System.out.println(ex.getMessage());
-                throw new cinepolisException("Hubo un error al registrar el cliente",ex);
-                
-            }finally {
-        
+            }
+            System.out.println(ex.getMessage());
+            throw new cinepolisException("Hubo un error al registrar el cliente", ex);
+        } finally {
+            try {
+                if (resultado != null) {
+                    resultado.close();
+                }
+                if (comandoSQL != null) {
+                    comandoSQL.close();
+                }
                 if (conexion != null) {
-                    try {
-                        conexion.setAutoCommit(true);
-                        conexion.close();
-                    } catch (SQLException e) {
-                        System.out.println("Error al cerrar la conexión: " + e.getMessage());
-                        }
-                    }
-                 }
-            return cliente;
+                    conexion.setAutoCommit(true);
+                    conexion.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar los recursos: " + e.getMessage());
+            }
+        }
+        return cliente;
     }
     
     

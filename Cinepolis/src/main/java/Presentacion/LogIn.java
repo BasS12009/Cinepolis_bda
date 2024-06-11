@@ -6,8 +6,13 @@ package Presentacion;
 
 import DTOs.ClienteDTO;
 import Negocio.CinepolisBO;
+import java.sql.SQLException;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import persistencia.ClienteDAO;
+import persistencia.ConexionBD;
 
 /**
  *
@@ -21,10 +26,6 @@ public class LogIn extends javax.swing.JFrame {
      */
     CinepolisBO negocio;
 
-    public LogIn() {
-        initComponents();
-        this.negocio = new CinepolisBO();
-    }
 
     public LogIn(CinepolisBO negocio) {
         initComponents();
@@ -134,8 +135,13 @@ public class LogIn extends javax.swing.JFrame {
         ClienteDTO clienteAutenticado = negocio.login(clienteDTO);
         if (clienteAutenticado != null) {
             negocio.setId(clienteAutenticado.getId());
-            cartelera cartelera = new cartelera(negocio);
-            cartelera.setVisible(true);
+            try {
+                Sucursales s=new Sucursales(negocio);
+                s.setVisible(true);
+                this.disable();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
             this.dispose();
         } else {
             JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
@@ -175,10 +181,14 @@ public class LogIn extends javax.swing.JFrame {
         }
         //</editor-fold>
 
+        ConexionBD c= new ConexionBD();
+        ClienteDAO d=new ClienteDAO(c);
+        CinepolisBO b= new CinepolisBO(d);
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LogIn().setVisible(true);
+                new LogIn(b).setVisible(true);
+                
             }
         });
     }

@@ -102,7 +102,7 @@ public class CinepolisBO implements ICinepolisBO {
 
         Cliente clienteAuxiliar = null;
         try {
-            clienteAuxiliar = convertirAEntidad(cliente);
+            clienteAuxiliar = convertirAEntidadSinId(cliente);
 
             return convertirAEntidad(clienteDAO.login(clienteAuxiliar));
 
@@ -128,6 +128,19 @@ public class CinepolisBO implements ICinepolisBO {
         Date fechaN = cliente.getFechaNacimiento();
 
         return new Cliente(id, nombre, paterno, materno, correo, contrasena, ubicacion, fechaN);
+    }
+    
+    public Cliente convertirAEntidadSinId(ClienteDTO cliente) throws SQLException {
+
+        String nombre = cliente.getNombre();
+        String paterno = cliente.getApellidoPaterno();
+        String materno = cliente.getApellidoMaterno();
+        String correo = cliente.getCorreo();
+        String contrasena = cliente.getContrasena();
+        String ubicacion = cliente.getUbicacion();
+        Date fechaN = cliente.getFechaNacimiento();
+
+        return new Cliente( nombre, paterno, materno, correo, contrasena, ubicacion, fechaN);
     }
 
     public Pelicula convertirAEntidad(PeliculaDTO peliculaDTO) throws SQLException, cinepolisException {

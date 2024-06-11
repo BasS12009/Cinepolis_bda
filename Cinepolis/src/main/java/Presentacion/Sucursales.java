@@ -27,50 +27,26 @@ public class Sucursales extends javax.swing.JFrame {
     /**
      * Creates new form Sucursales
      */
-    
-    public Sucursales() { 
-        initComponents();
-        this.setLocationRelativeTo(this);
-        this.setSize(725, 560);
-        this.cine= new CinepolisBO();
-    }
 
     public Sucursales(CinepolisBO cine) throws SQLException {
-       
+       initComponents();
+        this.setLocationRelativeTo(this);
+        this.setSize(725, 560);
+        this.cine= cine;
         
         llenarComboBoxNombreSucursal();
     }
 
     private void llenarComboBoxNombreSucursal() throws SQLException {
-        // Obtener la lista de sucursales
-            Point2D.Double coordenadasCliente = cine.obtenerCoordenadasCliente(cine.getId());
-
-        // Obtener la lista de sucursales
+        // Suponiendo que obtenerSucursales() devuelve una lista de SucursalDTO
         List<SucursalDTO> sucursales = cine.obtenerSucursales();
-
-        // Crear un mapa para almacenar las distancias entre el cliente y cada sucursal
-        Map<String, Double> distancias = new HashMap<>();
-
-        // Calcular la distancia entre el cliente y cada sucursal y almacenarla en el mapa
-        for (SucursalDTO sucursal : sucursales) {
-            Point2D.Double coordenadasSucursal = sucursal.getCoordenadas();
-            double distancia = calcularDistancia(coordenadasCliente, coordenadasSucursal);
-            distancias.put(sucursal.getNombre(), distancia);
-        }
-
-        // Ordenar las sucursales por distancia
-        List<Map.Entry<String, Double>> listaDistanciasOrdenadas = new ArrayList<>(distancias.entrySet());
-        listaDistanciasOrdenadas.sort(Map.Entry.comparingByValue());
-
-        // Limpiar el combo box antes de agregar los nuevos elementos
+        // Limpiar ComboBox antes de agregar nuevos elementos
         comboBoxNombreSucursal.removeAllItems();
-
-        // Agregar los nombres de las sucursales más cercanas al combo box
-        for (Map.Entry<String, Double> entry : listaDistanciasOrdenadas) {
-            comboBoxNombreSucursal.addItem(entry.getKey());
+        // Agregar cada nombre de sucursal al ComboBox
+        for (SucursalDTO sucursal : sucursales) {
+            comboBoxNombreSucursal.addItem(sucursal.getNombre()); // Suponiendo que SucursalDTO tiene un método getNombre()
         }
     }
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -270,12 +246,13 @@ public class Sucursales extends javax.swing.JFrame {
         CinepolisBO cinepolisBO=new CinepolisBO(clienteDAO);
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            public void run() { 
                 try {
                     new Sucursales(cinepolisBO).setVisible(true);
                 } catch (SQLException ex) {
                     Logger.getLogger(Sucursales.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                
             }
         });
     }
