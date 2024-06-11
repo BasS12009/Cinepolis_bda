@@ -258,9 +258,15 @@ public class Funcion extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
+<<<<<<< HEAD
         Cartelera cartelera = new Cartelera(negocio);
         cartelera.setVisible(true);
         this.dispose();
+=======
+//        cartelera cartelera = new cartelera(negocio);
+//        cartelera.setVisible(true);
+//        this.dispose();
+>>>>>>> 9790ae3067bee4fa712a81a1e5bb0929c725008a
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void NumeroDePaginaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NumeroDePaginaActionPerformed

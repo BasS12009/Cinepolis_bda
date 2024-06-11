@@ -617,19 +617,38 @@ public class PeliculaDAO implements IPeliculaDAO {
 
     public List<String> obtenerTitulosPorGeneroYSucursal(String generoSeleccionado, String sucursalSeleccionada) throws SQLException {
         List<String> titulos = new ArrayList<>();
-        String consulta = "SELECT DISTINCT p.titulo "
-                + "FROM funciones f "
-                + "JOIN peliculas p ON f.idpeliculas = p.idPelicula "
-                + "JOIN genero g ON p.idGenero = g.idGenero "
-                + "JOIN salas sa ON f.idFuncion = sa.idfunciones "
-                + "JOIN sucursales s ON sa.idSucursal = s.idSucursal "
-                + "WHERE g.tipo = ? AND s.nombre = ?";
-        try (Connection conexion = this.conexionBD.crearConexion(); PreparedStatement pstmt = conexion.prepareStatement(consulta)) {
-            pstmt.setString(1, generoSeleccionado);
-            pstmt.setString(2, sucursalSeleccionada);
+        StringBuilder consulta = new StringBuilder("SELECT " +
+                "    p.titulo AS Titulo_Pelicula " +
+                "FROM " +
+                "    funciones f " +
+                "JOIN " +
+                "    peliculas p ON f.idpeliculas = p.idPelicula " +
+                "JOIN " +
+                "    salas s ON f.idFuncion = s.idfunciones " +
+                "JOIN " +
+                "    sucursales sc ON s.idSucursal = sc.idSucursal ");
+
+        // Agregar filtro de género si se proporciona
+        if (generoSeleccionado != null && !generoSeleccionado.isEmpty()) {
+            consulta.append("JOIN " +
+                            "    genero g ON p.idGenero = g.idGenero " +
+                            "WHERE " +
+                            "    g.tipo = ? ");
+        }
+
+        // Agregar filtro de sucursal
+        consulta.append("AND sc.nombre = ? ");
+
+        try (Connection conexion = this.conexionBD.crearConexion(); PreparedStatement pstmt = conexion.prepareStatement(consulta.toString())) {
+            int index = 1;
+            // Asignar valores de parámetros
+            if (generoSeleccionado != null && !generoSeleccionado.isEmpty()) {
+                pstmt.setString(index++, generoSeleccionado);
+            }
+            pstmt.setString(index, sucursalSeleccionada);
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
-                    String titulo = rs.getString("titulo");
+                    String titulo = rs.getString("Titulo_Pelicula");
                     titulos.add(titulo);
                 }
             }
@@ -641,7 +660,6 @@ public class PeliculaDAO implements IPeliculaDAO {
             System.out.println(titulos.get(0));
         }
         return titulos;
-
     }
 
     public List<Pelicula> PeliculasPOrSucursal(String nombreSucursal) throws SQLException {
