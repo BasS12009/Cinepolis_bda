@@ -182,7 +182,7 @@ public class Sucursales extends javax.swing.JFrame {
         String nombreSucursalSeleccionada = (String) comboBoxNombreSucursal.getSelectedItem();
         cartelera c = new cartelera(nombreSucursalSeleccionada,cine);
         c.setVisible(true);
-        this.disable();
+        this.dispose();
     }//GEN-LAST:event_btnConfirmarSucursalActionPerformed
 
     private void botonCalcularSucursalMasCercanaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCalcularSucursalMasCercanaActionPerformed
