@@ -22,14 +22,12 @@ import java.util.List;
  */
 public class PeliculaDAO implements IPeliculaDAO {
 
-    private IConexionBD conexionBD;
+    private IConexionBD conexionBD = new ConexionBD();
 
-    public PeliculaDAO() throws SQLException {
-        this.conexionBD = new ConexionBD();
+    public PeliculaDAO() {
     }
 
-    public PeliculaDAO(IConexionBD conexionBD) throws SQLException {
-        this.conexionBD = new ConexionBD();
+    public PeliculaDAO(IConexionBD conexionBD) {
         this.conexionBD = conexionBD;
     }
 

@@ -9,7 +9,6 @@ import DTOs.GeneroDTO;
 import DTOs.PeliculaDTO;
 import Negocio.CinepolisBO;
 import excepciones.cinepolisException;
-import java.sql.SQLException;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -338,7 +337,7 @@ public class AgregarPeliculas extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) throws SQLException {
+    public static void main(String args[]) {
 
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

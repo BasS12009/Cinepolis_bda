@@ -45,7 +45,6 @@ public class AdministrarFunciones extends javax.swing.JFrame {
         this.setSize(955, 600);
         this.cinepolisBO=cinepolisBO;
         this.cargarMetodosIniciales();
-        CambiarLimite.setText(String.valueOf(LIMITE));
     } 
     
     private long getIdSeleccionadoTablaFunciones() {
@@ -68,7 +67,7 @@ public class AdministrarFunciones extends javax.swing.JFrame {
     
     private void cargarConfiguracionInicialTablaFunciones() {
         ActionListener onEditarClickListener = new ActionListener() {
-            final long columnaId = 0;
+            final int columnaId = 0;
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -87,7 +86,7 @@ public class AdministrarFunciones extends javax.swing.JFrame {
         modeloColumnas.getColumn(indiceColumnaEditar).setCellEditor(new JButtonCellEditor("Editar", onEditarClickListener));
 
         ActionListener onEliminarClickListener = new ActionListener() {
-            final long columnaId = 0;
+            final int columnaId = 0;
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -440,7 +439,7 @@ public class AdministrarFunciones extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) throws SQLException {  
+    public static void main(String args[]) {  
         ConexionBD conexion = new ConexionBD();
         ClienteDAO clienteDAO= new ClienteDAO (conexion);
         CinepolisBO cinepolisBO=new CinepolisBO(clienteDAO);

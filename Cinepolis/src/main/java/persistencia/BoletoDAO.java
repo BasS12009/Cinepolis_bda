@@ -24,7 +24,7 @@ public class BoletoDAO implements IBoletoDAO{
     private IConexionBD conexionBD;
     private Menu menu;
     
-    public BoletoDAO() throws SQLException{
+    public BoletoDAO(){
         this.conexionBD = new ConexionBD();
     }
     

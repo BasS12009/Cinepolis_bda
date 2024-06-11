@@ -39,7 +39,7 @@ import persistencia.SucursalesDAO;
  */
 public class CinepolisBO implements ICinepolisBO {
 
-    ClienteDAO clienteDAO;
+    ClienteDAO clienteDAO = new ClienteDAO();
     PeliculaDAO peliculaDAO = new PeliculaDAO();
     ClasificacionDAO clasificacionDAO;
     GeneroDAO generoDAO;
@@ -48,8 +48,7 @@ public class CinepolisBO implements ICinepolisBO {
     SucursalesDAO sucursalesDAO;
     int id;
 
-    public CinepolisBO(ClienteDAO clienteDAO) throws SQLException {
-        this.clienteDAO = new ClienteDAO();
+    public CinepolisBO(ClienteDAO clienteDAO) {
         this.clienteDAO = clienteDAO;
         this.peliculaDAO = new PeliculaDAO(clienteDAO.getConexion());
         this.clasificacionDAO = new ClasificacionDAO(clienteDAO.getConexion());
@@ -59,7 +58,7 @@ public class CinepolisBO implements ICinepolisBO {
         this.sucursalesDAO = new SucursalesDAO(clienteDAO.getConexion());
     }
 
-    public CinepolisBO() throws SQLException {
+    public CinepolisBO() {
         this.clienteDAO = new ClienteDAO();
         this.peliculaDAO = new PeliculaDAO(clienteDAO.getConexion());
         this.clasificacionDAO = new ClasificacionDAO(clienteDAO.getConexion());
@@ -103,14 +102,14 @@ public class CinepolisBO implements ICinepolisBO {
 
         Cliente clienteAuxiliar = null;
         try {
-            clienteAuxiliar = convertirAEntidadSinID(cliente);
+            clienteAuxiliar = convertirAEntidad(cliente);
 
             return convertirAEntidad(clienteDAO.login(clienteAuxiliar));
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+            Logger.getLogger(CinepolisBO.class.getName()).log(Level.SEVERE, null, ex);
         } catch (cinepolisException ex) {
-            System.out.println(ex.getMessage());
+            Logger.getLogger(CinepolisBO.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return null;
@@ -129,18 +128,6 @@ public class CinepolisBO implements ICinepolisBO {
         Date fechaN = cliente.getFechaNacimiento();
 
         return new Cliente(id, nombre, paterno, materno, correo, contrasena, ubicacion, fechaN);
-    }
-    
-    public Cliente convertirAEntidadSinID(ClienteDTO cliente) throws SQLException {
-        String nombre = cliente.getNombre();
-        String paterno = cliente.getApellidoPaterno();
-        String materno = cliente.getApellidoMaterno();
-        String correo = cliente.getCorreo();
-        String contrasena = cliente.getContrasena();
-        String ubicacion = cliente.getUbicacion();
-        Date fechaN = cliente.getFechaNacimiento();
-
-        return new Cliente( nombre, paterno, materno, correo, contrasena, ubicacion, fechaN);
     }
 
     public Pelicula convertirAEntidad(PeliculaDTO peliculaDTO) throws SQLException, cinepolisException {
@@ -196,7 +183,6 @@ public class CinepolisBO implements ICinepolisBO {
         peliculaDTO.setPais(pelicula.getPais());
 
         try {
-            System.out.println(pelicula.getGenero());
             String genero = obtenerTipoGeneroPorID(pelicula.getGenero());
             peliculaDTO.setGenero(genero);
         } catch (cinepolisException ex) {

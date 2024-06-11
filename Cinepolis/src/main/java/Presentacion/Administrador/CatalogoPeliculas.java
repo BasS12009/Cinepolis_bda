@@ -674,9 +674,8 @@ public class CatalogoPeliculas extends javax.swing.JFrame {
     
     /**
      * @param args the command line arguments
-     * @throws java.sql.SQLException
      */
-    public static void main(String args[]) throws SQLException {
+    public static void main(String args[]) {
 
         ConexionBD conexion = new ConexionBD();
         ClienteDAO clienteDAO= new ClienteDAO (conexion);
