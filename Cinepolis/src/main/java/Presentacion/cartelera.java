@@ -12,7 +12,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 /**
@@ -50,6 +54,27 @@ public class cartelera extends javax.swing.JFrame {
             }
         });
     }
+       public void agregarOpcionesMenu() {
+
+        JMenu menuSala = new JMenu("Sala");
+        JMenuItem verSalas = new JMenuItem("Ver Salas");
+        verSalas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Open your frame here
+                Sala sala = new Sala();
+                sala.setVisible(true);
+
+                dispose();
+            }
+        });
+
+        
+        menuSala.add(verSalas);
+        
+       
+        
+    }
 
 
 
@@ -74,11 +99,11 @@ public class cartelera extends javax.swing.JFrame {
         this.peliculas = negocio.obtenerTitulosPeliculasPorGeneroYSucursal((String) ComboBoxGenero.getSelectedItem(), sucursalSeleccionada);
         this.totalPaginas = calcularTotalPaginas();
         this.datosPeliculas = negocio.obtenerDatosPeliculasPorGeneroYSucursal((String) ComboBoxGenero.getSelectedItem(), sucursalSeleccionada);
-        int inicio = (pagina - 1) * 7;
-        int fin = Math.min(inicio + 7, peliculas.size());
+        int inicio = (pagina - 1) * 8;
+        int fin = Math.min(inicio + 8, peliculas.size());
 
         try {
-            for (int i = 0; i < 7; i++) {
+            for (int i = 0; i < 8; i++) {
                 int index = inicio + i;
                 if (index < fin) {
                     switch (i) {
@@ -92,7 +117,7 @@ public class cartelera extends javax.swing.JFrame {
                             botonPelicula3.setText(peliculas.get(index));
                             break;
                         case 3:
-                            botonPelicula4.setText(peliculas.get(index));
+                            botonPelicula8.setText(peliculas.get(index));
                             break;
                         case 4:
                             botonPelicula5.setText(peliculas.get(index));
@@ -103,7 +128,11 @@ public class cartelera extends javax.swing.JFrame {
                         case 6:
                             botonPelicula7.setText(peliculas.get(index));
                             break;
+                        case 7:
+                            botonPelicula8.setText(peliculas.get(index));
+                            break;
                     }
+                    
                 } else {
                     // Si no hay más películas para mostrar, limpiar el texto del botón
                     switch (i) {
@@ -117,7 +146,7 @@ public class cartelera extends javax.swing.JFrame {
                             botonPelicula3.setText("");
                             break;
                         case 3:
-                            botonPelicula4.setText("");
+                            botonPelicula8.setText("");
                             break;
                         case 4:
                             botonPelicula5.setText("");
@@ -127,6 +156,9 @@ public class cartelera extends javax.swing.JFrame {
                             break;
                         case 6:
                             botonPelicula7.setText("");
+                            break;
+                        case 7:
+                            botonPelicula8.setText(peliculas.get(index));
                             break;
                     }
                 }
@@ -155,14 +187,11 @@ public class cartelera extends javax.swing.JFrame {
         botonPelicula3 = new javax.swing.JButton();
         botonPelicula7 = new javax.swing.JButton();
         botonPelicula1 = new javax.swing.JButton();
-        botonPelicula4 = new javax.swing.JButton();
+        botonPelicula8 = new javax.swing.JButton();
         botonPelicula5 = new javax.swing.JButton();
         botonPelicula6 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         btnMenu = new javax.swing.JMenuBar();
-        jMenu2 = new javax.swing.JMenu();
-        jRadioButtonMenuItem3 = new javax.swing.JRadioButtonMenuItem();
-        jMenu3 = new javax.swing.JMenu();
-        jRadioButtonMenuItem2 = new javax.swing.JRadioButtonMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
 
@@ -263,21 +292,21 @@ public class cartelera extends javax.swing.JFrame {
                 botonPelicula1ActionPerformed(evt);
             }
         });
-        jPanel1.add(botonPelicula1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 110, 150, 190));
+        jPanel1.add(botonPelicula1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 110, 150, 190));
 
-        botonPelicula4.addActionListener(new java.awt.event.ActionListener() {
+        botonPelicula8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonPelicula4ActionPerformed(evt);
+                botonPelicula8ActionPerformed(evt);
             }
         });
-        jPanel1.add(botonPelicula4, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 330, 150, 190));
+        jPanel1.add(botonPelicula8, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 110, 150, 190));
 
         botonPelicula5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonPelicula5ActionPerformed(evt);
             }
         });
-        jPanel1.add(botonPelicula5, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 330, 150, 190));
+        jPanel1.add(botonPelicula5, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 330, 150, 190));
 
         botonPelicula6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -285,22 +314,7 @@ public class cartelera extends javax.swing.JFrame {
             }
         });
         jPanel1.add(botonPelicula6, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 330, 150, 190));
-
-        jMenu2.setText("Sucursales");
-
-        jRadioButtonMenuItem3.setSelected(true);
-        jRadioButtonMenuItem3.setText("Ver Sucursales");
-        jMenu2.add(jRadioButtonMenuItem3);
-
-        btnMenu.add(jMenu2);
-
-        jMenu3.setText("Funciones");
-
-        jRadioButtonMenuItem2.setSelected(true);
-        jRadioButtonMenuItem2.setText("Ver Funciones");
-        jMenu3.add(jRadioButtonMenuItem2);
-
-        btnMenu.add(jMenu3);
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 330, 150, 190));
 
         jMenu1.setText("Salas");
 
@@ -382,11 +396,11 @@ public class cartelera extends javax.swing.JFrame {
     String tituloPelicula = boton.getText(); // Obtener el texto del botón
     confirmarCompra(tituloPelicula, datosPeliculas);     }//GEN-LAST:event_botonPelicula1ActionPerformed
 
-    private void botonPelicula4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPelicula4ActionPerformed
+    private void botonPelicula8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPelicula8ActionPerformed
        JButton boton = (JButton) evt.getSource(); // Obtener el botón que activó el evento
     String tituloPelicula = boton.getText(); // Obtener el texto del botón
     confirmarCompra(tituloPelicula, datosPeliculas); 
-    }//GEN-LAST:event_botonPelicula4ActionPerformed
+    }//GEN-LAST:event_botonPelicula8ActionPerformed
 
     private void botonPelicula5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPelicula5ActionPerformed
      JButton boton = (JButton) evt.getSource(); // Obtener el botón que activó el evento
@@ -406,24 +420,21 @@ public class cartelera extends javax.swing.JFrame {
     private javax.swing.JButton botonPelicula1;
     private javax.swing.JButton botonPelicula2;
     private javax.swing.JButton botonPelicula3;
-    private javax.swing.JButton botonPelicula4;
     private javax.swing.JButton botonPelicula5;
     private javax.swing.JButton botonPelicula6;
     private javax.swing.JButton botonPelicula7;
+    private javax.swing.JButton botonPelicula8;
     private javax.swing.JButton btnAtras;
     private javax.swing.JMenuBar btnMenu;
     private javax.swing.JButton btnSiguiente;
+    private javax.swing.JButton jButton1;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem2;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem3;
     // End of variables declaration//GEN-END:variables
 
     private void confirmarCompra(String tituloPelicula, List<PeliculaDTO> datosPeliculas) {
