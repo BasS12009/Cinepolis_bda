@@ -52,6 +52,7 @@ public class ReporteDAO implements IReporteDAO {
     }
 
     
+    
     @Override
     public void generarReporte(Reporte reportes, int opcion) {
         Document doc = new Document() {
