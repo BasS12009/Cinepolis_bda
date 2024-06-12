@@ -18,6 +18,10 @@ public class SucursalDTO {
     private String ubicacion;
     List<SalaDTO> salaDTO;
     private Point2D.Double coordenadas;
+    
+    public SucursalDTO(){
+        
+    }
 
     public void setCoordenadas(Point2D.Double coordenadas) {
         this.coordenadas = coordenadas;
@@ -43,10 +47,7 @@ public class SucursalDTO {
         }
     
     
-    
-    public SucursalDTO() {
-    }
-
+  
     public SucursalDTO(Long id, String nombre, String ubicacion, List<SalaDTO> salaDTO) {
         this.id = id;
         this.nombre = nombre;

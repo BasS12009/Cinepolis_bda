@@ -15,6 +15,10 @@ import persistencia.ReporteDAO;
 public class ReporteBO implements IReporteDAO{
     
     ReporteDAO reporteDAO;
+    
+     public ReporteBO() {
+    }
+    
 
     public ReporteBO(ReporteDAO reporteDAO) {
         this.reporteDAO = reporteDAO;
@@ -23,8 +27,10 @@ public class ReporteBO implements IReporteDAO{
     @Override
     public void generarReporte(Reporte reportes, int opcion) {
         
+        reporteDAO.generarReporte(reportes, opcion);
+        
     }
-    
-    
+
+   
     
 }

@@ -359,6 +359,7 @@ public class FuncionDAO implements IFuncionDAO{
             }
             return null; 
         }
+        
 
     public SalaDTO obtenerSalaFuncionSucursal(String sucursal, Long id) {
         String consulta = "SELECT s.*\n" +

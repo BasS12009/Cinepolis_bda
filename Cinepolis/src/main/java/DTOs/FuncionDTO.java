@@ -18,15 +18,43 @@ public class FuncionDTO {
     private double horaInicio;
     private PeliculaDTO peliculaDTO;
     private double horaFin;
+    private SalaDTO salaDTO;
+    private SucursalDTO sucursalDTO;
     
     public FuncionDTO() {
     }
 
-    public FuncionDTO(Long id, Date fecha, double horaInicio, List<PeliculaDTO> peliculas) {
+    public FuncionDTO(Long id, Date fecha, double horaInicio, List<PeliculaDTO> peliculas,  SalaDTO salaDTO, SucursalDTO sucursalDTO) {
         this.id = id;
         this.fecha = fecha;
         this.horaInicio = horaInicio;
         this.peliculaDTO = peliculaDTO;
+        this.salaDTO = salaDTO;
+        this.sucursalDTO = sucursalDTO;
+    }
+
+    public double getHoraFin() {
+        return horaFin;
+    }
+
+    public void setHoraFin(double horaFin) {
+        this.horaFin = horaFin;
+    }
+
+    public SalaDTO getSalaDTO() {
+        return salaDTO;
+    }
+
+    public void setSalaDTO(SalaDTO salaDTO) {
+        this.salaDTO = salaDTO;
+    }
+
+    public SucursalDTO getSucursalDTO() {
+        return sucursalDTO;
+    }
+
+    public void setSucursalDTO(SucursalDTO sucursalDTO) {
+        this.sucursalDTO = sucursalDTO;
     }
 
     public Long getId() {
